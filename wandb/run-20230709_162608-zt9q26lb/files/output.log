@@ -1,0 +1,11 @@
+Using cpu device
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+/Users/omidvart/Library/Python/3.9/lib/python/site-packages/stable_baselines3/common/vec_env/patch_gym.py:49: UserWarning: You provided an OpenAI Gym environment. We strongly recommend transitioning to Gymnasium environments. Stable-Baselines3 is automatically wrapping your environments in a compatibility layer, which could potentially cause issues.
+  warnings.warn(
+Traceback (most recent call last):
+  File "/Users/omidvart/Desktop/Amazon/RL-Modular/train_policy.py", line 19, in <module>
+    shortest_path_agent.learn(timesteps=10000)
+  File "/Users/omidvart/Desktop/Amazon/RL-Modular/agent.py", line 20, in learn
+    callback = WandbCallback(self.model, verbose=1)
+TypeError: __init__() got multiple values for argument 'verbose'

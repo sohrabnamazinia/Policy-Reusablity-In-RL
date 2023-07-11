@@ -1,0 +1,29 @@
+Using cpu device
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+/Users/omidvart/Library/Python/3.9/lib/python/site-packages/stable_baselines3/common/vec_env/patch_gym.py:49: UserWarning: You provided an OpenAI Gym environment. We strongly recommend transitioning to Gymnasium environments. Stable-Baselines3 is automatically wrapping your environments in a compatibility layer, which could potentially cause issues.
+  warnings.warn(
+Traceback (most recent call last):
+  File "/Users/omidvart/Desktop/Amazon/RL-Modular/train_policy.py", line 29, in <module>
+    agent.learn(timesteps)
+  File "/Users/omidvart/Desktop/Amazon/RL-Modular/agents/deep_agent.py", line 45, in learn
+    self.model.learn(total_timesteps=timesteps, callback=callback)
+  File "/Users/omidvart/Library/Python/3.9/lib/python/site-packages/stable_baselines3/dqn/dqn.py", line 267, in learn
+    return super().learn(
+  File "/Users/omidvart/Library/Python/3.9/lib/python/site-packages/stable_baselines3/common/off_policy_algorithm.py", line 312, in learn
+    rollout = self.collect_rollouts(
+  File "/Users/omidvart/Library/Python/3.9/lib/python/site-packages/stable_baselines3/common/off_policy_algorithm.py", line 544, in collect_rollouts
+    new_obs, rewards, dones, infos = env.step(actions)
+  File "/Users/omidvart/Library/Python/3.9/lib/python/site-packages/stable_baselines3/common/vec_env/base_vec_env.py", line 197, in step
+    return self.step_wait()
+  File "/Users/omidvart/Library/Python/3.9/lib/python/site-packages/stable_baselines3/common/vec_env/dummy_vec_env.py", line 58, in step_wait
+    obs, self.buf_rews[env_idx], terminated, truncated, self.buf_infos[env_idx] = self.envs[env_idx].step(
+  File "/Users/omidvart/Library/Python/3.9/lib/python/site-packages/stable_baselines3/common/monitor.py", line 94, in step
+    observation, reward, terminated, truncated, info = self.env.step(action)
+  File "/Users/omidvart/Library/Python/3.9/lib/python/site-packages/shimmy/openai_gym_compatibility.py", line 257, in step
+    obs, reward, done, info = self.gym_env.step(action)
+  File "/Users/omidvart/Desktop/Amazon/RL-Modular/env/gridworld.py", line 50, in step
+    reward = self._get_reward()
+  File "/Users/omidvart/Desktop/Amazon/RL-Modular/env/gridworld.py", line 58, in _get_reward
+    if reward_system == "gold":
+NameError: name 'reward_system' is not defined
