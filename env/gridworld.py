@@ -22,7 +22,7 @@ class GridWorld(gym.Env):
 
         # Initialize the grid
         self.grid = np.zeros((grid_size, grid_size))
-        self.grid[self.agent_position[0]][self.agent_position[1]] = start_position_value # e.g., 5
+        self.grid[self.start_position[0]][self.start_position[1]] = start_position_value # e.g., 5
         self.grid[self.target_position[0]][self.target_position[1]] = target_position_value # e.g., 10
 
         # Position the golds
@@ -34,23 +34,27 @@ class GridWorld(gym.Env):
         if block_positions is not None:
             for pos in block_positions:
                 self.grid[pos[0]][pos[1]] = -1
+    
+    def reset(self):
+        self.agent_position = self.start_position # e.g., [0, 0]
+        return np.array(self.agent_position)
 
     def step(self, action):
-        if action == 0:   # left
-            self.agent_position[1] -= 1
+        if action == 0:   # up
+            self.agent_position[0] -= 1
         elif action == 1: # right
             self.agent_position[1] += 1
         elif action == 2: # down
-            self.agent_position[0] -= 1
-        elif action == 3: # up
             self.agent_position[0] += 1
+        elif action == 3: # left
+            self.agent_position[1] -= 1
 
         self.agent_position = np.clip(self.agent_position, 0, self.grid_size-1)
 
         reward = self._get_reward()
         done = np.array_equal(self.agent_position, self.target_position)
 
-        return self.grid, reward, done, {}
+        return self.agent_position, reward, done, {}
 
     def _get_reward(self):
         
@@ -71,11 +75,10 @@ class GridWorld(gym.Env):
 
         return 0
 
-    def reset(self):
-        self.grid[self.agent_position[0]][self.agent_position[1]] = 0
-        self.agent_position = self.agent_position # e.g., [0, 0]
-        self.grid[self.agent_position[0]][self.agent_position[1]] = self.start_position_value # e.g., 5
-        return self.grid
-
     def render(self, mode='human'):
         print(self.grid)
+
+    def manhattan_dist(self, state1, state2):
+        term1 = abs(state1.x - state2.x)
+        term2 = abs(state1.y - state2.y)
+        return (term1 + term2)

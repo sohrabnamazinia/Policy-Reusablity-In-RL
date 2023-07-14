@@ -1,12 +1,13 @@
 import numpy as np
-from gridworld import GridWorld
+from agents.q_agent import QLearningAgent
+from env.gridworld import GridWorld
 
 # Define gold and block positions
-gold_positions = [[1, 1], [1, 2], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [5, 4], [5, 5], [5, 6]]
-block_positions = [[2, 2], [3, 4], [5, 5], [6, 6], [7, 7], [8, 8]]
+gold_positions = [[2, 0], [2, 2], [5, 2], [1, 5]]
+block_positions = []
 
 # Instantiate GridWorld
-grid_world = GridWorld(grid_size=10, gold_positions=gold_positions, block_positions=block_positions)
+grid_world = GridWorld(grid_size=6, gold_positions=gold_positions, block_positions=block_positions)
 
 # Flatten the grid to get the total number of states
 n_states = np.product(grid_world.grid.shape)
