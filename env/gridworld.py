@@ -15,6 +15,7 @@ class GridWorld(gym.Env):
         self.target_position = target_position # e.g., [4, 4]
         self.start_position_value = start_position_value
         self.reward_system = reward_system
+        self.MINE_REWARD = -100
 
         self.action_space = spaces.Discrete(4)
         self.observation_space = spaces.Box(low = cell_low_value,
@@ -37,9 +38,12 @@ class GridWorld(gym.Env):
     
     def reset(self):
         self.agent_position = self.start_position # e.g., [0, 0]
-        return np.array(self.agent_position)
+        #return np.array(self.agent_position)
+        return self.grid
 
     def step(self, action):
+        prev_agent_position = [self.agent_position[0], self.agent_position[1]]
+
         if action == 0:   # up
             self.agent_position[0] -= 1
         elif action == 1: # right
@@ -51,12 +55,13 @@ class GridWorld(gym.Env):
 
         self.agent_position = np.clip(self.agent_position, 0, self.grid_size-1)
 
-        reward = self._get_reward()
+        reward = self._get_reward(prev_agent_position)
         done = np.array_equal(self.agent_position, self.target_position)
 
-        return self.agent_position, reward, done, {}
+        #return self.agent_position, reward, done, {}
+        return self.grid, reward, done, {}
 
-    def _get_reward(self):
+    def _get_reward(self, prev_agent_position):
         
         # gold collection task
         if self.reward_system == "gold":
@@ -64,14 +69,18 @@ class GridWorld(gym.Env):
             if cell_value == 1:  # gold
                 return 10
             elif cell_value == -1:  # block
-                return -5
+                return self.MINE_REWARD
             return 0
 
         # shortest path task
         elif self.reward_system == "path":
-            dist_start = np.linalg.norm(np.array(self.start_position) - np.array(self.target_position))
-            dist_now = np.linalg.norm(np.array(self.agent_position) - np.array(self.target_position))
-            return 1 if dist_now < dist_start else -1
+            cell_value = self.grid[self.agent_position[0]][self.agent_position[1]]
+            if cell_value == -1:  # block
+                return self.MINE_REWARD
+            d1 = np.sum(np.abs(np.array(prev_agent_position) - np.array(self.target_position)))
+            d2 = np.sum(np.abs(np.array(self.agent_position) - np.array(self.target_position)))
+            r = d1 - d2
+            return r
 
         return 0
 
