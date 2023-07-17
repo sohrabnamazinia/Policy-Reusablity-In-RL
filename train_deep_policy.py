@@ -6,7 +6,7 @@ import numpy as np
 
 timesteps = 10000
 deep_algorithm = "DQN" # either "DQN" or "A2C"
-reward_system = "path" # either "gold" or "path"
+reward_system = "gold" # either "gold" or "path"
 gold_positions = [[2, 0], [2, 2], [5, 2], [1, 5]]
 block_positions = []
 agent_initial_position = [0,0]
