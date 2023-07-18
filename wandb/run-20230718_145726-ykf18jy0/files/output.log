@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/train_deep_policy.py", line 25, in <module>
+    grid_world = GridWorld(grid_size= grid_size, reward_system = reward_system,
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: GridWorld.__init__() got an unexpected keyword argument 'grid_size'
