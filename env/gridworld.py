@@ -1,6 +1,7 @@
 import gym
 from gym import spaces
 import numpy as np
+import copy
 
 class GridWorld(gym.Env):
     
@@ -40,7 +41,7 @@ class GridWorld(gym.Env):
                 self.grid[pos[0]][pos[1]] = -1
     
     def reset(self):
-        self.agent_position = self.start_position # e.g., [0, 0]
+        self.agent_position = copy.copy(self.start_position) # e.g., [0, 0]
         for gold in self.gold_positions:
             self.grid[gold[0]][gold[1]] = 1
         #return np.array(self.agent_position)
