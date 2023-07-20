@@ -49,5 +49,9 @@ for episode in range(n_episodes):
         if done:
             break
 
+    # update lerning rate and explortion rate
+    q_agent.learning_rate = max(q_agent.learning_rate * q_agent.learning_rate_decay, q_agent.min_learning_rate)
+    q_agent.exploration_rate = max(q_agent.exploration_rate * q_agent.exploration_rate_decay, q_agent.min_exploration_rate)
+
 # Save the q_table for future use
 np.save('q_table.npy', q_agent.q_table)

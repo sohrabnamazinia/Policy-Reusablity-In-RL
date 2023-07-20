@@ -1,12 +1,16 @@
 import numpy as np
 
 class QLearningAgent:
-    def __init__(self, n_states, n_actions, learning_rate=0.5, discount_factor=0.99, exploration_rate=0.1):
+    def __init__(self, n_states, n_actions, learning_rate_decay = 0.99, min_learning_rate = 0.01, learning_rate=0.1, discount_factor=0.99, exploration_rate_decay=0.99, min_exploration_rate=0.01, exploration_rate=1):
         self.n_states = n_states
         self.n_actions = n_actions
         self.learning_rate = learning_rate
         self.discount_factor = discount_factor
         self.exploration_rate = exploration_rate
+        self.learning_rate_decay = learning_rate_decay
+        self.min_learning_rate = min_learning_rate
+        self.min_exploration_rate = min_exploration_rate
+        self.exploration_rate_decay = exploration_rate_decay
 
         self.q_table = np.zeros((n_states, n_actions))
 
@@ -24,12 +28,16 @@ class QLearningAgent:
         self.q_table[state, action] = new_value
 
 class SarsaAgent:
-    def __init__(self, n_states, n_actions, learning_rate=0.5, discount_factor=0.99, exploration_rate=0.1):
+    def __init__(self, n_states, n_actions, learning_rate_decay = 0.9, min_learning_rate = 0.01, learning_rate=0.1, discount_factor=0.99, exploration_rate_decay=0.9, min_exploration_rate=0.01, exploration_rate=1):
         self.n_states = n_states
         self.n_actions = n_actions
         self.learning_rate = learning_rate
         self.discount_factor = discount_factor
         self.exploration_rate = exploration_rate
+        self.learning_rate_decay = learning_rate_decay
+        self.min_learning_rate = min_learning_rate
+        self.min_exploration_rate = min_exploration_rate
+        self.exploration_rate_decay = exploration_rate_decay
 
         self.q_table = np.zeros((n_states, n_actions))
 
