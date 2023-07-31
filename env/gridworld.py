@@ -64,6 +64,7 @@ class GridWorld(gym.Env):
         reward = self._get_reward(prev_agent_position)
         done = np.array_equal(self.agent_position, self.target_position)
 
+
         #return self.agent_position, reward, done, {}
         return self.grid, reward, done, {}
 

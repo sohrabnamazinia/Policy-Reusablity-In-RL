@@ -2,6 +2,7 @@ import numpy as np
 from agents.q_agent import QLearningAgent
 from agents.q_agent import SarsaAgent
 from env.init_gridworld import init_gridworld_1
+import wandb
 
 def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type):
 
@@ -17,6 +18,9 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type):
         q_agent = QLearningAgent(n_states=n_states, n_actions=n_actions)
     elif agent_type == "Sarsa":
         q_agent = SarsaAgent(n_states=n_states, n_actions=n_actions)
+
+    wandb.init(project="Train_Q_Cumulative_Reward")
+    cumulative_reward = 0
     
 
     for episode in range(n_episodes):
@@ -27,6 +31,7 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type):
             action = q_agent.get_action(state_index)
 
             grid, reward, done, _ = grid_world.step(action)
+            cumulative_reward += reward
             next_state_index = np.ravel_multi_index(tuple(grid_world.agent_position.flatten()), dims=grid_world.grid.shape)
 
             if agent_type == "Sarsa":
@@ -43,6 +48,9 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type):
         # update lerning rate and explortion rate
         q_agent.learning_rate = max(q_agent.learning_rate * q_agent.learning_rate_decay, q_agent.min_learning_rate)
         q_agent.exploration_rate = max(q_agent.exploration_rate * q_agent.exploration_rate_decay, q_agent.min_exploration_rate)
+
+        # log cumulative reward
+        wandb.log({"Cumulative Reward": cumulative_reward}, step=episode)
 
     # Save the q_table for future use
     np.save('q_table.npy', q_agent.q_table)
