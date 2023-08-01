@@ -1,0 +1,42 @@
+{
+    "os": "Windows-10-10.0.22000-SP0",
+    "python": "3.10.11",
+    "heartbeatAt": "2023-08-01T09:31:40.075337",
+    "startedAt": "2023-08-01T09:31:38.232858",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "c:\\Users\\ferti\\Documents\\RL_Modular\\train_deep_policy.py",
+    "codePath": "train_deep_policy.py",
+    "git": {
+        "remote": "https://github.com/sohrabnamazinia/RL_Modular.git",
+        "commit": "91b64e332c9c9d4a95f4fb3098ddbfca7ddf5fd1"
+    },
+    "email": "one.giant.cowboy@gmail.com",
+    "root": "C:/Users/ferti/Documents/RL_Modular",
+    "host": "TravisBoop",
+    "username": "ferti",
+    "executable": "C:\\Users\\ferti\\AppData\\Local\\Programs\\Python\\Python310\\python.exe",
+    "cpu_count": 4,
+    "cpu_count_logical": 8,
+    "cpu_freq": {
+        "current": 1298.0,
+        "min": 0.0,
+        "max": 1498.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 1298.0,
+            "min": 0.0,
+            "max": 1498.0
+        }
+    ],
+    "disk": {
+        "total": 461.33495712280273,
+        "used": 381.46229553222656
+    },
+    "memory": {
+        "total": 11.76754379272461
+    }
+}
