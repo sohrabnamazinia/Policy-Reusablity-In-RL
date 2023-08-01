@@ -20,7 +20,7 @@ grid_width = 5
 grid_length = 6
 
 # Initialize a new run
-run = wandb.init(project="gridworld", entity="sn773")
+run = wandb.init(project="gridworld", entity="advait")
 
 # Instantiate environment
 grid_world = GridWorld(grid_width=grid_width, grid_length=grid_length , reward_system = reward_system, 
