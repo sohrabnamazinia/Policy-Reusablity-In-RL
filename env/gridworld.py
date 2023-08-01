@@ -6,7 +6,7 @@ import copy
 class GridWorld(gym.Env):
     
     def __init__(self, grid_width, grid_length, reward_system, agent_position, target_position, cell_low_value, cell_high_value, 
-        start_position_value, target_position_value, gold_positions=None, block_positions=None):
+        start_position_value, target_position_value, agent_position_value, gold_positions=None, block_positions=None):
         
         super(GridWorld, self).__init__()
 
@@ -16,6 +16,8 @@ class GridWorld(gym.Env):
         self.start_position = agent_position # e.g., [0, 0]
         self.target_position = target_position # e.g., [4, 4]
         self.start_position_value = start_position_value
+        self.target_position_value = target_position_value
+        self.agent_position_value = agent_position_value
         self.reward_system = reward_system
         self.gold_positions = gold_positions
         self.block_positions = block_positions
@@ -39,12 +41,15 @@ class GridWorld(gym.Env):
         if block_positions is not None:
             for pos in block_positions:
                 self.grid[pos[0]][pos[1]] = -1
-    
+
+        # position the agent
+        self.grid[self.start_position[0]][self.start_position[1]] = self.agent_position_value
+
     def reset(self):
         self.agent_position = copy.copy(self.start_position) # e.g., [0, 0]
         for gold in self.gold_positions:
             self.grid[gold[0]][gold[1]] = 1
-        #return np.array(self.agent_position)
+        self.grid[self.start_position[0]][self.start_position[1]] = self.agent_position_value
         return self.grid
 
     def step(self, action):
@@ -64,8 +69,10 @@ class GridWorld(gym.Env):
         reward = self._get_reward(prev_agent_position)
         done = np.array_equal(self.agent_position, self.target_position)
 
+        # update observation space
+        self.grid[prev_agent_position[0]][prev_agent_position[1]] = 0
+        self.grid[self.agent_position[0]][self.agent_position[1]] = self.agent_position_value
 
-        #return self.agent_position, reward, done, {}
         return self.grid, reward, done, {}
 
     def _get_reward(self, prev_agent_position):

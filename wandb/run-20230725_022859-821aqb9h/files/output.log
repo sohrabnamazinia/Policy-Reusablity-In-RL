@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "c:/Users/ferti/Documents/RL_Modular/train_deep_policy.py", line 34, in <module>
+    deep_agent.learn(timesteps)
+  File "c:\Users\ferti\Documents\RL_Modular\agents\deep_agent.py", line 33, in learn
+    self.model.learn(total_timesteps=timesteps, callback=callback)
+  File "C:\Users\ferti\AppData\Local\Programs\Python\Python36\lib\site-packages\stable_baselines3\dqn\dqn.py", line 250, in learn
+    reset_num_timesteps=reset_num_timesteps,
+  File "C:\Users\ferti\AppData\Local\Programs\Python\Python36\lib\site-packages\stable_baselines3\common\off_policy_algorithm.py", line 359, in learn
+    log_interval=log_interval,
+  File "C:\Users\ferti\AppData\Local\Programs\Python\Python36\lib\site-packages\stable_baselines3\common\off_policy_algorithm.py", line 580, in collect_rollouts
+    if callback.on_step() is False:
+  File "C:\Users\ferti\AppData\Local\Programs\Python\Python36\lib\site-packages\stable_baselines3\common\callbacks.py", line 88, in on_step
+    return self._on_step()
+  File "c:\Users\ferti\Documents\RL_Modular\agents\deep_agent.py", line 12, in _on_step
+    reward = self.locals["rewards"][0]
+KeyError: 'rewards'
+Using cpu device
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.

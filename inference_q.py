@@ -23,6 +23,9 @@ def inference_q(grid_world):
         # greedy action selection (inference)
         action = np.argmax(q_table[state_index, :])
 
+        # print action
+        print("Action: ", action)
+
         # step
         grid, reward, done, _ = grid_world.step(action)
         next_state_index = np.ravel_multi_index(tuple(grid_world.agent_position.flatten()), dims=grid_world.grid.shape)
