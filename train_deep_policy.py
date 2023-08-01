@@ -15,19 +15,20 @@ cell_low_value = -1
 cell_high_value = 10
 start_position_value = 5
 target_position_value = 10
+agent_position_value = 7
 max_steps_per_episode = 100
 grid_width = 5
 grid_length = 6
 
 # Initialize a new run
-run = wandb.init(project="gridworld", entity="advait")
+run = wandb.init(project="gridworld", entity="sn773")
 
 # Instantiate environment
 grid_world = GridWorld(grid_width=grid_width, grid_length=grid_length , reward_system = reward_system, 
 	agent_position = agent_initial_position, target_position = target_position,
 	cell_low_value = cell_low_value, cell_high_value = cell_high_value,
 	start_position_value = start_position_value, target_position_value = target_position_value,
-	gold_positions = gold_positions, block_positions = block_positions)
+	gold_positions = gold_positions, block_positions = block_positions, agent_position_value=agent_position_value)
 
 # Instantiate and train deep agent
 deep_agent = Agent(grid_world, deep_algorithm)

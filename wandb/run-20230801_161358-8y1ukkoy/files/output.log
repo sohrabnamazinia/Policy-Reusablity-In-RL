@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/train_deep_policy.py", line 26, in <module>
+    grid_world = GridWorld(grid_width=grid_width, grid_length=grid_length , reward_system = reward_system,
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: GridWorld.__init__() missing 1 required positional argument: 'agent_position_value'
