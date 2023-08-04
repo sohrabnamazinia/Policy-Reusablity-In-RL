@@ -6,7 +6,7 @@ import copy
 class GridWorld(gym.Env):
     
     def __init__(self, grid_width, grid_length, reward_system, agent_position, target_position, cell_low_value, cell_high_value, 
-        start_position_value, target_position_value, block_position_value, agent_position_value, gold_position_value, block_reward, target_reward, gold_positions=None, block_positions=None):
+        start_position_value, target_position_value, block_position_value, agent_position_value, gold_position_value, block_reward, target_reward, gold_k=0, gold_positions=None, block_positions=None):
         
         super(GridWorld, self).__init__()
 
@@ -25,6 +25,7 @@ class GridWorld(gym.Env):
         self.target_reward = target_reward
         self.block_position_value = block_position_value
         self.gold_position_value = gold_position_value
+        self.gold_k = gold_k
 
         self.action_space = spaces.Discrete(4)
         self.observation_space = spaces.Box(low = cell_low_value,
@@ -120,8 +121,8 @@ class GridWorld(gym.Env):
             return self.block_reward
         if current_cell_value == self.target_position_value: # target
             return self.target_reward
-        for i in range(0, 1):
-            for j in range(0, 1):
+        for i in range(-self.gold_k, self.gold_k + 1):
+            for j in range(-self.gold_k, self.gold_k + 1):
                 new_candidate = [self.agent_position[0] + i, self.agent_position[1] + j]
                 new_candidate = np.clip(new_candidate, (0, 0), (self.grid_width - 1, self.grid_length - 1)).tolist()
                 if new_candidate not in candidates:
