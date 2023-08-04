@@ -1,0 +1,43 @@
+Traceback (most recent call last):
+  File "/Users/sohrabnamazinia/.vscode/extensions/ms-python.python-2023.12.0/pythonFiles/lib/python/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_frame.py", line 928, in trace_dispatch
+    if not eval_result:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/runpy.py", line 198, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/runpy.py", line 88, in _run_code
+    exec(code, run_globals)
+  File "/Users/sohrabnamazinia/.vscode/extensions/ms-python.python-2023.12.0/pythonFiles/lib/python/debugpy/adapter/../../debugpy/launcher/../../debugpy/__main__.py", line 39, in <module>
+    cli.main()
+  File "/Users/sohrabnamazinia/.vscode/extensions/ms-python.python-2023.12.0/pythonFiles/lib/python/debugpy/adapter/../../debugpy/launcher/../../debugpy/../debugpy/server/cli.py", line 430, in main
+    run()
+  File "/Users/sohrabnamazinia/.vscode/extensions/ms-python.python-2023.12.0/pythonFiles/lib/python/debugpy/adapter/../../debugpy/launcher/../../debugpy/../debugpy/server/cli.py", line 284, in run_file
+    runpy.run_path(target, run_name="__main__")
+  File "/Users/sohrabnamazinia/.vscode/extensions/ms-python.python-2023.12.0/pythonFiles/lib/python/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 321, in run_path
+    return _run_module_code(code, init_globals, run_name,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sohrabnamazinia/.vscode/extensions/ms-python.python-2023.12.0/pythonFiles/lib/python/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 135, in _run_module_code
+    _run_code(code, mod_globals, init_globals,
+  File "/Users/sohrabnamazinia/.vscode/extensions/ms-python.python-2023.12.0/pythonFiles/lib/python/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 124, in _run_code
+    exec(code, run_globals)
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/train_q_policy.py", line 68, in <module>
+    train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type)
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/train_q_policy.py", line 33, in train_q_policy
+    grid, reward, done, _ = grid_world.step(action)
+                            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/env/gridworld.py", line 73, in step
+    reward = self._get_reward(prev_agent_position)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/env/gridworld.py", line 89, in _get_reward
+    return self.get_reward_gold() + self.get_reward_path(prev_agent_position)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/env/gridworld.py", line 106, in get_reward_gold
+    reward = 0
+             ^
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/env/gridworld.py", line 106, in get_reward_gold
+    reward = 0
+             ^
+  File "/Users/sohrabnamazinia/.vscode/extensions/ms-python.python-2023.12.0/pythonFiles/lib/python/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_frame.py", line 928, in trace_dispatch
+    if not eval_result:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()

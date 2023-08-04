@@ -6,7 +6,7 @@ import copy
 class GridWorld(gym.Env):
     
     def __init__(self, grid_width, grid_length, reward_system, agent_position, target_position, cell_low_value, cell_high_value, 
-        start_position_value, target_position_value, agent_position_value, gold_positions=None, block_positions=None):
+        start_position_value, target_position_value, block_position_value, agent_position_value, gold_position_value, block_reward, target_reward, gold_positions=None, block_positions=None):
         
         super(GridWorld, self).__init__()
 
@@ -21,13 +21,18 @@ class GridWorld(gym.Env):
         self.reward_system = reward_system
         self.gold_positions = gold_positions
         self.block_positions = block_positions
-        self.MINE_REWARD = -100
+        self.block_reward = block_reward
+        self.target_reward = target_reward
+        self.block_position_value = block_position_value
+        self.gold_position_value = gold_position_value
 
         self.action_space = spaces.Discrete(4)
         self.observation_space = spaces.Box(low = cell_low_value,
             high= cell_high_value, shape=(self.grid_width, self.grid_length))
 
         # Initialize the grid
+        self.grid = np.zeros((self.grid_width, self.grid_length))
+        self.visited = np.zeros((self.grid_width, self.grid_length))
         self.grid = np.zeros((self.grid_width, self.grid_length))
         self.grid[self.start_position[0]][self.start_position[1]] = start_position_value # e.g., 5
         self.grid[self.target_position[0]][self.target_position[1]] = target_position_value # e.g., 10
@@ -46,7 +51,9 @@ class GridWorld(gym.Env):
         self.grid[self.start_position[0]][self.start_position[1]] = self.agent_position_value
 
     def reset(self):
+        self.grid[self.agent_position[0]][self.agent_position[1]] = 0
         self.agent_position = copy.copy(self.start_position) # e.g., [0, 0]
+        self.grid[self.target_position[0]][self.target_position[1]] = self.target_position_value
         for gold in self.gold_positions:
             self.grid[gold[0]][gold[1]] = 1
         self.grid[self.start_position[0]][self.start_position[1]] = self.agent_position_value
@@ -67,11 +74,12 @@ class GridWorld(gym.Env):
         self.agent_position = np.clip(self.agent_position, (0, 0), (self.grid_width - 1, self.grid_length - 1))
 
         reward = self._get_reward(prev_agent_position)
-        done = np.array_equal(self.agent_position, self.target_position)
 
         # update observation space
         self.grid[prev_agent_position[0]][prev_agent_position[1]] = 0
         self.grid[self.agent_position[0]][self.agent_position[1]] = self.agent_position_value
+
+        done = np.array_equal(self.agent_position, self.target_position)
 
         return self.grid, reward, done, {}
 
@@ -95,8 +103,10 @@ class GridWorld(gym.Env):
 
     def get_reward_path(self, prev_agent_position):
         current_cell_value = self.grid[self.agent_position[0]][self.agent_position[1]]
-        if current_cell_value == -1:  # block
-            return self.MINE_REWARD
+        if current_cell_value == self.block_position_value:  # block
+            return self.block_reward
+        if current_cell_value == self.target_position_value: # target
+            return self.target_reward
         d1 = np.sum(np.abs(np.array(prev_agent_position) - np.array(self.target_position)))
         d2 = np.sum(np.abs(np.array(self.agent_position) - np.array(self.target_position)))
         r = d1 - d2
@@ -106,18 +116,20 @@ class GridWorld(gym.Env):
         reward = 0
         candidates = []
         current_cell_value = self.grid[self.agent_position[0]][self.agent_position[1]]
-        if current_cell_value == -1:  # block
-            return self.MINE_REWARD
-        for i in range(-2, 3):
-            for j in range(-2, 3):
+        if current_cell_value == self.block_position_value:  # block
+            return self.block_reward
+        if current_cell_value == self.target_position_value: # target
+            return self.target_reward
+        for i in range(0, 1):
+            for j in range(0, 1):
                 new_candidate = [self.agent_position[0] + i, self.agent_position[1] + j]
                 new_candidate = np.clip(new_candidate, (0, 0), (self.grid_width - 1, self.grid_length - 1)).tolist()
                 if new_candidate not in candidates:
                     candidates.append(new_candidate)
         for candidate in candidates:
             cell_value = self.grid[candidate[0], candidate[1]]
-            if cell_value == 1:
+            if cell_value == self.gold_position_value:
                 reward += 1
-        if current_cell_value == 1:  # gold
+        if current_cell_value == self.gold_position_value:  # gold
             self.grid[self.agent_position[0]][self.agent_position[1]] = 0
         return reward

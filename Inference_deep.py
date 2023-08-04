@@ -2,15 +2,29 @@ from agents.deep_agent import Agent
 import numpy as np
 from env.gridworld import GridWorld
 from env.init_gridworld import init_gridworld_1
+from stable_baselines3.common.evaluation import evaluate_policy
 
 
 # inference method
 # the agent.pkl file must be in the same directory as this file
 
+def inference_deep_2(grid_world):
+	deep_agent = Agent(grid_world, "DQN")
+	deep_agent.load('agent.pkl', grid_world)
+	mean_reward, std_reward = evaluate_policy(deep_agent.model, deep_agent.model.get_env(), n_eval_episodes=10)
+
+	# Enjoy trained agent
+	vec_env = deep_agent.model.get_env()
+	obs = vec_env.reset()
+	for i in range(1000):
+		action, _states = deep_agent.model.predict(obs, deterministic=True)
+		obs, rewards, dones, info = vec_env.step(action)
+		vec_env.render("human")
+
 def inference_deep(grid_world):
 	
 	deep_agent = Agent(grid_world, "DQN")
-	deep_agent.load('agent.pkl')
+	deep_agent.load('agent.pkl', grid_world)
 	
     # Reset the environment to its initial state, and record returned observation
 	obs = grid_world.reset()
@@ -49,5 +63,5 @@ def inference_deep(grid_world):
 				print("Agent failed to reach the target!")
 			break
 			
-grid_world = init_gridworld_1('combined')
-inference_deep(grid_world)
+grid_world = init_gridworld_1('path')
+inference_deep_2(grid_world)

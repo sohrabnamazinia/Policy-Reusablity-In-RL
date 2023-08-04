@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/train_q_policy.py", line 68, in <module>
+    train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type)
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/train_q_policy.py", line 33, in train_q_policy
+    grid, reward, done, _ = grid_world.step(action)
+                            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/env/gridworld.py", line 71, in step
+    reward = self._get_reward(prev_agent_position)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/env/gridworld.py", line 85, in _get_reward
+    return self.get_reward_gold()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/env/gridworld.py", line 117, in get_reward_gold
+    new_candidate = np.clip(new_candidate, (0, 0), (self.grid_width - 1, self.grid_length - 1)).tolist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<__array_function__ internals>", line 180, in clip
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/numpy/core/fromnumeric.py", line 2154, in clip
+    return _wrapfunc(a, 'clip', a_min, a_max, out=out, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/numpy/core/fromnumeric.py", line 54, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/numpy/core/fromnumeric.py", line 43, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/numpy/core/_methods.py", line 160, in _clip
+    return _clip_dep_invoke_with_casting(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/numpy/core/_methods.py", line 114, in _clip_dep_invoke_with_casting
+    return ufunc(*args, out=out, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

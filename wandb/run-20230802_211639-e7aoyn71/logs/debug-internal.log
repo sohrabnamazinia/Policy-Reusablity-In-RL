@@ -1,0 +1,57 @@
+2023-08-02 21:16:39,431 INFO    StreamThr :71693 [internal.py:wandb_internal():86] W&B internal server running at pid: 71693, started at: 2023-08-02 21:16:39.430848
+2023-08-02 21:16:39,450 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: status
+2023-08-02 21:16:39,454 INFO    WriterThread:71693 [datastore.py:open_for_write():85] open: /Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/wandb/run-20230802_211639-e7aoyn71/run-e7aoyn71.wandb
+2023-08-02 21:16:39,455 DEBUG   SenderThread:71693 [sender.py:send():369] send: header
+2023-08-02 21:16:39,473 DEBUG   SenderThread:71693 [sender.py:send():369] send: run
+2023-08-02 21:16:39,969 INFO    SenderThread:71693 [dir_watcher.py:__init__():211] watching files in: /Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/wandb/run-20230802_211639-e7aoyn71/files
+2023-08-02 21:16:39,969 INFO    SenderThread:71693 [sender.py:_start_run_threads():1100] run started: e7aoyn71 with start time 1691025399.42488
+2023-08-02 21:16:39,970 DEBUG   SenderThread:71693 [sender.py:send_request():396] send_request: summary_record
+2023-08-02 21:16:39,970 INFO    SenderThread:71693 [sender.py:_save_file():1354] saving file wandb-summary.json with policy end
+2023-08-02 21:16:39,981 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: check_version
+2023-08-02 21:16:39,982 DEBUG   SenderThread:71693 [sender.py:send_request():396] send_request: check_version
+2023-08-02 21:16:40,119 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: run_start
+2023-08-02 21:16:40,136 DEBUG   HandlerThread:71693 [system_info.py:__init__():31] System info init
+2023-08-02 21:16:40,137 DEBUG   HandlerThread:71693 [system_info.py:__init__():46] System info init done
+2023-08-02 21:16:40,137 INFO    HandlerThread:71693 [system_monitor.py:start():181] Starting system monitor
+2023-08-02 21:16:40,139 INFO    SystemMonitor:71693 [system_monitor.py:_start():145] Starting system asset monitoring threads
+2023-08-02 21:16:40,140 INFO    HandlerThread:71693 [system_monitor.py:probe():201] Collecting system info
+2023-08-02 21:16:40,144 INFO    SystemMonitor:71693 [interfaces.py:start():190] Started cpu monitoring
+2023-08-02 21:16:40,145 DEBUG   HandlerThread:71693 [system_info.py:probe():195] Probing system
+2023-08-02 21:16:40,147 INFO    SystemMonitor:71693 [interfaces.py:start():190] Started disk monitoring
+2023-08-02 21:16:40,150 INFO    SystemMonitor:71693 [interfaces.py:start():190] Started memory monitoring
+2023-08-02 21:16:40,161 INFO    SystemMonitor:71693 [interfaces.py:start():190] Started network monitoring
+2023-08-02 21:16:40,166 DEBUG   HandlerThread:71693 [system_info.py:_probe_git():180] Probing git
+2023-08-02 21:16:40,220 DEBUG   HandlerThread:71693 [system_info.py:_probe_git():188] Probing git done
+2023-08-02 21:16:40,221 DEBUG   HandlerThread:71693 [system_info.py:probe():240] Probing system done
+2023-08-02 21:16:40,222 DEBUG   HandlerThread:71693 [system_monitor.py:probe():210] {'os': 'macOS-12.6.3-x86_64-i386-64bit', 'python': '3.11.1', 'heartbeatAt': '2023-08-03T01:16:40.145465', 'startedAt': '2023-08-03T01:16:39.398520', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/train_q_policy.py', 'codePath': 'train_q_policy.py', 'git': {'remote': 'https://github.com/sohrabnamazinia/RL_Modular.git', 'commit': '771fe6f6000df63739a9a2fb8baf35b44941e83b'}, 'email': 'sohrab.namazinia@gmail.com', 'root': '/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular', 'host': 'senjutibs-MBP', 'username': 'sohrabnamazinia', 'executable': '/usr/local/bin/python3.11', 'cpu_count': 2, 'cpu_count_logical': 4, 'cpu_freq': {'current': 2700, 'min': 2700, 'max': 2700}, 'cpu_freq_per_core': [{'current': 2700, 'min': 2700, 'max': 2700}], 'disk': {'total': 233.5667953491211, 'used': 20.5462646484375}, 'memory': {'total': 8.0}}
+2023-08-02 21:16:40,222 INFO    HandlerThread:71693 [system_monitor.py:probe():211] Finished collecting system info
+2023-08-02 21:16:40,222 INFO    HandlerThread:71693 [system_monitor.py:probe():214] Publishing system info
+2023-08-02 21:16:40,223 DEBUG   HandlerThread:71693 [system_info.py:_save_pip():51] Saving list of pip packages installed into the current environment
+2023-08-02 21:16:40,224 DEBUG   HandlerThread:71693 [system_info.py:_save_pip():67] Saving pip packages done
+2023-08-02 21:16:40,226 INFO    HandlerThread:71693 [system_monitor.py:probe():216] Finished publishing system info
+2023-08-02 21:16:40,245 DEBUG   SenderThread:71693 [sender.py:send():369] send: files
+2023-08-02 21:16:40,246 INFO    SenderThread:71693 [sender.py:_save_file():1354] saving file wandb-metadata.json with policy now
+2023-08-02 21:16:40,274 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: stop_status
+2023-08-02 21:16:40,276 DEBUG   SenderThread:71693 [sender.py:send_request():396] send_request: stop_status
+2023-08-02 21:16:40,456 DEBUG   SenderThread:71693 [sender.py:send():369] send: telemetry
+2023-08-02 21:16:40,590 INFO    wandb-upload_0:71693 [upload_job.py:push():133] Uploaded file /var/folders/rd/9hb4fktx6dzf6vhw6v8x2jcm0000gr/T/tmpuu15no0_wandb/i2qczduu-wandb-metadata.json
+2023-08-02 21:16:40,986 INFO    Thread-17 :71693 [dir_watcher.py:_on_file_created():272] file/dir created: /Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/wandb/run-20230802_211639-e7aoyn71/files/wandb-metadata.json
+2023-08-02 21:16:40,987 INFO    Thread-17 :71693 [dir_watcher.py:_on_file_created():272] file/dir created: /Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/wandb/run-20230802_211639-e7aoyn71/files/requirements.txt
+2023-08-02 21:16:40,987 INFO    Thread-17 :71693 [dir_watcher.py:_on_file_created():272] file/dir created: /Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/wandb/run-20230802_211639-e7aoyn71/files/wandb-summary.json
+2023-08-02 21:16:44,468 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: status_report
+2023-08-02 21:16:49,485 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: status_report
+2023-08-02 21:16:54,504 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: status_report
+2023-08-02 21:16:55,275 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: stop_status
+2023-08-02 21:16:55,276 DEBUG   SenderThread:71693 [sender.py:send_request():396] send_request: stop_status
+2023-08-02 21:17:00,472 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: status_report
+2023-08-02 21:17:05,483 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: status_report
+2023-08-02 21:17:10,279 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: stop_status
+2023-08-02 21:17:10,280 DEBUG   SenderThread:71693 [sender.py:send_request():396] send_request: stop_status
+2023-08-02 21:17:11,396 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: status_report
+2023-08-02 21:17:12,079 INFO    Thread-17 :71693 [dir_watcher.py:_on_file_modified():289] file/dir modified: /Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/wandb/run-20230802_211639-e7aoyn71/files/config.yaml
+2023-08-02 21:17:16,552 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: status_report
+2023-08-02 21:17:21,565 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: status_report
+2023-08-02 21:17:25,282 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: stop_status
+2023-08-02 21:17:25,282 DEBUG   SenderThread:71693 [sender.py:send_request():396] send_request: stop_status
+2023-08-02 21:17:27,469 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: status_report
+2023-08-02 21:17:32,515 DEBUG   HandlerThread:71693 [handler.py:handle_request():144] handle_request: status_report

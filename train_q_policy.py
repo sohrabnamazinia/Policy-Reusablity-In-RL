@@ -28,6 +28,7 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type):
         state_index = np.ravel_multi_index(tuple(grid_world.agent_position), dims=grid_world.grid.shape)
 
         for step in range(max_steps_per_episode):
+            grid_world.visited[grid_world.agent_position[0]][grid_world.agent_position[1]] += 1
             action = q_agent.get_action(state_index)
 
             grid, reward, done, _ = grid_world.step(action)
@@ -58,7 +59,7 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type):
 
 
 # Define env and train parameters
-reward_system = "path"
+reward_system = "combined"
 grid_world = init_gridworld_1(reward_system)
 n_episodes = 10000
 max_steps_per_episode = 100
@@ -66,3 +67,4 @@ agent_type = "QLearning"
 
 # train the agent
 train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type)
+print(grid_world.visited)

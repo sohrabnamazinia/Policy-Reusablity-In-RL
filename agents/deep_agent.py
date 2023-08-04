@@ -35,8 +35,8 @@ class Agent:
     def save(self, path):
         self.model.save(path)
 
-    def load(self, path):
+    def load(self, path, grid_world):
         if self.algorithm == 'DQN':
-            self.model = DQN.load(path)
+            self.model = DQN.load(path, grid_world)
         elif self.algorithm == 'A2C':
-            self.model = A2C.load(path)
+            self.model = A2C.load(path, grid_world)
