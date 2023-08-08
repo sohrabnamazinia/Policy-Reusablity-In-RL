@@ -19,7 +19,7 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type):
     elif agent_type == "Sarsa":
         q_agent = SarsaAgent(n_states=n_states, n_actions=n_actions)
 
-    wandb.init(project="Train_Q_Cumulative_Reward")
+    run = wandb.init(project="Train_Q_Cumulative_Reward")
     cumulative_reward = 0
     
 
@@ -55,11 +55,13 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type):
 
     # Save the q_table for future use
     np.save('q_table.npy', q_agent.q_table)
+    run.finish()
+
 
 
 
 # Define env and train parameters
-reward_system = "combined"
+reward_system = "gold"
 grid_world = init_gridworld_1(reward_system)
 n_episodes = 10000
 max_steps_per_episode = 100
@@ -68,3 +70,4 @@ agent_type = "QLearning"
 # train the agent
 train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type)
 print(grid_world.visited)
+

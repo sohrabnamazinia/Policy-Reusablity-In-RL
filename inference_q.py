@@ -45,5 +45,5 @@ def inference_q(grid_world):
                 print("Agent failed to reach the target!")
             break
 
-grid_world = init_gridworld_1("combined")
+grid_world = init_gridworld_1("gold")
 inference_q(grid_world)

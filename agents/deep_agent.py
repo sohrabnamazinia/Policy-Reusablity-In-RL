@@ -1,4 +1,4 @@
-from stable_baselines3 import DQN, A2C
+from stable_baselines3 import DQN, A2C, PPO
 from stable_baselines3.common.callbacks import BaseCallback
 import wandb
 
@@ -19,12 +19,14 @@ class WandbCallback(BaseCallback):
 
 
 class Agent:
-    def __init__(self, env, algorithm='DQN'):
+    def __init__(self, env, algorithm='A2C'):
         self.algorithm = algorithm
         if self.algorithm == 'DQN':
             self.model = DQN("MlpPolicy", env, verbose=1)
         elif self.algorithm == 'A2C':
             self.model = A2C("MlpPolicy", env, verbose=1)
+        elif self.algorithm == 'PPO':
+            self.model = PPO("MlpPolicy", env, verbose=1)
         else:
             raise ValueError("Invalid algorithm. Choose either 'DQN' or 'A2C'")
 
@@ -40,3 +42,5 @@ class Agent:
             self.model = DQN.load(path, grid_world)
         elif self.algorithm == 'A2C':
             self.model = A2C.load(path, grid_world)
+        elif self.algorithm == 'PPO':
+            self.model = PPO.load(path, grid_world)

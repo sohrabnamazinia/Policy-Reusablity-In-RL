@@ -1,34 +1,17 @@
 from agents.deep_agent import Agent
 import numpy as np
-from env.gridworld import GridWorld
 from env.init_gridworld import init_gridworld_1
-from stable_baselines3.common.evaluation import evaluate_policy
 
 
 # inference method
 # the agent.pkl file must be in the same directory as this file
-
-def inference_deep_2(grid_world):
-	deep_agent = Agent(grid_world, "DQN")
-	deep_agent.load('agent.pkl', grid_world)
-	mean_reward, std_reward = evaluate_policy(deep_agent.model, deep_agent.model.get_env(), n_eval_episodes=10)
-
-	# Enjoy trained agent
-	vec_env = deep_agent.model.get_env()
-	obs = vec_env.reset()
-	for i in range(1000):
-		action, _states = deep_agent.model.predict(obs, deterministic=True)
-		obs, rewards, dones, info = vec_env.step(action)
-		vec_env.render("human")
-
-def inference_deep(grid_world):
+def inference_deep(grid_world, algorithm):
 	
-	deep_agent = Agent(grid_world, "DQN")
+	deep_agent = Agent(grid_world, algorithm)
 	deep_agent.load('agent.pkl', grid_world)
 	
     # Reset the environment to its initial state, and record returned observation
 	obs = grid_world.reset()
-	state_index = np.ravel_multi_index(tuple(grid_world.agent_position), dims=grid_world.grid.shape)
 
     # Maximum number of steps for inference
 	max_steps_inference = 100
@@ -39,21 +22,16 @@ def inference_deep(grid_world):
 		print("Agent location: " + str(grid_world.agent_position))
 		
         # action selection from model (inference)
-		action, _states = deep_agent.model.predict(observation = obs, deterministic=True)
-		#action, _states = deep_agent.model.predict(observation = obs, state=state_index, deterministic=True)
+		action, _states = deep_agent.model.predict(observation = obs)
 
 		print("Action: ", action)
 
         # step
 		obs, reward, done, _ = grid_world.step(action)
-		next_state_index = np.ravel_multi_index(tuple(grid_world.agent_position.flatten()), dims=grid_world.grid.shape)
-
-        # upadate state index
-		state_index = next_state_index
 
         # print step index
 		print("Step: ", step + 1)
-		print(obs)
+		grid_world.render()
 
         # check if the agent reached the target or the maximum number of steps is reached
 		if done:
@@ -62,6 +40,9 @@ def inference_deep(grid_world):
 			else:
 				print("Agent failed to reach the target!")
 			break
-			
-grid_world = init_gridworld_1('path')
-inference_deep_2(grid_world)
+
+
+reward_system = "gold"	
+algorithm = "A2C"		
+grid_world = init_gridworld_1(reward_system)
+inference_deep(grid_world, algorithm)
