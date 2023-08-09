@@ -4,7 +4,7 @@ from env.init_gridworld import init_gridworld_1
 
 timesteps = 10000
 deep_algorithm = "A2C" 
-reward_system = "gold" 
+reward_system = "path" 
 
 # Initialize a new run
 run = wandb.init(project="gridworld", entity="sn773")

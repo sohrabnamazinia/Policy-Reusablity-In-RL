@@ -4,7 +4,7 @@ from agents.q_agent import SarsaAgent
 from env.init_gridworld import init_gridworld_1
 import wandb
 
-def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type):
+def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path):
 
     # Flatten the grid to get the total number of states
     n_states = np.product(grid_world.grid.shape)
@@ -54,20 +54,21 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type):
         wandb.log({"Cumulative Reward": cumulative_reward}, step=episode)
 
     # Save the q_table for future use
-    np.save('q_table.npy', q_agent.q_table)
+    np.save(output_path, q_agent.q_table)
     run.finish()
 
 
 
 
 # Define env and train parameters
-reward_system = "gold"
+reward_system = "path"
 grid_world = init_gridworld_1(reward_system)
 n_episodes = 10000
 max_steps_per_episode = 100
 agent_type = "QLearning"
+output_path = "q_table.npy"
 
 # train the agent
-train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type)
+train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path)
 print(grid_world.visited)
 

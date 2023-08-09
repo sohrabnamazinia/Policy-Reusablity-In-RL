@@ -4,9 +4,9 @@ from env.init_gridworld import init_gridworld_1
 
 # inference method
 # the q_table.npy file must be in the same directory as this file
-def inference_q(grid_world):
+def inference_q(grid_world, q_table_path):
     # Load the Q-table
-    q_table = np.load('q_table.npy')
+    q_table = np.load(q_table_path)
     print(q_table)
 
     # Reset the environment to its initial state
@@ -45,5 +45,7 @@ def inference_q(grid_world):
                 print("Agent failed to reach the target!")
             break
 
-grid_world = init_gridworld_1("gold")
-inference_q(grid_world)
+# set inputs
+grid_world = init_gridworld_1("path")
+q_table_path = "q_table.npy"
+inference_q(grid_world, q_table_path)

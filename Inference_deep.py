@@ -5,10 +5,10 @@ from env.init_gridworld import init_gridworld_1
 
 # inference method
 # the agent.pkl file must be in the same directory as this file
-def inference_deep(grid_world, algorithm):
+def inference_deep(grid_world, algorithm, agent_path):
 	
 	deep_agent = Agent(grid_world, algorithm)
-	deep_agent.load('agent.pkl', grid_world)
+	deep_agent.load(agent_path, grid_world)
 	
     # Reset the environment to its initial state, and record returned observation
 	obs = grid_world.reset()
@@ -42,7 +42,8 @@ def inference_deep(grid_world, algorithm):
 			break
 
 
-reward_system = "gold"	
-algorithm = "A2C"		
+reward_system = "path"	
+algorithm = "A2C"	
+agent_path = "agent.pkl"	
 grid_world = init_gridworld_1(reward_system)
-inference_deep(grid_world, algorithm)
+inference_deep(grid_world, algorithm, agent_path)
