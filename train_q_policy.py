@@ -62,12 +62,14 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
 
         # log cumulative reward
         wandb.log({"Cumulative Reward": cumulative_reward}, step=episode)
-        wandb.log({"Total Time": total_time}, step=episode)
+        wandb.log({"Total Training Time": total_time}, step=episode)
 
 
     # Save the q_table for future use
     np.save(output_path, q_agent.q_table)
     run.finish()
+
+    return total_time
 
 # Define env and train parameters
 reward_system = "combined"
