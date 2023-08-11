@@ -46,6 +46,6 @@ def inference_q(grid_world, q_table_path):
             break
 
 # set inputs
-grid_world = init_gridworld_1("path")
-q_table_path = "q_table.npy"
+grid_world = init_gridworld_1("combined")
+q_table_path = "q_table_combined.npy"
 inference_q(grid_world, q_table_path)

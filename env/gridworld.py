@@ -28,8 +28,8 @@ class GridWorld(gym.Env):
         self.gold_k = gold_k
 
         # action space in case we want to avoid cycles
-        #self.action_space = spaces.Discrete(2)
-        self.action_space = spaces.Discrete(4)
+        self.action_space = spaces.Discrete(2)
+        #self.action_space = spaces.Discrete(4)
         self.observation_space = spaces.Box(low = cell_low_value,
             high= cell_high_value, shape=(self.grid_width, self.grid_length))
 
@@ -65,20 +65,20 @@ class GridWorld(gym.Env):
     def step(self, action):
         prev_agent_position = [self.agent_position[0], self.agent_position[1]]
 
-        if action == 0:   # up
-            self.agent_position[0] -= 1
-        elif action == 1: # right
-            self.agent_position[1] += 1
-        elif action == 2: # down
-            self.agent_position[0] += 1
-        elif action == 3: # left
-            self.agent_position[1] -= 1
+        # if action == 0:   # up
+        #     self.agent_position[0] -= 1
+        # elif action == 1: # right
+        #     self.agent_position[1] += 1
+        # elif action == 2: # down
+        #     self.agent_position[0] += 1
+        # elif action == 3: # left
+        #     self.agent_position[1] -= 1
 
         #NOTE: actions in case we want to avoid cycle
-        # if action == 0: # right
-        #     self.agent_position[1] += 1
-        # elif action == 1: # down
-        #     self.agent_position[0] += 1
+        if action == 0: # right
+            self.agent_position[1] += 1
+        elif action == 1: # down
+            self.agent_position[0] += 1
         
 
         self.agent_position = np.clip(self.agent_position, (0, 0), (self.grid_width - 1, self.grid_length - 1))

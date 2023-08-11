@@ -3,6 +3,7 @@ from agents.q_agent import QLearningAgent
 from agents.q_agent import SarsaAgent
 from env.init_gridworld import init_gridworld_1
 import wandb
+import time
 
 def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path):
 
@@ -19,11 +20,16 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
     elif agent_type == "Sarsa":
         q_agent = SarsaAgent(n_states=n_states, n_actions=n_actions)
 
-    run = wandb.init(project="Train_Q_Cumulative_Reward")
+    run = wandb.init(project="Train_Q")
+
     cumulative_reward = 0
+    total_time = 0
     
 
     for episode in range(n_episodes):
+        # turn on stopwatch
+        start_time = time.time()
+
         grid_world.reset().flatten()
         state_index = np.ravel_multi_index(tuple(grid_world.agent_position), dims=grid_world.grid.shape)
 
@@ -50,25 +56,26 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
         q_agent.learning_rate = max(q_agent.learning_rate * q_agent.learning_rate_decay, q_agent.min_learning_rate)
         q_agent.exploration_rate = max(q_agent.exploration_rate * q_agent.exploration_rate_decay, q_agent.min_exploration_rate)
 
+        # turn of stopwatch
+        elapsed_time = time.time() - start_time
+        total_time += elapsed_time
+
         # log cumulative reward
         wandb.log({"Cumulative Reward": cumulative_reward}, step=episode)
+        wandb.log({"Total Time": total_time}, step=episode)
+
 
     # Save the q_table for future use
     np.save(output_path, q_agent.q_table)
     run.finish()
 
-
-
-
 # Define env and train parameters
-reward_system = "path"
+reward_system = "combined"
 grid_world = init_gridworld_1(reward_system)
-n_episodes = 10000
+n_episodes = 1000
 max_steps_per_episode = 100
 agent_type = "QLearning"
-output_path = "q_table.npy"
+output_path = "q_table_combined.npy"
 
 # train the agent
 train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path)
-print(grid_world.visited)
-

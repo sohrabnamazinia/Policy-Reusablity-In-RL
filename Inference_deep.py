@@ -43,7 +43,7 @@ def inference_deep(grid_world, algorithm, agent_path):
 
 
 reward_system = "path"	
-algorithm = "A2C"	
+algorithm = "PPO"	
 agent_path = "agent.pkl"	
 grid_world = init_gridworld_1(reward_system)
 inference_deep(grid_world, algorithm, agent_path)

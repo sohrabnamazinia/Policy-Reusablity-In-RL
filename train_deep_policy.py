@@ -3,7 +3,7 @@ import wandb
 from env.init_gridworld import init_gridworld_1
 
 timesteps = 10000
-deep_algorithm = "A2C" 
+deep_algorithm = "PPO" 
 reward_system = "path" 
 
 # Initialize a new run

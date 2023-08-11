@@ -1,21 +1,28 @@
 import numpy as np
 from env.init_gridworld import init_gridworld_1
+import time
 
 def step_brute_force(grid_world, current_state, action):
     next_state = [current_state[0], current_state[1]]
-    if action == 0:   # up
-            next_state[0] -= 1
-    elif action == 1: # right
+    # if action == 0:   # up
+    #         next_state[0] -= 1
+    # elif action == 1: # right
+    #         next_state[1] += 1
+    # elif action == 2: # down
+    #         next_state[0] += 1
+    # elif action == 3: # left
+    #         next_state[1] -= 1
+
+    if action == 0:   # right
             next_state[1] += 1
-    elif action == 2: # down
+    elif action == 1: # down
             next_state[0] += 1
-    elif action == 3: # left
-            next_state[1] -= 1
 
     next_state = np.clip(next_state, (0, 0), (grid_world.grid_width - 1, grid_world.grid_length - 1))
     return next_state.tolist()
 
 def brute_force_q(q_table_1, q_table_2, env, k, max_allowed_path_size):
+    start_time = time.time()
     paths = []
     shortest_paths = []
     stack = []
@@ -23,7 +30,7 @@ def brute_force_q(q_table_1, q_table_2, env, k, max_allowed_path_size):
     start_state = env.start_position
     stack.append((start_state, [], True))
     stack.append((start_state, [], False))
-
+    i = 0
     while (len(stack) > 0):
         current_state, current_path, use_policy1 = stack.pop()
         if (current_state == env.target_position) and (current_path not in paths):
@@ -43,8 +50,8 @@ def brute_force_q(q_table_1, q_table_2, env, k, max_allowed_path_size):
             
             for action in top_k_actions:
                 # NOTE: escaping actions that cause cycle
-                if action in [0, 3]:
-                     continue
+                # if action in [0, 3]:
+                #      continue
                 next_state = step_brute_force(env, current_state, action)
                 if (next_state == current_state):
                      continue
@@ -52,8 +59,11 @@ def brute_force_q(q_table_1, q_table_2, env, k, max_allowed_path_size):
                 if len(next_path) <= max_allowed_path_size:
                     stack.append((next_state, next_path, use_policy1))
                     stack.append((next_state, next_path, not use_policy1))
+        i += 1
+        
 
-    return paths, shortest_paths
+    total_time = time.time() - start_time
+    return paths, shortest_paths, total_time
 
 
 def run_brute_force_q(q_table_1_path, q_table_2_path, reward_system, k, max_allowed_path_size):
@@ -67,11 +77,12 @@ def run_brute_force_q(q_table_1_path, q_table_2_path, reward_system, k, max_allo
 reward_system = "combined"
 q_table_1_path = "q_table_path.npy"
 q_table_2_path = "q_table_gold.npy"
-k = 1
+k = 4
 max_allowed_path_size = 8
 
-paths, shortest_paths = run_brute_force_q(q_table_1_path, q_table_2_path, reward_system, k, max_allowed_path_size)
+paths, shortest_paths, total_time = run_brute_force_q(q_table_1_path, q_table_2_path, reward_system, k, max_allowed_path_size)
+print("Total_time: " + str(total_time))
 print("All paths count:\n" + str(len(paths)))
-print(paths)
+#print(paths)
 print("Shortest paths count:\n" + str(len(shortest_paths)))
-print(shortest_paths)
+#print(shortest_paths)
