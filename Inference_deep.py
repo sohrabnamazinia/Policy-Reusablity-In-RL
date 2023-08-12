@@ -50,6 +50,7 @@ def inference_deep(grid_world, algorithm, agent_path):
 		wandb.log({"Total Inference Time": total_time}, step=step)
         
 	run.finish()
+	return total_time
 
 reward_system = "path"	
 algorithm = "PPO"	
