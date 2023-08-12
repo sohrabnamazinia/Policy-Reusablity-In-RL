@@ -5,20 +5,19 @@ from Inference_deep import inference_deep
 # Define env and train parameters
 reward_system = "combined"
 grid_world = init_gridworld_1(reward_system)
-n_episodes = 1000
-max_steps_per_episode = 100
-agent_type = "Sarsa"
-output_path = "q_table_combined.npy"
+timesteps = 1000
+deep_algorithm = "PPO"
+output_path = "agent_new.pkl"
 
 # train + inference
-total_train_time = train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path)
+total_train_time = train_deep_policy(timesteps, deep_algorithm, reward_system, output_path)
 grid_world = init_gridworld_1(reward_system)
-q_table_path = output_path
-total_inference_time = inference_q(grid_world, q_table_path)
+deep_agent_path = output_path
+total_inference_time = inference_deep(grid_world, deep_algorithm, output_path)
 total_time = total_train_time + total_inference_time
 
 # output
-print("Agent_Type: " + agent_type + ", Policy: " + reward_system + ":")
+print("Deep_Algorithm: " + deep_algorithm + ", Policy: " + reward_system + ":")
 print("Train+Inference time: " + str(total_time))
 print("Train time: " + str(total_train_time))
 print("Inference time: " + str(total_inference_time))
