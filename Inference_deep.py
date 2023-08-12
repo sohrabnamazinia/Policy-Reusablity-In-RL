@@ -1,12 +1,13 @@
 from agents.deep_agent import Agent
 import numpy as np
 from env.init_gridworld import init_gridworld_1
-
+import wandb
 
 # inference method
 # the agent.pkl file must be in the same directory as this file
 def inference_deep(grid_world, algorithm, agent_path):
-	
+    
+	run = wandb.init(project="Inference_Deep")
 	deep_agent = Agent(grid_world, algorithm)
 	deep_agent.load(agent_path, grid_world)
 	
@@ -40,7 +41,7 @@ def inference_deep(grid_world, algorithm, agent_path):
 			else:
 				print("Agent failed to reach the target!")
 			break
-
+		run.finish()
 
 reward_system = "path"	
 algorithm = "PPO"	
