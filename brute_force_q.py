@@ -39,7 +39,7 @@ def brute_force_q(q_table_1, q_table_2, env, k, max_allowed_path_size):
                 shortest_paths.append(current_path)
                 shortest_paths_length = len(current_path)
         else:
-            state_index = np.ravel_multi_index(tuple(env.agent_position), dims=env.grid.shape)
+            state_index = env.state_to_index(env.agent_position)
             if use_policy1:
                 q_values = q_table_1[state_index]  # Get Q-values for current state from Q-table 1
             else:

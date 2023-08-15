@@ -62,6 +62,16 @@ class GridWorld(gym.Env):
         self.grid[self.start_position[0]][self.start_position[1]] = self.agent_position_value
         return self.grid
 
+    # this function is just to convert a position on the grid to an index
+    def state_to_index(self, state):
+        next_state_index = np.ravel_multi_index(tuple(state), dims=self.grid.shape)
+        return next_state_index
+    
+    def check_boundry_constraint(self):
+        if (0 <= self.agent_position[0] < self.grid_width) and (0 <= self.agent_position[1] < self.grid_length):
+            return True
+        return False
+
     def step(self, action):
         prev_agent_position = [self.agent_position[0], self.agent_position[1]]
 
@@ -80,8 +90,11 @@ class GridWorld(gym.Env):
         elif action == 1: # down
             self.agent_position[0] += 1
         
-
-        self.agent_position = np.clip(self.agent_position, (0, 0), (self.grid_width - 1, self.grid_length - 1))
+        #self.agent_position = np.clip(self.agent_position, (0, 0), (self.grid_width - 1, self.grid_length - 1))
+        # check boundary constraint of the grid world
+        if not self.check_boundry_constraint():
+            self.agent_position = prev_agent_position
+            #return self.grid, 0, False, {False}
 
         reward = self._get_reward(prev_agent_position)
 

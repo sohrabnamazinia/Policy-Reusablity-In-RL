@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/train_q_policy.py", line 87, in <module>
+    total_time, dag = train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/train_q_policy.py", line 53, in train_q_policy
+    dag.add_edge(state_index, next_state_index)
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/DAG.py", line 13, in add_edge
+    self.graph.add_edge(a, b)
+    ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'numpy.int64' object has no attribute 'add_edge'

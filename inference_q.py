@@ -16,7 +16,8 @@ def inference_q(grid_world, q_table_path):
 
     # Reset the environment to its initial state
     grid_world.reset().flatten()
-    state_index = np.ravel_multi_index(tuple(grid_world.agent_position), dims=grid_world.grid.shape)
+    state_index = grid_world.state_to_index(grid_world.agent_position)
+
 
     # Maximum number of steps for inference
     max_steps_inference = 100
@@ -36,7 +37,7 @@ def inference_q(grid_world, q_table_path):
 
         # step
         grid, reward, done, _ = grid_world.step(action)
-        next_state_index = np.ravel_multi_index(tuple(grid_world.agent_position.flatten()), dims=grid_world.grid.shape)
+        next_state_index = grid_world.state_to_index(grid_world.agent_position)
 
         # upadate state index
         state_index = next_state_index

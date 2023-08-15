@@ -2,6 +2,7 @@ import numpy as np
 from agents.q_agent import QLearningAgent
 from agents.q_agent import SarsaAgent
 from env.init_gridworld import init_gridworld_1
+from DAG import DAG
 import wandb
 import time
 
@@ -9,6 +10,7 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
 
     # Flatten the grid to get the total number of states
     n_states = np.product(grid_world.grid.shape)
+    dag = DAG(n_states)
 
     # Get the total number of actions
     n_actions = grid_world.action_space.n
@@ -31,22 +33,26 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
         start_time = time.time()
 
         grid_world.reset().flatten()
-        state_index = np.ravel_multi_index(tuple(grid_world.agent_position), dims=grid_world.grid.shape)
+        state_index = grid_world.state_to_index(grid_world.agent_position)
 
         for step in range(max_steps_per_episode):
             grid_world.visited[grid_world.agent_position[0]][grid_world.agent_position[1]] += 1
             action = q_agent.get_action(state_index)
 
-            grid, reward, done, _ = grid_world.step(action)
+            grid, reward, done, info = grid_world.step(action)
+            # if (False in info):
+            #     continue
             cumulative_reward += reward
-            next_state_index = np.ravel_multi_index(tuple(grid_world.agent_position.flatten()), dims=grid_world.grid.shape)
-
+            next_state_index = grid_world.state_to_index(grid_world.agent_position)
+            
             if agent_type == "Sarsa":
                 next_action = q_agent.get_action(next_state_index)
                 q_agent.update_q_table(state_index, action, reward, next_state_index, next_action)
             elif agent_type == "QLearning":
                 q_agent.update_q_table(state_index, action, reward, next_state_index)
 
+            if (state_index != next_state_index):
+                dag.add_edge(state_index, next_state_index)
             state_index = next_state_index
 
             if done:
@@ -69,7 +75,7 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
     np.save(output_path, q_agent.q_table)
     run.finish()
 
-    return total_time
+    return total_time, dag
 
 # Define env and train parameters
 reward_system = "combined"
@@ -80,4 +86,5 @@ agent_type = "QLearning"
 output_path = "q_table_combined.npy"
 
 # train the agent
-train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path)
+total_time, dag = train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path)
+dag.print(mode=3, env_length=grid_world.grid_length)

@@ -28,7 +28,7 @@ class Agent:
         elif self.algorithm == 'PPO':
             self.model = PPO("MlpPolicy", env, verbose=1)
         else:
-            raise ValueError("Invalid algorithm. Choose either 'DQN' or 'A2C'")
+            raise ValueError("Invalid algorithm. Choose either 'DQN' or 'A2C' or 'PPO'")
 
     def learn(self, timesteps):
         callback = WandbCallback()

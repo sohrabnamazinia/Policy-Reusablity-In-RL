@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/train_q_policy.py", line 88, in <module>
+    total_time, dag = train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/train_q_policy.py", line 45, in train_q_policy
+    next_state_state = grid_world.index_to_state(next_state_index)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/env/gridworld.py", line 72, in index_to_state
+    state_flat = np.unravel_index(index, dims=self.grid.shape)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<__array_function__ internals>", line 179, in unravel_index
+TypeError: unravel_index() got an unexpected keyword argument 'dims'
