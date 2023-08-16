@@ -35,7 +35,10 @@ class DAG:
                 print("\t" + str(neighbor_states))
     
     def union(self, other):
-        union_graph = nx.union(self.graph, other.graph)
-        dag = DAG(union_graph.number_of_nodes)
-        dag.graph = union_graph
+        graph = nx.DiGraph()
+        graph.add_nodes_from(self.graph.nodes)
+        graph.add_edges_from(self.graph.edges)
+        graph.add_edges_from(other.graph.edges)
+        dag = DAG(self.graph.number_of_nodes())
+        dag.graph = graph
         return dag

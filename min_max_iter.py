@@ -2,7 +2,7 @@ from env.init_gridworld import init_gridworld_1
 from train_q_policy import train_q_policy
 
 def min_max_iter(dag):
-    pass
+    return 0, 0
 
 reward_system_1 = "path"
 reward_system_2 = "gold"
@@ -21,3 +21,5 @@ total_time_1, dag_2 = train_q_policy(grid_world_2, n_episodes, max_steps_per_epi
 
 union_dag = dag_1.union(dag_2)
 min_iterations, max_iterations = min_max_iter(union_dag)
+
+union_dag.print(mode=3, env_length=grid_world_1.grid_length)
