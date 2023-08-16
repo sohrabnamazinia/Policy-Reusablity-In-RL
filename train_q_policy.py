@@ -10,10 +10,11 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
 
     # Flatten the grid to get the total number of states
     n_states = np.product(grid_world.grid.shape)
-    dag = DAG(n_states)
 
     # Get the total number of actions
     n_actions = grid_world.action_space.n
+
+    dag = DAG(n_states, n_actions, n_episodes, grid_world.state_to_index(grid_world.target_position), grid_world.grid_length)
 
     # Initialize the Q-Learning agent
     q_agent = None

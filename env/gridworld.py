@@ -66,6 +66,13 @@ class GridWorld(gym.Env):
     def state_to_index(self, state):
         next_state_index = np.ravel_multi_index(tuple(state), dims=self.grid.shape)
         return next_state_index
+
+    # this function is only used for grid world environment
+    # and is to convert a state index to its position on the grid
+    @staticmethod
+    def index_to_state(index, grid_length):
+        result = int(index / grid_length), int(index % grid_length)
+        return result    
     
     def check_boundry_constraint(self):
         if (0 <= self.agent_position[0] < self.grid_width) and (0 <= self.agent_position[1] < self.grid_length):
