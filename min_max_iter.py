@@ -18,7 +18,8 @@ total_time_1, dag_1 = train_q_policy(grid_world_1, n_episodes, max_steps_per_epi
 total_time_1, dag_2 = train_q_policy(grid_world_2, n_episodes, max_steps_per_episode, agent_type, output_path_2)
 
 union_dag = dag_1.union(dag_2)
-min_iterations, max_iterations = union_dag.min_max_iter()
+max_iterations, min_iterations = union_dag.min_max_iter()
 
+print(max_iterations)
 print(min_iterations)
-union_dag.print(mode=3)
+#union_dag.print(mode=3)

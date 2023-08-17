@@ -8,7 +8,7 @@ class DAG:
     # N = No. episodes
     # end node: the goal node
     # env length is only for gridworld
-    def __init__(self, n, action_size, N, end_node, env_length=None):
+    def __init__(self, n, action_size, N, start_node, end_node, env_length=None):
         self.graph = nx.DiGraph()
         states = range(n)
         self.graph.add_nodes_from(states)
@@ -16,6 +16,7 @@ class DAG:
         self.end_node = end_node
         self.action_size = action_size
         self.env_length = env_length
+        self.start_node = start_node
 
     def add_edge(self, a, b):
         self.graph.add_edge(a, b)
@@ -60,7 +61,7 @@ class DAG:
         graph.add_nodes_from(self.graph.nodes)
         graph.add_edges_from(self.graph.edges)
         graph.add_edges_from(other.graph.edges)
-        dag = DAG(self.graph.number_of_nodes(), self.action_size, self.N, self.end_node, self.env_length)
+        dag = DAG(self.graph.number_of_nodes(), self.action_size, self.N, self.start_node, self.end_node, self.env_length)
         dag.graph = graph
         return dag
     
@@ -92,6 +93,43 @@ class DAG:
                         max_iterations[node][action] = total - (self.graph.in_degree(next_node) - 1)
         
         return max_iterations
+    
+    def calculate_itr_nodes(self):
+        itr = [0] * self.graph.number_of_nodes()
+        articulation_points = list(nx.articulation_points(self.graph.to_undirected()))
+
+        for i in range(self.graph.number_of_nodes()):
+            # if node is disconnected from the whole graph, simply ignore it
+            if (self.graph.in_degree(i) == 0 and self.graph.out_degree(i) == 0):
+                continue
+            elif i == self.start_node or i == self.end_node:
+                itr[i] = self.N
+            elif i in articulation_points:
+                itr[i] = self.N
+            else:
+                itr[i] = max(self.graph.in_degree(i), self.graph.out_degree(i))
+        return itr
 
     def min_iter(self):
-        pass
+        visited = set()
+        queue = deque([self.end_node])
+        min_iterations = {node: [0] * self.action_size for node in self.graph.nodes}
+        itr = self.calculate_itr_nodes()
+
+        while queue:
+            next_node = queue.popleft()
+            visited.add(next_node)
+
+            for node in self.graph.predecessors(next_node):
+                if node not in visited and node not in queue:
+                    queue.append(node)
+                action = self.obtain_action(node, next_node)
+                if self.graph.out_degree(node) == 1 and self.graph.in_degree(node) > 1:
+                    min_iterations[node][action] = itr[node]
+                if self.graph.in_degree(next_node) == 1 and self.graph.out_degree(next_node) > 1:
+                    min_iterations[node][action] = itr[next_node]
+                else:
+                    min_iterations[node][action] = 1
+        return min_iterations
+
+        
