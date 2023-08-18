@@ -96,15 +96,14 @@ class DAG:
     
     def calculate_itr_nodes(self):
         itr = [0] * self.graph.number_of_nodes()
-        articulation_points = list(nx.articulation_points(self.graph.to_undirected()))
 
         for i in range(self.graph.number_of_nodes()):
+            graph_copy = self.graph.copy()
+            graph_copy.remove_node(i)
             # if node is disconnected from the whole graph, simply ignore it
-            if (self.graph.in_degree(i) == 0 and self.graph.out_degree(i) == 0):
-                continue
-            elif i == self.start_node or i == self.end_node:
+            if i == self.start_node or i == self.end_node:
                 itr[i] = self.N
-            elif i in articulation_points:
+            elif not nx.has_path(graph_copy, source=self.start_node, target=self.end_node):
                 itr[i] = self.N
             else:
                 itr[i] = max(self.graph.in_degree(i), self.graph.out_degree(i))
