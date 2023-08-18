@@ -1,0 +1,15 @@
+from DAG import DAG
+
+dag = DAG(6, 2, 4, 0, 5)
+dag.add_edge(0, 1)
+dag.add_edge(0, 2)
+dag.add_edge(1, 2)
+dag.add_edge(2, 3)
+dag.add_edge(2, 4)
+dag.add_edge(3, 4)
+dag.add_edge(3, 5)
+dag.add_edge(4, 5)
+max_iters, min_iters = dag.min_max_iter()
+print(max_iters)
+print("\n\n")
+print(min_iters)

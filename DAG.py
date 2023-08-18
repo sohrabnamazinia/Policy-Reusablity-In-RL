@@ -37,6 +37,13 @@ class DAG:
         
         else:
             print("Action could not be obtained")
+
+    # This has been implemented for the gridworld environment with two actions: right and down
+    # def obtain_action(self, state_1_index, state_2_index):
+
+    #     if (state_1_index == 0 and state_2_index == 2) or (state_1_index == 2 and state_2_index == 4) or (state_1_index == 3 and state_2_index == 5):
+    #         return 1
+    #     return 0
     
     # ENV width & length are only used for gridworld policy 
     # to have a better understanding of the position of states 
@@ -125,7 +132,7 @@ class DAG:
                 action = self.obtain_action(node, next_node)
                 if self.graph.out_degree(node) == 1 and self.graph.in_degree(node) > 1:
                     min_iterations[node][action] = itr[node]
-                if self.graph.in_degree(next_node) == 1 and self.graph.out_degree(next_node) > 1:
+                elif self.graph.in_degree(next_node) == 1 and self.graph.out_degree(next_node) > 1:
                     min_iterations[node][action] = itr[next_node]
                 else:
                     min_iterations[node][action] = 1
