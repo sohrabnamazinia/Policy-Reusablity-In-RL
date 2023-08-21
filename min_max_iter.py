@@ -20,6 +20,7 @@ total_time_1, dag_2 = train_q_policy(grid_world_2, n_episodes, max_steps_per_epi
 union_dag = dag_1.union(dag_2)
 max_iterations, min_iterations = union_dag.min_max_iter()
 
-print(max_iterations)
-print(min_iterations)
+print("Max iteration:\nExample: i: [a, b] means node #i has max_iter = a for action = right, and max_iter = b for action down\n" + str(max_iterations))
+print("***********************")
+print("Min iteration:\nExample: i: [a, b] means node #i has min_iter = a for action = right, and min_iter = b for action down\n" + str(min_iterations))
 #union_dag.print(mode=3)

@@ -83,10 +83,11 @@ class DAG:
         while queue:
             next_node = queue.popleft()
             visited.add(next_node)
+            adding_candidates = []
             
             for node in self.graph.predecessors(next_node):
                 if node not in visited and node not in queue:
-                    queue.append(node)
+                    adding_candidates.append(node)
                 action = self.obtain_action(node, next_node)
                 if next_node == self.end_node:
                     max_iterations[node][action] = self.N - (self.graph.in_degree(next_node) - 1)
@@ -98,7 +99,12 @@ class DAG:
                         max_iterations[node][action] = self.N - (self.graph.in_degree(next_node) - 1)
                     else:
                         max_iterations[node][action] = total - (self.graph.in_degree(next_node) - 1)
-        
+                #this is where we should add the nodes from adding candidates to the queue in the order i just described yo you
+                for i in range(len(adding_candidates)):
+                    for j in range(len(adding_candidates)):
+                        if (self.graph.has_edge(i, j)):
+                            adding_candidates[i], adding_candidates[j] = adding_candidates[j], adding_candidates[i]
+                queue.extend(adding_candidates)
         return max_iterations
     
     def calculate_itr_nodes(self):
@@ -125,7 +131,6 @@ class DAG:
         while queue:
             next_node = queue.popleft()
             visited.add(next_node)
-
             for node in self.graph.predecessors(next_node):
                 if node not in visited and node not in queue:
                     queue.append(node)
