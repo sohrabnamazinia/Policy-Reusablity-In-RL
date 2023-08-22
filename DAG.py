@@ -23,28 +23,28 @@ class DAG:
         self.graph.add_edge(a, b)
 
     # This has been implemented for the gridworld environment with two actions: right and down
-    def obtain_action(self, state_1_index, state_2_index):
-
-        state_1 = GridWorld.index_to_state(state_1_index, self.env_length)
-        state_2 = GridWorld.index_to_state(state_2_index, self.env_length)
-
-        # down
-        if (state_2[0] == state_1[0] + 1 and state_2[1] == state_1[1]):
-            return 1
-        
-        # right
-        elif (state_2[0] == state_1[0] and state_2[1] == state_1[1] + 1):
-            return 0
-        
-        else:
-            print("Action could not be obtained")
-
-    # This has been implemented for the gridworld environment with two actions: right and down
     # def obtain_action(self, state_1_index, state_2_index):
 
-    #     if (state_1_index == 0 and state_2_index == 2) or (state_1_index == 2 and state_2_index == 4) or (state_1_index == 3 and state_2_index == 5):
+    #     state_1 = GridWorld.index_to_state(state_1_index, self.env_length)
+    #     state_2 = GridWorld.index_to_state(state_2_index, self.env_length)
+
+    #     # down
+    #     if (state_2[0] == state_1[0] + 1 and state_2[1] == state_1[1]):
     #         return 1
-    #     return 0
+        
+    #     # right
+    #     elif (state_2[0] == state_1[0] and state_2[1] == state_1[1] + 1):
+    #         return 0
+        
+    #     else:
+    #         print("Action could not be obtained")
+
+    # This has been implemented for the gridworld environment with two actions: right and down
+    def obtain_action(self, state_1_index, state_2_index):
+
+        if (state_1_index == 0 and state_2_index == 2) or (state_1_index == 2 and state_2_index == 4) or (state_1_index == 3 and state_2_index == 5):
+            return 1
+        return 0
     
     # ENV width & length are only used for gridworld policy 
     # to have a better understanding of the position of states 
@@ -102,8 +102,8 @@ class DAG:
                         max_iterations[node][action] = total - (self.graph.in_degree(next_node) - 1)
                 #this is where we should add the nodes from adding candidates to the queue in the order i just described yo you
                 for i in range(len(adding_candidates)):
-                    for j in range(len(adding_candidates)):
-                        if (self.graph.has_edge(i, j)):
+                    for j in range(i + 1, len(adding_candidates)):
+                        if (self.graph.has_edge(adding_candidates[i], adding_candidates[j])):
                             adding_candidates[i], adding_candidates[j] = adding_candidates[j], adding_candidates[i]
                 queue.extend(adding_candidates)
         return max_iterations
@@ -167,10 +167,10 @@ class DAG:
                 upper_Qs[node][action] = math.pow(-1, max_iter - 1) * reward * []
                 lower_Qs[node][action] = 0
 
-                #this is where we should add the nodes from adding candidates to the queue in the order i just described yo you
+                #this is where we should add the nodes from adding candidates 
                 for i in range(len(adding_candidates)):
-                    for j in range(len(adding_candidates)):
-                        if (self.graph.has_edge(i, j)):
+                    for j in range(i + 1, len(adding_candidates)):
+                        if (self.graph.has_edge(adding_candidates[i], adding_candidates[j])):
                             adding_candidates[i], adding_candidates[j] = adding_candidates[j], adding_candidates[i]
                 queue.extend(adding_candidates)
         return lower_Qs, upper_Qs
