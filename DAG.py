@@ -1,6 +1,7 @@
 import networkx as nx
 from collections import deque
 from env.gridworld import GridWorld
+import math
 
 class DAG:
     # n = node size
@@ -142,5 +143,37 @@ class DAG:
                 else:
                     min_iterations[node][action] = 1
         return min_iterations
+    
+    def backtrack(self, min_iterations, max_iterations):
+        visited = set()
+        queue = deque([self.end_node])
+        lower_Qs = {node: [0] * self.action_size for node in self.graph.nodes}
+        upper_Qs = {node: [0] * self.action_size for node in self.graph.nodes}
 
-        
+        while queue:
+            next_node = queue.popleft()
+            visited.add(next_node)
+            adding_candidates = []
+
+            for node in self.graph.predecessors(next_node):
+                if node not in visited and node not in queue:
+                    adding_candidates.append(node)
+
+                action = self.obtain_action(node, next_node)
+                min_iter, max_iter = min_iterations[node][action], max_iterations[node][action]
+
+                # NOTE: update lower and uppder bounds
+                reward = 1
+                upper_Qs[node][action] = math.pow(-1, max_iter - 1) * reward * []
+                lower_Qs[node][action] = 0
+
+                #this is where we should add the nodes from adding candidates to the queue in the order i just described yo you
+                for i in range(len(adding_candidates)):
+                    for j in range(len(adding_candidates)):
+                        if (self.graph.has_edge(i, j)):
+                            adding_candidates[i], adding_candidates[j] = adding_candidates[j], adding_candidates[i]
+                queue.extend(adding_candidates)
+        return lower_Qs, upper_Qs
+                
+
+            
