@@ -6,7 +6,7 @@ from DAG import DAG
 import wandb
 import time
 
-def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path):
+def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path, learning_rate=None, discount_factor=None):
 
     # Flatten the grid to get the total number of states
     n_states = np.product(grid_world.grid.shape)
@@ -14,7 +14,7 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
     # Get the total number of actions
     n_actions = grid_world.action_space.n
 
-    dag = DAG(n_states, n_actions, n_episodes, grid_world.state_to_index(grid_world.start_position), grid_world.state_to_index(grid_world.target_position), grid_world.grid_length)
+    dag = DAG(gridworld=grid_world, N=n_episodes)
 
     # Initialize the Q-Learning agent
     q_agent = None
@@ -23,8 +23,13 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
     elif agent_type == "Sarsa":
         q_agent = SarsaAgent(n_states=n_states, n_actions=n_actions)
 
-    run = wandb.init(project="Train_Q")
+    # check if we want to hardcode lr and df by using input parameters
+    if learning_rate != None:
+        q_agent.learning_rate = learning_rate
+    if discount_factor != None:
+        q_agent.discount_factor = discount_factor
 
+    run = wandb.init(project="Train_Q")
     cumulative_reward = 0
     total_time = 0
     
@@ -60,7 +65,7 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
                 break
 
         # update lerning rate and explortion rate
-        q_agent.learning_rate = max(q_agent.learning_rate * q_agent.learning_rate_decay, q_agent.min_learning_rate)
+        #q_agent.learning_rate = max(q_agent.learning_rate * q_agent.learning_rate_decay, q_agent.min_learning_rate)
         q_agent.exploration_rate = max(q_agent.exploration_rate * q_agent.exploration_rate_decay, q_agent.min_exploration_rate)
 
         # turn of stopwatch

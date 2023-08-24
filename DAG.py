@@ -9,42 +9,44 @@ class DAG:
     # N = No. episodes
     # end node: the goal node
     # env length is only for gridworld
-    def __init__(self, n, action_size, N, start_node, end_node, env_length=None):
+    def __init__(self, gridworld, N):
+        gridworld.reset()
+        self.gridworld = gridworld
         self.graph = nx.DiGraph()
-        states = range(n)
+        states = range(gridworld.state_count)
         self.graph.add_nodes_from(states)
         self.N = N
-        self.end_node = end_node
-        self.action_size = action_size
-        self.env_length = env_length
-        self.start_node = start_node
+        self.end_node = gridworld.state_to_index(gridworld.target_position)
+        self.action_size = gridworld.action_count
+        self.env_length = gridworld.grid_length
+        self.start_node = gridworld.state_to_index(gridworld.start_position)
 
     def add_edge(self, a, b):
         self.graph.add_edge(a, b)
 
     # This has been implemented for the gridworld environment with two actions: right and down
-    # def obtain_action(self, state_1_index, state_2_index):
-
-    #     state_1 = GridWorld.index_to_state(state_1_index, self.env_length)
-    #     state_2 = GridWorld.index_to_state(state_2_index, self.env_length)
-
-    #     # down
-    #     if (state_2[0] == state_1[0] + 1 and state_2[1] == state_1[1]):
-    #         return 1
-        
-    #     # right
-    #     elif (state_2[0] == state_1[0] and state_2[1] == state_1[1] + 1):
-    #         return 0
-        
-    #     else:
-    #         print("Action could not be obtained")
-
-    # This has been implemented for the gridworld environment with two actions: right and down
     def obtain_action(self, state_1_index, state_2_index):
 
-        if (state_1_index == 0 and state_2_index == 2) or (state_1_index == 2 and state_2_index == 4) or (state_1_index == 3 and state_2_index == 5):
+        state_1 = GridWorld.index_to_state(state_1_index, self.env_length)
+        state_2 = GridWorld.index_to_state(state_2_index, self.env_length)
+
+        # down
+        if (state_2[0] == state_1[0] + 1 and state_2[1] == state_1[1]):
             return 1
-        return 0
+        
+        # right
+        elif (state_2[0] == state_1[0] and state_2[1] == state_1[1] + 1):
+            return 0
+        
+        else:
+            print("Action could not be obtained")
+
+    # This has been implemented for the gridworld environment with two actions: right and down
+    # def obtain_action(self, state_1_index, state_2_index):
+
+    #     if (state_1_index == 0 and state_2_index == 2) or (state_1_index == 2 and state_2_index == 4) or (state_1_index == 3 and state_2_index == 5):
+    #         return 1
+    #     return 0
     
     # ENV width & length are only used for gridworld policy 
     # to have a better understanding of the position of states 
@@ -69,7 +71,9 @@ class DAG:
         graph.add_nodes_from(self.graph.nodes)
         graph.add_edges_from(self.graph.edges)
         graph.add_edges_from(other.graph.edges)
-        dag = DAG(self.graph.number_of_nodes(), self.action_size, self.N, self.start_node, self.end_node, self.env_length)
+        new_grid_world = self.gridworld
+        new_grid_world.reward_system = "combined"
+        dag = DAG(new_grid_world, self.N)
         dag.graph = graph
         return dag
     
@@ -144,7 +148,7 @@ class DAG:
                     min_iterations[node][action] = 1
         return min_iterations
     
-    def backtrack(self, min_iterations, max_iterations):
+    def backtrack(self, min_iterations, max_iterations, learning_rate, discount_factor):
         visited = set()
         queue = deque([self.end_node])
         lower_Qs = {node: [0] * self.action_size for node in self.graph.nodes}
@@ -163,9 +167,12 @@ class DAG:
                 min_iter, max_iter = min_iterations[node][action], max_iterations[node][action]
 
                 # NOTE: update lower and uppder bounds
-                reward = 1
-                upper_Qs[node][action] = math.pow(-1, max_iter - 1) * reward * []
-                lower_Qs[node][action] = 0
+                reward = self.calculate_reward(self.gridworld.index_to_state(node, self.env_length), self.gridworld.index_to_state(next_node, self.env_length))
+                # Assuming max_iters is a dictionary with nodes as keys and lists as values
+                next_max = max(max_iterations[next_node][i] for i in range(self.action_size))
+                next_min = min(min_iterations[next_node][i] for i in range(self.action_size))
+                upper_Qs[node][action] = round(math.pow(-1, max_iter - 1) * reward * (math.pow(learning_rate - 1, max_iter) + math.pow(-1, max_iter - 1)) + (learning_rate * discount_factor * next_max), 2)
+                lower_Qs[node][action] = round(math.pow(-1, min_iter - 1) * reward * (math.pow(learning_rate - 1, min_iter) + math.pow(-1, min_iter - 1)) + (learning_rate * discount_factor * next_min), 2)
 
                 #this is where we should add the nodes from adding candidates 
                 for i in range(len(adding_candidates)):
@@ -174,6 +181,11 @@ class DAG:
                             adding_candidates[i], adding_candidates[j] = adding_candidates[j], adding_candidates[i]
                 queue.extend(adding_candidates)
         return lower_Qs, upper_Qs
+    
+    def calculate_reward(self, state, next_state):
+        self.gridworld.agent_position = next_state
+        reward = self.gridworld._get_reward(state)
+        return reward
                 
 
             

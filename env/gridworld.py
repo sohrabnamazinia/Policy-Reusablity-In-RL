@@ -29,7 +29,9 @@ class GridWorld(gym.Env):
 
         # action space in case we want to avoid cycles
         self.action_space = spaces.Discrete(2)
+        self.action_count = 2
         #self.action_space = spaces.Discrete(4)
+        self.state_count = self.grid_length * self.grid_width
         self.observation_space = spaces.Box(low = cell_low_value,
             high= cell_high_value, shape=(self.grid_width, self.grid_length))
 
