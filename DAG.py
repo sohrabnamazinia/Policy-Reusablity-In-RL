@@ -186,6 +186,50 @@ class DAG:
         self.gridworld.agent_position = next_state
         reward = self.gridworld._get_reward(state)
         return reward
+    
+    def prune(self, lower_bounds, upper_bounds):
+        queue = deque()
+        queue.append(self.start_node)
+        visited = set()
+
+        while queue:
+            node = queue.popleft()
+            visited.add(node)
+            remove = []
+            next_nodes = list(self.graph.successors(node))
+            if len(next_nodes) == 1:
+                queue.append(next_nodes[0])
+            else:
+                for next_node in next_nodes:
+                    action = self.obtain_action(node, next_node)
+                    lower_bound = lower_bounds[node][action]
+                    upper_bound = upper_bounds[node][action]
+                    for next_node_2 in next_nodes:
+                        if (next_node == next_node_2) or ((node, next_node) in remove) or ((node, next_node_2) in remove):
+                            continue
+                        else:
+                            action_2 = self.obtain_action(node, next_node_2)
+                            upper_bound_2 = upper_bounds[node][action_2]
+                            lower_bound_2 = lower_bounds[node][action_2]
+
+                            if upper_bound_2 <= lower_bound:
+                                remove.append((node, next_node_2))
+                            else:
+                                if next_node_2 not in queue and next_node_2 not in visited:
+                                    queue.append(next_node_2)
+                    if remove != []:
+                        print("removed edges:", str(remove))
+
+                    self.graph.remove_edges_from(remove)
+        return self.graph
+    
+    def find_paths(self):
+        paths = []
+        #x_start, y_start = self.gridworld.index_to_state(self.start_node, self.gridworld.grid_length)
+        #x_end, y_end = self.gridworld.index_to_state(self.end_node, self.gridworld.grid_length)
+        for path in nx.all_simple_paths(self.graph, source= self.start_node, target = self.end_node):
+            paths.append(path)
+        return paths
                 
 
             
