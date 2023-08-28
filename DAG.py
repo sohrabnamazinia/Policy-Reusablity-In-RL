@@ -50,9 +50,11 @@ class DAG:
     
     # ENV width & length are only used for gridworld policy 
     # to have a better understanding of the position of states 
-    def print(self, mode=1):
+    def print(self, mode=0):
         print(self.graph)
-        if mode == 1:
+        if mode == 0:
+            return
+        elif mode == 1:
             n = self.graph.number_of_nodes()
             for i in range(n):
                 print("node " + str(i) + ":")
@@ -213,12 +215,13 @@ class DAG:
                             lower_bound_2 = lower_bounds[node][action_2]
 
                             if upper_bound_2 <= lower_bound:
+                                print("Edge removed: " + str((node, next_node_2)))
                                 remove.append((node, next_node_2))
                             else:
                                 if next_node_2 not in queue and next_node_2 not in visited:
                                     queue.append(next_node_2)
-                    if remove != []:
-                        print("removed edges:", str(remove))
+                    # if remove != []:
+                    #     print("removed edges:", str(remove))
 
                     self.graph.remove_edges_from(remove)
         return self.graph
