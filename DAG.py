@@ -75,6 +75,7 @@ class DAG:
         graph.add_edges_from(other.graph.edges)
         new_grid_world = self.gridworld
         new_grid_world.reward_system = "combined"
+        new_grid_world.reset()
         dag = DAG(new_grid_world, self.N)
         dag.graph = graph
         return dag
@@ -106,7 +107,7 @@ class DAG:
                         max_iterations[node][action] = self.N - (self.graph.in_degree(next_node) - 1)
                     else:
                         max_iterations[node][action] = total - (self.graph.in_degree(next_node) - 1)
-                #this is where we should add the nodes from adding candidates to the queue in the order i just described yo you
+                #this is where we should add the nodes from adding candidates to the queue 
                 for i in range(len(adding_candidates)):
                     for j in range(i + 1, len(adding_candidates)):
                         if (self.graph.has_edge(adding_candidates[i], adding_candidates[j])):
