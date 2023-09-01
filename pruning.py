@@ -1,5 +1,6 @@
 from env.init_gridworld import init_gridworld_1
 from train_q_policy import train_q_policy
+import time
 
 def compute_pruning(before, after):
     reduced_edge_count = before - after
@@ -7,6 +8,7 @@ def compute_pruning(before, after):
     
 
 def run_pruning(dag_1, dag_2, learning_rate, discount_factor):
+    start_time = time.time()
     union_dag = dag_1.union(dag_2)
     print("Union DAG:")
     union_dag.print()
@@ -17,13 +19,15 @@ def run_pruning(dag_1, dag_2, learning_rate, discount_factor):
     print("Upper bounds:\nExample: i: [a, b] means node #i has upper_bound = a for action = right, and upper_bound = b for action down\n" + str(upper_bounds))
     print("Lower bounds:\nExample: i: [a, b] means node #i has lower_bound = a for action = right, and lower_bound = b for action down\n" + str(lower_bounds))
     edge_count_before_prune = union_dag.graph.number_of_edges()
-    pruned_graph = union_dag.prune(lower_bounds, upper_bounds)
+    pruned_graph, pruning_percentage = union_dag.prune(lower_bounds, upper_bounds)
     print("Pruned Graph:")
     print(pruned_graph)
     paths = union_dag.find_paths()
     print("Count of resulting paths: " + str(len(paths)))
     print("Resulting paths:\n" + str(paths))
-    print("Pruning Percentage: %" + str(round(compute_pruning(edge_count_before_prune, pruned_graph.number_of_edges()), 2)))
+    print("Pruning Percentage: %" + str(pruning_percentage))
+    total_time = time.time() - start_time
+    return paths, total_time
 
 
 
@@ -35,7 +39,7 @@ output_path_1 = "q_table_path.npy"
 output_path_2 = "q_table_gold.npy"
 n_episodes = 1000
 max_steps_per_episode = 100
-agent_type = "QLearning"
+agent_type = "Sarsa"
 learning_rate = 0.1
 discount_factor = 0.99
 
@@ -48,4 +52,5 @@ print("Dag of Training - Path:")
 dag_1.print(mode=1)
 print("Dag of Training - Gold:")
 dag_2.print(mode=1)
-run_pruning(dag_1, dag_2, learning_rate, discount_factor)
+paths, total_time = run_pruning(dag_1, dag_2, learning_rate, discount_factor)
+print("Total time of the pruning algorithm: " + str(total_time))

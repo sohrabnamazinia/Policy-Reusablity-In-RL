@@ -190,10 +190,15 @@ class DAG:
         reward = self.gridworld._get_reward(state)
         return reward
     
+    def compute_pruning_percentage(self, edge_count_before, edge_count_after):
+        reduced_edge_count = edge_count_before - edge_count_after
+        return round(((100 * reduced_edge_count) / edge_count_before), 2)
+    
     def prune(self, lower_bounds, upper_bounds):
         queue = deque()
         queue.append(self.start_node)
         visited = set()
+        edge_count_before = self.graph.number_of_edges()
 
         while queue:
             node = queue.popleft()
@@ -225,7 +230,9 @@ class DAG:
                     #     print("removed edges:", str(remove))
 
                     self.graph.remove_edges_from(remove)
-        return self.graph
+        edge_count_after = self.graph.number_of_edges()
+        pruning_percentage = self.compute_pruning_percentage(edge_count_before=edge_count_before, edge_count_after=edge_count_after)
+        return self.graph, pruning_percentage
     
     def find_paths(self):
         paths = []
