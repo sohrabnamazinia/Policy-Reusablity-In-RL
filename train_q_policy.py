@@ -84,13 +84,13 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
     return total_time, dag
 
 # Define env and train parameters
-# reward_system = "combined"
-# grid_world = init_gridworld_1(reward_system)
-# n_episodes = 1000
-# max_steps_per_episode = 100
-# agent_type = "QLearning"
-# output_path = "q_table_combined.npy"
+reward_system = "combined"
+grid_world = init_gridworld_1(reward_system)
+n_episodes = 1000
+max_steps_per_episode = 100
+agent_type = "QLearning"
+output_path = "q_table_combined.npy"
 
-# # train the agent
-# total_time, dag = train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path)
-# dag.print(mode=3, env_length=grid_world.grid_length)
+# train the agent
+total_time, dag = train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path)
+dag.print()
