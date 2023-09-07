@@ -2,7 +2,7 @@ import psycopg2
 
 class amazonDB:
 
-    def __init__(self, database="amazon_reviews", user="postgres", passwd="2534", host="localhost", port="5432"):
+    def __init__(self, database="AmazonDB", user="postgres", passwd="MoSree14", host="127.0.0.1", port="9000"):
         self.connection = psycopg2.connect(database=database, user=user, password=passwd, host=host, port=port)
         self.cursor = self.connection.cursor()
     
