@@ -5,8 +5,10 @@ from env.init_gridworld import init_gridworld_1
 from DAG import DAG
 import wandb
 import time
+import pandas as pd
+from utilities import plot_cummulative_reward
 
-def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path, learning_rate=None, discount_factor=None):
+def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path, learning_rate=None, discount_factor=None, result_step_size=1):
 
     # Flatten the grid to get the total number of states
     n_states = np.product(grid_world.grid.shape)
@@ -30,6 +32,12 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
         q_agent.discount_factor = discount_factor
 
     run = wandb.init(project="Train_Q")
+    df = pd.DataFrame()
+    csv_index_episode = 0
+    csv_index_cummulative_reward = 1
+    #df.at[0, csv_index_cummulative_reward] = "Cummulative Reward"
+    #df.at[0, csv_index_episode] = "Episode"
+    header = ["Episode", "Cumulative Reward"]
     cumulative_reward = 0
     total_time = 0
     
@@ -75,9 +83,15 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
         # log cumulative reward
         wandb.log({"Cumulative Reward": cumulative_reward}, step=episode)
         wandb.log({"Total Training Time": total_time}, step=episode)
+        if episode % result_step_size == 0:
+            df.at[(episode / result_step_size) + 1, csv_index_episode] = episode
+            df.at[(episode / result_step_size) + 1, csv_index_cummulative_reward] = cumulative_reward
 
-
+    
     # Save the q_table for future use
+    csv_file_name = "Train_" + grid_world.reward_system + "_" + str(n_episodes) + ".csv"
+    df.to_csv(csv_file_name, index=False, header=header)
+    plot_cummulative_reward(csv_file_name, header[0], header[1])
     np.save(output_path, q_agent.q_table)
     run.finish()
 
@@ -88,9 +102,10 @@ reward_system = "combined"
 grid_world = init_gridworld_1(reward_system)
 n_episodes = 1000
 max_steps_per_episode = 100
+result_step_size = 10
 agent_type = "QLearning"
 output_path = "q_table_combined.npy"
 
 # train the agent
-total_time, dag = train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path)
+total_time, dag = train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path, result_step_size=result_step_size)
 dag.print()

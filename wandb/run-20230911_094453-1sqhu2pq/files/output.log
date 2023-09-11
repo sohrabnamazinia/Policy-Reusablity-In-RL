@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/train_q_policy.py", line 110, in <module>
+    total_time, dag = train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path, result_step_size=result_step_size)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/train_q_policy.py", line 94, in train_q_policy
+    plot_cummulative_reward(csv_file_name, header[0], header[1])
+  File "/Users/sohrabnamazinia/Desktop/Summer 23/RA/RL/RL_Modular/utilities.py", line 36, in plot_cummulative_reward
+    plt.plot(data[x], data[y])
+    ^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/matplotlib/_api/__init__.py", line 226, in __getattr__
+    raise AttributeError(
+AttributeError: module 'matplotlib' has no attribute 'plot'
