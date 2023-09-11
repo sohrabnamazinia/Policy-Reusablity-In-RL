@@ -9,4 +9,5 @@ class query_refine(gym.Env):
         self.amazonDB = amazonDB()
         
     
-        
+
+
