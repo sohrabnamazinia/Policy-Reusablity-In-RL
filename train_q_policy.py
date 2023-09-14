@@ -8,7 +8,7 @@ import time
 import pandas as pd
 from utilities import plot_cummulative_reward
 
-def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path, learning_rate=None, discount_factor=None, result_step_size=1):
+def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path, learning_rate=None, discount_factor=None, result_step_size=1, plot_cumulative_reward=False):
 
     # Flatten the grid to get the total number of states
     n_states = np.product(grid_world.grid.shape)
@@ -91,21 +91,22 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
     # Save the q_table for future use
     csv_file_name = "Train_" + grid_world.reward_system + "_" + str(n_episodes) + ".csv"
     df.to_csv(csv_file_name, index=False, header=header)
-    plot_cummulative_reward(csv_file_name, header[0], header[1])
+    if plot_cumulative_reward:
+        plot_cummulative_reward(csv_file_name, header[0], header[1])
     np.save(output_path, q_agent.q_table)
     run.finish()
 
     return total_time, dag
 
-# Define env and train parameters
-reward_system = "combined"
-grid_world = init_gridworld_1(reward_system)
-n_episodes = 1000
-max_steps_per_episode = 100
-result_step_size = 10
-agent_type = "QLearning"
-output_path = "q_table_combined.npy"
+# # Define env and train parameters
+# reward_system = "combined"
+# grid_world = init_gridworld_1(reward_system)
+# n_episodes = 1000
+# max_steps_per_episode = 100
+# result_step_size = 10
+# agent_type = "QLearning"
+# output_path = "q_table_combined.npy"
 
-# train the agent
-total_time, dag = train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path, result_step_size=result_step_size)
-dag.print()
+# # train the agent
+# total_time, dag = train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path, result_step_size=result_step_size)
+# dag.print()

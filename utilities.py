@@ -38,3 +38,11 @@ def plot_cummulative_reward(csv_file_name, x, y):
     plt.xlabel("Episode")
     plt.ylabel("Cumulative Reward")
     plt.show()
+
+def plot_recalls(csv_file_name, x, y):
+    data = pd.read_csv(csv_file_name)
+    plt.plot(data[x], data[y], marker='o', linestyle='-')
+    plt.title("Recall percentage Graph")
+    plt.xlabel("Enironment size (width * length)")
+    plt.ylabel("Recall Percentage")
+    plt.show()

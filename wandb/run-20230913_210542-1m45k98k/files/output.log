@@ -1,0 +1,26 @@
+Agent location: [2, 3]
+Action:  0
+Backend MacOSX is interactive backend. Turning interactive mode on.
+Step:  1
+[[ 0.  0.  0.  0.  0.]
+ [ 0.  1.  0.  0.  0.]
+ [ 0.  0.  1.  0.  7.]
+ [ 0.  0.  0.  1.  0.]
+ [ 0.  0.  0.  0. 10.]]
+Agent location: [2, 4]
+Action:  1
+Step:  2
+[[ 0.  0.  0.  0.  0.]
+ [ 0.  1.  0.  0.  0.]
+ [ 0.  0.  1.  0.  0.]
+ [ 0.  0.  0.  1.  7.]
+ [ 0.  0.  0.  0. 10.]]
+Agent location: [3, 4]
+Action:  1
+Step:  3
+[[0. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0.]
+ [0. 0. 1. 0. 0.]
+ [0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 7.]]
+Agent reached the target!

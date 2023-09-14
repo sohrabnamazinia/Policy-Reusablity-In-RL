@@ -55,15 +55,17 @@ class GridWorld(gym.Env):
         # position the agent
         self.grid[self.start_position[0]][self.start_position[1]] = self.agent_position_value
 
-    def reset(self):
+    def reset(self, new_start_position=None):
         self.grid[self.agent_position[0]][self.agent_position[1]] = 0
+        if new_start_position != None:
+            self.start_position = new_start_position
         self.agent_position = copy.copy(self.start_position) # e.g., [0, 0]
         self.grid[self.target_position[0]][self.target_position[1]] = self.target_position_value
         for gold in self.gold_positions:
             self.grid[gold[0]][gold[1]] = 1
         self.grid[self.start_position[0]][self.start_position[1]] = self.agent_position_value
         return self.grid
-
+    
     # this function is just to convert a position on the grid to an index
     def state_to_index(self, state):
         next_state_index = np.ravel_multi_index(tuple(state), dims=self.grid.shape)

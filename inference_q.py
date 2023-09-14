@@ -13,6 +13,7 @@ def inference_q(grid_world, q_table_path):
 
     run = wandb.init(project="Inference_Q")
     total_time = 0
+    total_reward = 0
 
     # Reset the environment to its initial state
     grid_world.reset().flatten()
@@ -37,6 +38,7 @@ def inference_q(grid_world, q_table_path):
 
         # step
         grid, reward, done, _ = grid_world.step(action)
+        total_reward += reward
         next_state_index = grid_world.state_to_index(grid_world.agent_position)
 
         # upadate state index
@@ -61,10 +63,11 @@ def inference_q(grid_world, q_table_path):
         wandb.log({"Total Inference Time": total_time}, step=step)
     
     run.finish()
-    return total_time
+    return total_time, total_reward
 
 # set inputs
-reward_system = "combined"
-grid_world = init_gridworld_1(reward_system)
-q_table_path = "q_table_combined.npy"
-inference_q(grid_world, q_table_path)
+# reward_system = "combined"
+# grid_world = init_gridworld_1(reward_system)
+# q_table_path = "q_table_combined.npy"
+# total_time, total_reward = inference_q(grid_world, q_table_path)
+# print("Total reward: " + str(total_reward))
