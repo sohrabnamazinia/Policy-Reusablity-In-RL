@@ -46,3 +46,11 @@ def plot_recalls(csv_file_name, x, y):
     plt.xlabel("Enironment size (width * length)")
     plt.ylabel("Recall Percentage")
     plt.show()
+
+def plot_cumulative_reward_env_size(csv_file_name, x, y):
+    data = pd.read_csv(csv_file_name)
+    plt.plot(data[x], data[y], marker='o', linestyle='-')
+    plt.title("Cumulative Reward based on environment size")
+    plt.xlabel("Enironment size (width * length)")
+    plt.ylabel("Cumulative Reward")
+    plt.show()

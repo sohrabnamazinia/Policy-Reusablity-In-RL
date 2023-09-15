@@ -78,9 +78,9 @@ for i in range(env_test_count):
         gold_env.reset(new_start_position=[x, y])
         combined_env.reset(new_start_position=[x, y])
         print("Start location: " + str((x, y)))
-        time_path, dag_path = train_q_policy(grid_world=path_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path="q_table_path.npy", result_step_size=result_step_size, learning_rate=learning_rate, discount_factor=discount_factor)
-        time_gold, dag_gold = train_q_policy(grid_world=gold_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path="q_table_gold.npy", result_step_size=result_step_size, learning_rate=learning_rate, discount_factor=discount_factor)
-        time_combined, dag_combined = train_q_policy(grid_world=combined_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path="q_table_combined.npy", result_step_size=result_step_size, learning_rate=learning_rate, discount_factor=discount_factor)
+        time_path, dag_path, _ = train_q_policy(grid_world=path_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path="q_table_path.npy", result_step_size=result_step_size, learning_rate=learning_rate, discount_factor=discount_factor)
+        time_gold, dag_gold, _ = train_q_policy(grid_world=gold_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path="q_table_gold.npy", result_step_size=result_step_size, learning_rate=learning_rate, discount_factor=discount_factor)
+        time_combined, dag_combined, _ = train_q_policy(grid_world=combined_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path="q_table_combined.npy", result_step_size=result_step_size, learning_rate=learning_rate, discount_factor=discount_factor)
         inference_time_combined, reward_ground_truth = inference_q(grid_world=combined_env, q_table_path="q_table_combined.npy")
         paths, total_time, pruning_percentage = run_pruning(dag_1=dag_path, dag_2=dag_gold, discount_factor=discount_factor, learning_rate=learning_rate)
         # reset agent position to try all paths and get rewards

@@ -96,7 +96,7 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
     np.save(output_path, q_agent.q_table)
     run.finish()
 
-    return total_time, dag
+    return total_time, dag, cumulative_reward
 
 # # Define env and train parameters
 # reward_system = "combined"

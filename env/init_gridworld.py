@@ -81,3 +81,31 @@ def init_gridworld_3(reward_system, grid_width, grid_length):
                         start_position_value=start_position_value, target_position_value=target_position_value, block_position_value=block_position_value, gold_position_value=gold_position_value, agent_position_value=agent_position_value, block_reward=block_reward, target_reward=target_reward)
     
     return grid_world
+
+def init_gridworld_4(reward_system, width_size, length_size):
+    # Define the environment details
+    gold_positions = []
+    for i in range(1, min(width_size, length_size)):
+        gold_positions.append([i, i])
+    #gold_positions = [[4, 2], [4, 1], [4, 0], [4, 3]]
+    block_positions = []
+    reward_system = reward_system
+    agent_initial_position = [0, 0]
+    target_position = [width_size - 1, length_size - 1]
+    cell_low_value = -1
+    cell_high_value = 10
+    start_position_value = 5
+    target_position_value = 10
+    block_position_value = -1
+    gold_position_value = +1
+    agent_position_value = 7
+    block_reward = -10
+    target_reward = +100
+
+    # Instantiate GridWorld
+    grid_world = GridWorld(grid_width=width_size, grid_length=length_size, gold_positions=gold_positions, block_positions=block_positions
+                        , reward_system=reward_system, agent_position=agent_initial_position, target_position=target_position
+                        , cell_high_value=cell_high_value, cell_low_value=cell_low_value,
+                        start_position_value=start_position_value, target_position_value=target_position_value, block_position_value=block_position_value, gold_position_value=gold_position_value, agent_position_value=agent_position_value, block_reward=block_reward, target_reward=target_reward)
+    
+    return grid_world
