@@ -11,12 +11,12 @@ n_episodes = 1000
 max_steps_per_episode = 100
 result_step_size = 10
 reward_system = "combined"
-agent_type = "QLearning"
+agent_type = "Sarsa"
 
 #output
 cumulative_rewards = []
-csv_file_name = "cumulative_reward_" + str(n_episodes) + ".csv"
-output_path = "q_table_test_cummulative_reward_" + str(n_episodes) + ".npy"
+csv_file_name = "cumulative_reward_" + agent_type + "_" + str(n_episodes) + ".csv"
+output_path = "q_table_test_cummulative_reward_" + agent_type + "_" + str(n_episodes) + ".npy"
 
 # setup plot
 header = ["Environment Size", "Cumulative Reward"]

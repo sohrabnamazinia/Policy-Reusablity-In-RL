@@ -31,7 +31,7 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
     if discount_factor != None:
         q_agent.discount_factor = discount_factor
 
-    run = wandb.init(project="Train_Q")
+    #run = wandb.init(project="Train_Q")
     df = pd.DataFrame()
     csv_index_episode = 0
     csv_index_cummulative_reward = 1
@@ -81,20 +81,20 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
         total_time += elapsed_time
 
         # log cumulative reward
-        wandb.log({"Cumulative Reward": cumulative_reward}, step=episode)
-        wandb.log({"Total Training Time": total_time}, step=episode)
+        #wandb.log({"Cumulative Reward": cumulative_reward}, step=episode)
+        #wandb.log({"Total Training Time": total_time}, step=episode)
         if episode % result_step_size == 0:
             df.at[(episode / result_step_size) + 1, csv_index_episode] = episode
             df.at[(episode / result_step_size) + 1, csv_index_cummulative_reward] = cumulative_reward
 
     
     # Save the q_table for future use
-    csv_file_name = "Train_" + grid_world.reward_system + "_" + str(n_episodes) + ".csv"
+    csv_file_name = "Train_" + grid_world.reward_system + "_" + agent_type + "_" + str(n_episodes) + ".csv"
     df.to_csv(csv_file_name, index=False, header=header)
     if plot_cumulative_reward:
         plot_cummulative_reward(csv_file_name, header[0], header[1])
     np.save(output_path, q_agent.q_table)
-    run.finish()
+    #run.finish()
 
     return total_time, dag, cumulative_reward
 
@@ -108,5 +108,5 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
 # output_path = "q_table_combined.npy"
 
 # # train the agent
-# total_time, dag = train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path, result_step_size=result_step_size)
+# total_time, dag, cumulative_reward = train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path, result_step_size=result_step_size, plot_cumulative_reward=True)
 # dag.print()

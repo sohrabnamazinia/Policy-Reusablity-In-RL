@@ -11,7 +11,7 @@ def inference_q(grid_world, q_table_path):
     # Load the Q-table
     q_table = np.load(q_table_path)
 
-    run = wandb.init(project="Inference_Q")
+    #run = wandb.init(project="Inference_Q")
     total_time = 0
     total_reward = 0
 
@@ -60,9 +60,9 @@ def inference_q(grid_world, q_table_path):
         elapsed_time = time.time() - start_time
         total_time += elapsed_time
 
-        wandb.log({"Total Inference Time": total_time}, step=step)
+        #wandb.log({"Total Inference Time": total_time}, step=step)
     
-    run.finish()
+    #run.finish()
     return total_time, total_reward
 
 # set inputs

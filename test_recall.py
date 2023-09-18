@@ -12,7 +12,7 @@ def get_random_start_pos(max_x, max_y):
     return x, y
 
 # use obtain action in DAG
-def check_reward_coverage(gridworld, dag, paths, ground_truth_reward):
+def check_reward_coverage(start_position, gridworld, dag, paths, ground_truth_reward):
     rewards = []
     for path in paths:
         reward = 0
@@ -25,23 +25,26 @@ def check_reward_coverage(gridworld, dag, paths, ground_truth_reward):
         rewards.append(reward)
         if reward >= ground_truth_reward:
             return True
+        else:
+            gridworld.reset(new_start_position=start_position)
+            print("Reward: " + str(reward) + ", while G_Reward = " + str(ground_truth_reward))
     return False
 
 #inputs
-env_test_count = 2
-diff_agent_pos_per_test = 2
+env_test_count = 4
+diff_agent_pos_per_test = 4
 first_env_size = 4
-env_test_step = 1
+env_test_step = 4
 n_episodes = 1000
 max_steps_per_episode = 100
 result_step_size = 10
 learning_rate = 0.1
 discount_factor = 0.99
-agent_type = "QLearning"
+agent_type = "Sarsa"
 
 #output
 recalls = []
-csv_file_name = "Recall_Test.csv"
+csv_file_name = "Recall_" + agent_type + "_" + str(n_episodes) + ".csv"
 
 env_sizes = []
 for i in range(env_test_count):
@@ -74,6 +77,7 @@ for i in range(env_test_count):
     for j in range(diff_agent_pos_per_test):
         #set their starting position 
         x, y = get_random_start_pos(max_x=combined_env.target_position[0], max_y=combined_env.target_position[1])
+        #x, y = 1, 2
         path_env.reset(new_start_position=[x, y])
         gold_env.reset(new_start_position=[x, y])
         combined_env.reset(new_start_position=[x, y])
@@ -85,7 +89,7 @@ for i in range(env_test_count):
         paths, total_time, pruning_percentage = run_pruning(dag_1=dag_path, dag_2=dag_gold, discount_factor=discount_factor, learning_rate=learning_rate)
         # reset agent position to try all paths and get rewards
         combined_env.reset(new_start_position=[x, y])
-        if check_reward_coverage(combined_env, dag_combined, paths, reward_ground_truth):
+        if check_reward_coverage([x, y], combined_env, dag_combined, paths, reward_ground_truth):
             recall += 1
 
     recall = round(((recall / diff_agent_pos_per_test) * 100), 2)
