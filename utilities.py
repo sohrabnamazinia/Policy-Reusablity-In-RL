@@ -39,12 +39,14 @@ def plot_cummulative_reward(csv_file_name, x, y):
     plt.ylabel("Cumulative Reward")
     plt.show()
 
-def plot_recalls(csv_file_name, x, y):
+def plot_recalls(csv_file_name, x, y_1, y_2):
     data = pd.read_csv(csv_file_name)
-    plt.plot(data[x], data[y], marker='o', linestyle='-')
-    plt.title("Recall percentage Graph")
+    plt.plot(data[x], data[y_1], label="Exact Pruning", marker='o', linestyle='-')
+    plt.plot(data[x], data[y_2], label="Heuristic", marker='s', linestyle='--')
+    plt.title("Recall percentage: Exact Pruning VS Heuristic")
     plt.xlabel("Enironment size (width * length)")
     plt.ylabel("Recall Percentage")
+    plt.legend()
     plt.show()
 
 def plot_cumulative_reward_env_size(csv_file_name, x, y):
