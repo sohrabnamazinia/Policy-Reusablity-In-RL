@@ -49,9 +49,10 @@ def plot_recalls(csv_file_name, x, y_1, y_2):
     plt.legend()
     plt.show()
 
-def plot_cumulative_reward_env_size(csv_file_name, x, y):
+def plot_cumulative_reward_env_size(csv_file_name, x, y_1, y_2):
     data = pd.read_csv(csv_file_name)
-    plt.plot(data[x], data[y], marker='o', linestyle='-')
+    plt.plot(data[x], data[y_1], label="ExNonZeroDiscount", marker='o', linestyle='-')
+    plt.plot(data[x], data[y_2], label="Training Combined Policy", marker='s', linestyle='--')
     plt.title("Cumulative Reward based on environment size")
     plt.xlabel("Enironment size (width * length)")
     plt.ylabel("Cumulative Reward")

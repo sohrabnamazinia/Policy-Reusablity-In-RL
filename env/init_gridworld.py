@@ -85,7 +85,7 @@ def init_gridworld_3(reward_system, grid_width, grid_length):
 def init_gridworld_4(reward_system, width_size, length_size):
     # Define the environment details
     gold_positions = []
-    for i in range(1, min(width_size, length_size)):
+    for i in range(1, min(width_size, length_size) - 1):
         gold_positions.append([i, i])
     #gold_positions = [[4, 2], [4, 1], [4, 0], [4, 3]]
     block_positions = []

@@ -14,7 +14,7 @@ output_path = "q_table_combined.npy"
 total_train_time, dag = train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, output_path)
 grid_world = init_gridworld_1(reward_system)
 q_table_path = output_path
-total_inference_time = inference_q(grid_world, q_table_path)
+total_inference_time, total_reward, path = inference_q(grid_world, q_table_path)
 total_time = total_train_time + total_inference_time
 
 # output

@@ -1,5 +1,5 @@
-Environment Size,Cumulative Reward
-16.0,8880.0
-36.0,14689.0
-64.0,20585.0
-100.0,26371.0
+Environment Size,Cumulative Reward - Train Combined,Cumulative Reward - ExNonZeroDiscount
+16.0,207.0,207.0
+36.0,213.0,213.0
+64.0,218.0,219.0
+100.0,223.0,225.0

@@ -41,7 +41,7 @@ max_steps_per_episode = 100
 result_step_size = 10
 learning_rate = 0.1
 discount_factor = 0.99
-heuristic_k = 1
+heuristic_k = 2
 agent_type = "QLearning"
 
 #output
@@ -95,11 +95,11 @@ for i in range(env_test_count):
         time_path, dag_path, _ = train_q_policy(grid_world=path_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_1_output_path, result_step_size=result_step_size, learning_rate=learning_rate, discount_factor=discount_factor)
         time_gold, dag_gold, _ = train_q_policy(grid_world=gold_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_2_output_path, result_step_size=result_step_size, learning_rate=learning_rate, discount_factor=discount_factor)
         time_combined, dag_combined, _ = train_q_policy(grid_world=combined_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_3_output_path, result_step_size=result_step_size, learning_rate=learning_rate, discount_factor=discount_factor)
-        inference_time_combined, reward_ground_truth = inference_q(grid_world=combined_env, q_table_path=q_table_3_output_path)
-        paths, total_time, pruning_percentage = run_pruning(dag_1=dag_path, dag_2=dag_gold, discount_factor=discount_factor, learning_rate=learning_rate)
+        inference_time_combined, reward_ground_truth, _ = inference_q(grid_world=combined_env, q_table_path=q_table_3_output_path)
+        best_path, max_reward, total_time, pruning_percentage = run_pruning(gridworld=combined_env, dag_1=dag_path, dag_2=dag_gold, discount_factor=discount_factor, learning_rate=learning_rate)
         # reset agent position to try all paths and get rewards
         combined_env.reset(new_start_position=[x, y])
-        if check_reward_coverage([x, y], combined_env, dag_combined, paths, reward_ground_truth):
+        if max_reward >= reward_ground_truth:
             recall_exact_pruning += 1
         combined_env.reset(new_start_position=[x, y])
         max_cumulative_reward, best_path, paths, shortest_paths, total_time = run_heuristic(q_table_1_output_path, q_table_2_output_path, heuristic_k, heuristic_max_allowed_path_size, gridworld=combined_env)

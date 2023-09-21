@@ -22,6 +22,7 @@ def inference_q(grid_world, q_table_path):
 
     # Maximum number of steps for inference
     max_steps_inference = 100
+    path = []
 
     for step in range(max_steps_inference):
         # turn on stopwatch
@@ -32,6 +33,7 @@ def inference_q(grid_world, q_table_path):
 
         # greedy action selection (inference)
         action = np.argmax(q_table[state_index, :])
+        path.append(action)
 
         # print action
         print("Action: ", action)
@@ -63,7 +65,7 @@ def inference_q(grid_world, q_table_path):
         #wandb.log({"Total Inference Time": total_time}, step=step)
     
     #run.finish()
-    return total_time, total_reward
+    return total_time, total_reward, path
 
 # set inputs
 # reward_system = "combined"
