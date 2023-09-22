@@ -12,25 +12,6 @@ def get_random_start_pos(max_x, max_y):
     y = random.randint(0, max_y - 1)
     return x, y
 
-# use obtain action in DAG
-def check_reward_coverage(start_position, gridworld, dag, paths, ground_truth_reward):
-    rewards = []
-    for path in paths:
-        reward = 0
-        for i in range(len(path) - 1):
-            state_index_1 = path[i]
-            state_index_2 = path[i + 1]
-            action = dag.obtain_action(state_index_1, state_index_2)
-            grid, r, done, _ = gridworld.step(action)
-            reward += r
-        rewards.append(reward)
-        if reward >= ground_truth_reward:
-            return True
-        else:
-            gridworld.reset(new_start_position=start_position)
-            print("Reward: " + str(reward) + ", while G_Reward = " + str(ground_truth_reward))
-    return False
-
 #inputs
 env_test_count = 2
 diff_agent_pos_per_test = 1
@@ -71,7 +52,7 @@ for (env_width, env_length) in env_sizes:
 
 # setup panda
 df = pd.DataFrame()
-header = ["Environment Size", "Recall - Exact Pruning", "Recall - Heuristic"]
+header = ["Environment Size", "Recall - ExNonZeroDiscount", "Recall - Greedy K"]
 env_size_index = 0
 recall_exact_pruning_index = 1
 recall_heuristic_index = 2
@@ -117,6 +98,6 @@ for i in range(env_test_count):
 df.to_csv(csv_file_name, index=False, header=header)
 plot_recalls(csv_file_name, header[0], header[1], header[2])
 print("Environment sizes: " + str(env_sizes))
-print("Recalls for exact pruning: " + str(recalls_exact_pruning))
+print("Recalls for ExNonZeroDiscount: " + str(recalls_exact_pruning))
 print("Recalls for greedy-k algorithm with k = : " + str(heuristic_k) + ": " + str(recalls_heuristic))
 

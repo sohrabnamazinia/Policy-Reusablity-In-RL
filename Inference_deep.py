@@ -8,8 +8,9 @@ import time
 # the agent.pkl file must be in the same directory as this file
 def inference_deep(grid_world, algorithm, agent_path):
     
-	run = wandb.init(project="Inference_Deep")
+	#run = wandb.init(project="Inference_Deep")
 	total_time = 0
+	grid_world.reset()
 
 	deep_agent = Agent(grid_world, algorithm)
 	deep_agent.load(agent_path, grid_world)
@@ -19,6 +20,8 @@ def inference_deep(grid_world, algorithm, agent_path):
 
     # Maximum number of steps for inference
 	max_steps_inference = 100
+	path = []
+	cumulative_reward = 0
 
 	for step in range(max_steps_inference):
      
@@ -28,11 +31,16 @@ def inference_deep(grid_world, algorithm, agent_path):
 		
         # action selection from model (inference)
 		action, _states = deep_agent.model.predict(observation = obs)
+		
 
 		print("Action: ", action)
 
         # step
 		obs, reward, done, _ = grid_world.step(action)
+
+		# update return values
+		path.append(int(action))
+		cumulative_reward += reward
 
         # print step index
 		print("Step: ", step + 1)
@@ -47,13 +55,15 @@ def inference_deep(grid_world, algorithm, agent_path):
 			break
 		elapsed_time = time.time() - start_time
 		total_time += elapsed_time
-		wandb.log({"Total Inference Time": total_time}, step=step)
+		#wandb.log({"Total Inference Time": total_time}, step=step)
         
-	run.finish()
-	return total_time
+	#run.finish()
+	return path, cumulative_reward, total_time
 
-reward_system = "path"	
-algorithm = "PPO"	
-agent_path = "agent.pkl"	
-grid_world = init_gridworld_1(reward_system)
-inference_deep(grid_world, algorithm, agent_path)
+# reward_system = "path"	
+# deep_algorithm = "PPO"	
+# agent_path = "deep_" + deep_algorithm + ".pkl"
+# grid_world = init_gridworld_1(reward_system)
+# path, cumulative_reward, total_time = inference_deep(grid_world, deep_algorithm, agent_path)
+# print("Path: " + str(path))
+# print("Cumulative reward = " + str(cumulative_reward))

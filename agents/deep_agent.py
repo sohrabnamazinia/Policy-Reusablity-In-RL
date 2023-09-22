@@ -18,8 +18,8 @@ class WandbCallback(BaseCallback):
         # Update the cumulative reward
         self.cumulative_reward += reward
         
-        elapsed_time = time.time() - start_time
-        total_time += elapsed_time
+        elapsed_time = time.time() - self.start_time
+        self.total_time += elapsed_time
         
         # Log the cumulative reward using wandb
         wandb.log({'cumulative_reward': self.cumulative_reward})
@@ -30,7 +30,7 @@ class WandbCallback(BaseCallback):
 class Agent:
     def __init__(self, env, algorithm='A2C'):
         self.algorithm = algorithm
-        self.callback = WandbCallback()
+        #self.callback = WandbCallback()
         
         if self.algorithm == 'DQN':
             self.model = DQN("MlpPolicy", env, verbose=1)
@@ -42,8 +42,9 @@ class Agent:
             raise ValueError("Invalid algorithm. Choose either 'DQN' or 'A2C' or 'PPO'")
 
     def learn(self, timesteps):
-        self.model.learn(total_timesteps=timesteps, callback=self.callback)
-        wandb.log({"Total Training Time": self.callback.total_time})
+        self.model.learn(total_timesteps=timesteps)
+        #self.model.learn(total_timesteps=timesteps, callback=self.callback)
+        #wandb.log({"Total Training Time": self.callback.total_time})
     
     def save(self, path):
         self.model.save(path)
