@@ -46,6 +46,7 @@ def heuristic(q_table_1, q_table_2, env, k, max_allowed_path_size):
     shortest_paths = []
     stack = []
     shortest_paths_length = float('inf')
+    env.reset()
     start_state = env.start_position
     stack.append((start_state, [], True))
     stack.append((start_state, [], False))

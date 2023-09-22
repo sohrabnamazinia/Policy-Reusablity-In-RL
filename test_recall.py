@@ -118,5 +118,5 @@ df.to_csv(csv_file_name, index=False, header=header)
 plot_recalls(csv_file_name, header[0], header[1], header[2])
 print("Environment sizes: " + str(env_sizes))
 print("Recalls for exact pruning: " + str(recalls_exact_pruning))
-print("Recalls for heuristic algorithm with k = : " + str(heuristic_k) + ": " + str(recalls_exact_pruning))
+print("Recalls for greedy-k algorithm with k = : " + str(heuristic_k) + ": " + str(recalls_heuristic))
 
