@@ -2,6 +2,7 @@ import networkx as nx
 from collections import deque
 from env.gridworld import GridWorld
 import math
+import copy
 
 class DAG:
     # n = node size
@@ -73,7 +74,7 @@ class DAG:
         graph.add_nodes_from(self.graph.nodes)
         graph.add_edges_from(self.graph.edges)
         graph.add_edges_from(other.graph.edges)
-        new_grid_world = self.gridworld
+        new_grid_world = copy.copy(self.gridworld)
         new_grid_world.reward_system = "combined"
         new_grid_world.reset()
         dag = DAG(new_grid_world, self.N)

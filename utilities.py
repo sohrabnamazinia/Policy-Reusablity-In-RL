@@ -15,7 +15,6 @@ def plot_discount_factors(discount_factors, pruning_percentages):
     plt.plot(x, y)
     plt.show()
 
-
 def compute_cosine_similarity(text1, text2, model_name="bert-base-uncased"):
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         model = AutoModel.from_pretrained(model_name)
@@ -34,16 +33,17 @@ def compute_cosine_similarity(text1, text2, model_name="bert-base-uncased"):
 def plot_cummulative_reward(csv_file_name, x, y):
     data = pd.read_csv(csv_file_name)
     plt.plot(data[x], data[y])
-    plt.title("Cummulative Reward Graph")
+    #plt.title("Cummulative Reward Graph")
     plt.xlabel("Episode")
     plt.ylabel("Cumulative Reward")
     plt.show()
 
-def plot_recalls(csv_file_name, x, y_1, y_2):
+def plot_recalls(csv_file_name, x, y_1, y_2, y_3):
     data = pd.read_csv(csv_file_name)
-    plt.plot(data[x], data[y_1], label="Exact Pruning", marker='o', linestyle='-')
-    plt.plot(data[x], data[y_2], label="Heuristic", marker='s', linestyle='--')
-    plt.title("Recall percentage: Exact Pruning VS Heuristic")
+    plt.plot(data[x], data[y_1], label="ExNonZeroDiscount", marker='o', linestyle='-')
+    plt.plot(data[x], data[y_2], label="Greedy K", marker='s', linestyle='--')
+    plt.plot(data[x], data[y_3], label="Deep Agent", marker='^', linestyle=':')
+    #plt.title("Recall percentage")
     plt.xlabel("Enironment size (width * length)")
     plt.ylabel("Recall Percentage")
     plt.legend()

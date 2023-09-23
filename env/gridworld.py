@@ -78,6 +78,16 @@ class GridWorld(gym.Env):
         result = int(index / grid_length), int(index % grid_length)
         return result    
     
+    def obtain_action(self, state_1, state_2):
+        # down
+        if (state_2[0] == state_1[0] + 1 and state_2[1] == state_1[1]):
+            return 1
+        # right
+        elif (state_2[0] == state_1[0] and state_2[1] == state_1[1] + 1):
+            return 0
+        else:
+            print("Action could not be obtained")
+    
     def check_boundry_constraint(self):
         if (0 <= self.agent_position[0] < self.grid_width) and (0 <= self.agent_position[1] < self.grid_length):
             return True

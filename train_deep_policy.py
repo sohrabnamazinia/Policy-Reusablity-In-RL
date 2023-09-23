@@ -4,7 +4,7 @@ from env.init_gridworld import init_gridworld_1
 import time
 
 
-def train_deep(grid_world, deep_algorithm, reward_system, timesteps, output_path):
+def train_deep(grid_world, deep_algorithm, timesteps, output_path):
     # Initialize a new run
     #run = wandb.init(project="gridworld", entity="sn773")
     start_time = time.time()

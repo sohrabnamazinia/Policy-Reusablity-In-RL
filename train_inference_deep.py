@@ -1,7 +1,6 @@
 from train_deep_policy import train_deep
 from env.init_gridworld import init_gridworld_1
 from Inference_deep import inference_deep
-from agents.deep_agent import Agent
 
 # Define env and train parameters
 reward_system = "combined"
@@ -11,7 +10,7 @@ deep_algorithm = "PPO"
 output_path = "agent_" + deep_algorithm + ".pkl"
 
 # train inference
-total_train_time = train_deep(grid_world, deep_algorithm, reward_system, timesteps, output_path)
+total_train_time = train_deep(grid_world, deep_algorithm, timesteps, output_path)
 
 # inference
 path, cumulative_reward, total_inference_time = inference_deep(grid_world, deep_algorithm, output_path)

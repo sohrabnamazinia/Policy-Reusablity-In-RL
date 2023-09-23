@@ -95,17 +95,17 @@ def run_heuristic(q_table_1_path, q_table_2_path, k, max_allowed_path_size, rewa
     return heuristic(q_table_1, q_table_2, gridworld, k, max_allowed_path_size)
 
 
-# set up inputs
-reward_system = "combined"
-q_table_1_path = "q_table_path.npy"
-q_table_2_path = "q_table_gold.npy"
-k = 2
-max_allowed_path_size = 8
+# # set up inputs
+# reward_system = "combined"
+# q_table_1_path = "q_table_path.npy"
+# q_table_2_path = "q_table_gold.npy"
+# k = 2
+# max_allowed_path_size = 8
 
-max_cumulative_reward, best_path, paths, shortest_paths, total_time = run_heuristic(q_table_1_path, q_table_2_path, k, max_allowed_path_size, reward_system=reward_system)
-print("Total_time: " + str(total_time))
-print("All paths count:\n" + str(len(paths)))
-#print(paths)
-print("Shortest paths count:\n" + str(len(shortest_paths)))
-print("Max cumulative reward: " + str(max_cumulative_reward))
-#print(shortest_paths)
+# max_cumulative_reward, best_path, paths, shortest_paths, total_time = run_heuristic(q_table_1_path, q_table_2_path, k, max_allowed_path_size, reward_system=reward_system)
+# print("Total_time: " + str(total_time))
+# print("All paths count:\n" + str(len(paths)))
+# #print(paths)
+# print("Shortest paths count:\n" + str(len(shortest_paths)))
+# print("Max cumulative reward: " + str(max_cumulative_reward))
+# #print(shortest_paths)

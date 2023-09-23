@@ -22,6 +22,7 @@ def inference_deep(grid_world, algorithm, agent_path):
 	max_steps_inference = 100
 	path = []
 	cumulative_reward = 0
+	path.append(grid_world.agent_position.copy())
 
 	for step in range(max_steps_inference):
      
@@ -35,11 +36,15 @@ def inference_deep(grid_world, algorithm, agent_path):
 
 		print("Action: ", action)
 
+		prev_agent_position = grid_world.agent_position.copy()
+
         # step
 		obs, reward, done, _ = grid_world.step(action)
+		if grid_world.agent_position != prev_agent_position:
+			path.append(grid_world.agent_position.copy())
+
 
 		# update return values
-		path.append(int(action))
 		cumulative_reward += reward
 
         # print step index
