@@ -66,7 +66,7 @@ for i in range(env_test_count):
     cumulative_rewards_train_combined.append(cumulative_reward_train_combined)
     cumulative_rewards_pruning.append(cumulative_reward_pruning)
     cumulative_rewards_greedy_k.append(cumulative_reward_greedy_k)
-    df.at[i, environment_size_index] = combined_env.grid_width * combined_env.grid_length
+    df.at[i, environment_size_index] = str((combined_env.grid_width, combined_env.grid_length))
     df.at[i, cumulative_reward_Train_Combined_index] = cumulative_reward_train_combined
     df.at[i, cumulative_reward_ExNonZeroDiscount_index] = cumulative_reward_pruning
     df.at[i, cumulative_reward_greedy_k_index] = cumulative_reward_greedy_k

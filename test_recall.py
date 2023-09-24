@@ -47,8 +47,8 @@ def compute_deep_max_reward(gridworld, paths):
 
 
 #inputs
-env_test_count = 3
-diff_agent_pos_per_test = 4
+env_test_count = 2
+diff_agent_pos_per_test = 1
 first_env_size = 4
 env_test_step = 1
 n_episodes = 1000
@@ -140,7 +140,7 @@ for i in range(env_test_count):
     recall_exact_pruning = round(((recall_exact_pruning / diff_agent_pos_per_test) * 100), 2)
     recall_heuristic = round(((recall_heuristic / diff_agent_pos_per_test) * 100), 2)
     recall_deep = round(((recall_deep / diff_agent_pos_per_test) * 100), 2)
-    df.at[i, env_size_index] = combined_env.state_count
+    df.at[i, env_size_index] = str((combined_env.grid_width, combined_env.grid_length))
     df.at[i, recall_exact_pruning_index] = recall_exact_pruning
     df.at[i, recall_heuristic_index] = recall_heuristic
     df.at[i, recall_deep_index] = recall_deep
