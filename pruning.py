@@ -48,26 +48,26 @@ def run_pruning(gridworld, dag_1, dag_2, learning_rate, discount_factor):
 
 
 
-# reward_system_1 = "path"
-# reward_system_2 = "gold"
-# grid_world_1 = init_gridworld_1(reward_system_1)
-# grid_world_2 = init_gridworld_1(reward_system_2)
-# output_path_1 = "q_table_path.npy"
-# output_path_2 = "q_table_gold.npy"
-# n_episodes = 1000
-# max_steps_per_episode = 100
-# agent_type = "Sarsa"
-# learning_rate = 0.1
-# discount_factor = 0.99
+reward_system_1 = "path"
+reward_system_2 = "gold"
+grid_world_1 = init_gridworld_1(reward_system_1)
+grid_world_2 = init_gridworld_1(reward_system_2)
+output_path_1 = "q_table_path.npy"
+output_path_2 = "q_table_gold.npy"
+n_episodes = 1000
+max_steps_per_episode = 100
+agent_type = "Sarsa"
+learning_rate = 0.1
+discount_factor = 0.99
 
-# # train the agent and run the algorithm
-# total_time_1, dag_1 = train_q_policy(grid_world_1, n_episodes, max_steps_per_episode, agent_type, output_path_1, learning_rate, discount_factor)
-# total_time_2, dag_2 = train_q_policy(grid_world_2, n_episodes, max_steps_per_episode, agent_type, output_path_2, learning_rate, discount_factor)
-# print("Total training time - Path: " + str(total_time_1))
-# print("Total training time - Gold: " + str(total_time_2))
-# print("Dag of Training - Path:")
-# dag_1.print(mode=1)
-# print("Dag of Training - Gold:")
-# dag_2.print(mode=1)
-# paths, total_time, pruning_percentage = run_pruning(dag_1, dag_2, learning_rate, discount_factor)
-# print("Total time of the pruning algorithm: " + str(total_time))
+# train the agent and run the algorithm
+total_time_1, dag_1, _ = train_q_policy(grid_world_1, n_episodes, max_steps_per_episode, agent_type, output_path_1, learning_rate, discount_factor)
+total_time_2, dag_2, _ = train_q_policy(grid_world_2, n_episodes, max_steps_per_episode, agent_type, output_path_2, learning_rate, discount_factor)
+print("Total training time - Path: " + str(total_time_1))
+print("Total training time - Gold: " + str(total_time_2))
+print("Dag of Training - Path:")
+dag_1.print(mode=1)
+print("Dag of Training - Gold:")
+dag_2.print(mode=1)
+best_path, max_reward, total_time, pruning_percentage = run_pruning(grid_world_1, dag_1, dag_2, learning_rate, discount_factor)
+print("Total time of the pruning algorithm: " + str(total_time))
