@@ -65,7 +65,7 @@ for i in range(env_test_count):
     speedup = time_from_scratch / time_ExNonZeroDiscount
     df.at[i, env_size_index] = str((combined_env.grid_width, combined_env.grid_length))
     df.at[i, time_ExNonZeroDiscount_index] = time_ExNonZeroDiscount
-    df.at[i, time_train_scratch_index] = time_train_combined
+    df.at[i, time_train_scratch_index] = time_from_scratch
     df.at[i, speedup_index] = speedup
     times_train_scratch.append(time_from_scratch)
     times_ExNonZeroDiscount.append(time_ExNonZeroDiscount)

@@ -31,6 +31,9 @@ pruning_percentages = []
 discount_factors = set_discount_factors(experiments_count)
 
 for i in range(experiments_count):
+    if (i == 0):
+        pruning_percentages.append(100)
+        continue
     df = discount_factors[i]
     gridworld_1 = init_gridworld_5(policy_1, env_width_size, env_length_size)
     gridworld_2 = init_gridworld_5(policy_2, env_width_size, env_length_size)
