@@ -59,3 +59,11 @@ def plot_cumulative_reward_env_size(csv_file_name, x, y_1, y_2, y_3):
     plt.ylabel("Cumulative Reward")
     plt.legend()
     plt.show()
+
+def plot_speedup(csv_file_name, x, y_1, y_2, y_3):
+    data = pd.read_csv(csv_file_name)
+    plt.plot(data[x], data[y_3], label="Speedup", marker='o', linestyle='-')
+    plt.xlabel("Enironment size (width, length)")
+    plt.ylabel("Speedup")
+    plt.show()
+     
