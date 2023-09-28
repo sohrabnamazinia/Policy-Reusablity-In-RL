@@ -3,10 +3,12 @@ from gym import spaces
 import numpy as np
 import copy
 
+from Random_Policies_Generation import generate_random_policies
+
 class GridWorld(gym.Env):
     
     def __init__(self, grid_width, grid_length, reward_system, agent_position, target_position, cell_low_value, cell_high_value, 
-        start_position_value, target_position_value, block_position_value, agent_position_value, gold_position_value, block_reward, target_reward, gold_k=0, gold_positions=None, block_positions=None):
+        start_position_value, target_position_value, block_position_value, agent_position_value, gold_position_value, block_reward, target_reward, gold_k=0, gold_positions=None, block_positions=None, n = 0):
         
         super(GridWorld, self).__init__()
 
@@ -26,6 +28,8 @@ class GridWorld(gym.Env):
         self.block_position_value = block_position_value
         self.gold_position_value = gold_position_value
         self.gold_k = gold_k
+        self.num_synthetic_policies = n
+        self.reward_dict = generate_random_policies(self.grid_width, self.grid_length, self.num_synthetic_policies, 0, 2)
 
         # action space in case we want to avoid cycles
         self.action_space = spaces.Discrete(2)
@@ -128,7 +132,7 @@ class GridWorld(gym.Env):
         return self.grid, reward, done, {}
     
     def _get_reward(self, prev_agent_position):
-        
+
         # gold collection task
         if self.reward_system == "gold":
             return self.get_reward_gold()
@@ -140,10 +144,24 @@ class GridWorld(gym.Env):
         elif self.reward_system == "combined":
             return self.get_reward_gold() + self.get_reward_path(prev_agent_position)
 
+        # get synthetic policies reward
+
+        action = self.obtain_action(prev_agent_position, self.agent_position)
+        total = 0
+
+        for i in range(self.num_synthetic_policies):
+            if self.reward_system == f"R{i}":
+                return self.reward_dict[i][tuple(prev_agent_position)][action]
+            elif self.reward_system == "combined_synthetic":
+                total += self.reward_dict[i][tuple(prev_agent_position)][action]
+        return total
+
         return 0
 
     def render(self, mode='human'):
         print(self.grid)
+
+
 
     def get_reward_path(self, prev_agent_position):
         current_cell_value = self.grid[self.agent_position[0]][self.agent_position[1]]
