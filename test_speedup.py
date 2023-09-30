@@ -6,7 +6,7 @@ from pruning import run_pruning
 from utilities import plot_speedup
 
 #inputs
-env_test_count = 2
+env_test_count = 4
 first_env_size = 4
 env_test_step = 1
 n_episodes = 1000
