@@ -70,8 +70,8 @@ for i in range(env_test_count):
     times_train_scratch.append(time_from_scratch)
     times_ExNonZeroDiscount.append(time_ExNonZeroDiscount)
     speedups.append(speedup)
+    df.to_csv(csv_file_name, index=False, header=header)
 
-df.to_csv(csv_file_name, index=False, header=header)
 plot_speedup(csv_file_name, header[0], header[1], header[2], header[3])
 print("Environment sizes: " + str(env_sizes))
 print("Total time for ExNonZeroDiscount: " + str(times_ExNonZeroDiscount))

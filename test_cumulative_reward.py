@@ -70,9 +70,8 @@ for i in range(env_test_count):
     df.at[i, cumulative_reward_Train_Combined_index] = cumulative_reward_train_combined
     df.at[i, cumulative_reward_ExNonZeroDiscount_index] = cumulative_reward_pruning
     df.at[i, cumulative_reward_greedy_k_index] = cumulative_reward_greedy_k
+    df.to_csv(csv_file_name, index=False, header=header)
 
-
-df.to_csv(csv_file_name, index=False, header=header)
 print("Cumulative rewards for train combined:\n" + str(cumulative_rewards_train_combined))
 print("Cumulative rewards for ExNonZeroDiscount:\n" + str(cumulative_rewards_pruning))
 print("Cumulative rewards for Greedy K:\n" + str(cumulative_rewards_greedy_k))

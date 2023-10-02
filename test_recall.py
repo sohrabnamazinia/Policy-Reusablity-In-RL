@@ -147,8 +147,9 @@ for i in range(env_test_count):
     recalls_exact_pruning.append(recall_exact_pruning)
     recalls_heuristic.append(recall_heuristic)
     recalls_deep.append(recall_deep)
+    df.to_csv(csv_file_name, index=False, header=header)
 
-df.to_csv(csv_file_name, index=False, header=header)
+
 plot_recalls(csv_file_name, header[0], header[1], header[2], header[3])
 print("Environment sizes: " + str(env_sizes))
 print("Recalls for ExNonZeroDiscount: " + str(recalls_exact_pruning))

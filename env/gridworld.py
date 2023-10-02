@@ -3,7 +3,7 @@ from gym import spaces
 import numpy as np
 import copy
 
-from Random_Policies_Generation import generate_random_policies
+from env.Random_Policies_Generation import generate_random_policies
 
 class GridWorld(gym.Env):
     

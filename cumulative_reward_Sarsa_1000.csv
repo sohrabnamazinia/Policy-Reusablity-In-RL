@@ -1,4 +1,4 @@
 Environment Size,Cumulative Reward - Train Combined,Cumulative Reward - ExNonZeroDiscount,Cumulative Reward - Greedy K
-16.0,205.0,207.0,207.0
-25.0,208.0,210.0,210.0
-36.0,212.0,213.0,213.0
+"(4, 4)",207.0,207.0,207.0
+"(5, 5)",208.0,210.0,210.0
+"(6, 6)",213.0,213.0,213.0
