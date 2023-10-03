@@ -1,9 +1,13 @@
 import torch
 from transformers import AutoTokenizer, AutoModel
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import HashingVectorizer
 
+import torch
+import numpy as np
+from transformers import AutoTokenizer, AutoModel
 
-def embed_text_to_vector(text, model_name):
+def embed_text_to_vector(text, model_name="bert-base-uncased", vector_size=100):
     # Load the pre-trained tokenizer and model
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModel.from_pretrained(model_name)
@@ -20,10 +24,19 @@ def embed_text_to_vector(text, model_name):
     with torch.no_grad():
         outputs = model(input_ids)
 
-    # Extract the embeddings for the [CLS] token 
+    # Extract the embeddings for the [CLS] token
     embeddings = outputs.last_hidden_state[:, 0, :].squeeze().numpy()
 
+    # If embeddings length is greater than k, truncate; if less, pad with zeros
+    if embeddings.shape[0] > vector_size:
+        embeddings = embeddings[:vector_size]
+    elif embeddings.shape[0] < vector_size:
+        pad_length = vector_size - embeddings.shape[0]
+        embeddings = np.pad(embeddings, ((0, pad_length),), 'constant', constant_values=0.0)
+
+
     return embeddings
+
 
 def compute_cosine_similarity_huggingface(vector1, vector2, model_name):
     # Load the pre-trained tokenizer and model
@@ -44,6 +57,12 @@ def compute_cosine_similarity_huggingface(vector1, vector2, model_name):
 
     return similarity
 
+def text_to_binary_vector(text, max_features=128):
+    vectorizer = HashingVectorizer(n_features=max_features, binary=True)
+    binary_vector = vectorizer.transform([text])
+    return binary_vector
+
+
 
 text_to_embed = "This is a sample sentence to embed into a vector."
 text_to_embed2 = "This is a sample sentence to embed into a vector."
@@ -52,3 +71,7 @@ model_name = "bert-base-uncased"  # You can change this to the model of your cho
 vector_representation1 = embed_text_to_vector(text_to_embed, model_name)
 vector_representation1 = embed_text_to_vector(text_to_embed2, model_name)
 print(compute_cosine_similarity_huggingface(text_to_embed, text_to_embed2, model_name))
+binary_vector1 = text_to_binary_vector(text_to_embed)
+binary_vector2 = text_to_binary_vector(text_to_embed2)
+print("Binary Vector 1:", binary_vector1)
+print("Binary Vector 2:", binary_vector2.toarray())
