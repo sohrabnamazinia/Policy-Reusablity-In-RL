@@ -16,5 +16,21 @@ class LLM():
     def reformulate_query(self, query, action, reference_review):
         prompt = f"Reformulate the following query by {action} in order to make it more relevant to the following review. Only mention the reformulated query.\n\n{query}\n\nReview: {reference_review}"
         return self.ask(prompt)
+    
+    def process_feature_list(self, features_dict, review):
+        features = ", ".join(features_dict.keys())
+        prompt = f"To what the degree the following review is related to each of the mentioned features? Provide a score between 0 and 1. If not relevant, return 0. \n\nDesired format:\n<feature>: <score>\n\nFeatures: {features}\n\nReview: {review}"
+        output = self.ask(prompt)
+        output_sep = output.split("\n") 
+        for item in output_sep:
+            item_sep = item.split(":")
+            features_dict[item_sep[0]] = float(item_sep[1])
+        reward = 0
+        for value in features_dict.values():
+            reward += value
+        reward /= len(features_dict)
+        features_dict = {key: round(value) for key, value in features_dict.items()}
+        return reward, features_dict
+
 
     

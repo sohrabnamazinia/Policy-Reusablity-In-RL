@@ -38,7 +38,7 @@ def embed_text_to_vector(text, model_name="bert-base-uncased", vector_size=100):
     return embeddings
 
 
-def compute_cosine_similarity_huggingface(vector1, vector2, model_name):
+def compute_cosine_similarity_huggingface(vector1, vector2, model_name="bert-base-uncased"):
     # Load the pre-trained tokenizer and model
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModel.from_pretrained(model_name)
