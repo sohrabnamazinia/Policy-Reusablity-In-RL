@@ -3,14 +3,14 @@ from gym import spaces
 import numpy as np
 import copy
 from amazonDB import amazonDB
-from string_vector import embed_text_to_vector, compute_cosine_similarity_huggingface
+from string_vector import embed_text_to_vector, compute_cosine_similarity
 from LLM import LLM
 
 
 class Query_Refine(gym.Env):
     def __init__(self, embedding_size, query, reference_review, reference_features, reward_system="closeness", gaol_reward = 10):
         super(Query_Refine, self).__init__()
-        self.reviews = amazonDB().get_reviews()
+        self.amazonDB = amazonDB()
         self.llm = LLM()
         
         # number of actions
@@ -53,7 +53,7 @@ class Query_Refine(gym.Env):
     
     def is_end_state(self):
         if self.reward_system == "closeness":
-            similarity = compute_cosine_similarity_huggingface(vector1=self.query_vector, vector2=self.reference_review_vector)
+            similarity = compute_cosine_similarity(vector1=self.query_vector, vector2=self.reference_review_vector)
             if similarity >= self.cosine_similarity_threshold:
                 return True
             return False
@@ -75,16 +75,16 @@ class Query_Refine(gym.Env):
             return self.compute_reward_combined()
 
     def compute_reward_closeness(self):
-        return compute_cosine_similarity_huggingface(self.query_vector, embed_text_to_vector(self.reference_review))
+        review = self.amazonDB.pick_one_similar_random_review(self.query_vector)
+        return compute_cosine_similarity(review, embed_text_to_vector(self.reference_review))
 
     def compute_reward_feature(self):
-        reward, features_dict = self.llm.process_feature_list(self.reference_features, review=self.reference_review)
-        self.reference_features = features_dict
+        review = self.amazonDB.pick_one_similar_random_review(self.query_vector)
+        reward, features_dict = self.llm.process_feature_list(self.reference_features, review=review)
+        # when a feature gets one it should remian 1
+        for key in self.reference_features.keys():
+            self.reference_features[key] = max(self.reference_features[key], self.features_dict[key])
         return reward
 
     def compute_reward_combined(self):
         return self.compute_reward_closeness() + self.compute_reward_feature()
-    
-    # HOW TO USE THE TOP 5, reward function im using reference review and not the top 5
-    # when a feature gets one it should remain 1
-    # train it
