@@ -21,6 +21,7 @@ times_train_scratch = []
 times_ExNonZeroDiscount = []
 speedups = []
 csv_file_name = "Test_Speedup_" + agent_type + "_" + str(n_episodes) + ".csv"
+
 q_table_1_output_path = "q_table_1.npy"
 q_table_2_output_path = "q_table_2.npy"
 q_table_3_output_path = "q_table_combined.npy"

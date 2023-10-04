@@ -68,7 +68,21 @@ class DAG:
                 print("node " + str(GridWorld.index_to_state(i, self.env_length)) + ":")
                 neighbor_states = [GridWorld.index_to_state(neighbor, self.env_length) for neighbor in self.graph.neighbors(i)]
                 print("\t" + str(neighbor_states))
-    
+
+    def union_of_graphs(self, graph_list):
+        union_graph = nx.DiGraph()
+
+        for graph in graph_list:
+            union_graph.add_nodes_from(graph.nodes)
+            union_graph.add_edges_from(graph.edges)
+
+        new_grid_world = copy.copy(self.gridworld)
+        new_grid_world.reward_system = "combined"
+        new_grid_world.reset()
+        dag = DAG(new_grid_world, self.N)
+        dag.graph = union_graph
+        return dag
+
     def union(self, other):
         graph = nx.DiGraph()
         graph.add_nodes_from(self.graph.nodes)

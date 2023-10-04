@@ -151,9 +151,9 @@ class GridWorld(gym.Env):
 
         for i in range(self.num_synthetic_policies):
             if self.reward_system == f"R{i}":
-                return self.reward_dict[i][tuple(prev_agent_position)][action]
+                return self.get_reward_synthetic(prev_agent_position, i, action)
             elif self.reward_system == "combined_synthetic":
-                total += self.reward_dict[i][tuple(prev_agent_position)][action]
+                total += self.get_reward_synthetic(prev_agent_position, i, action)
         return total
 
         return 0
@@ -161,7 +161,15 @@ class GridWorld(gym.Env):
     def render(self, mode='human'):
         print(self.grid)
 
+    def get_reward_synthetic(self, prev_agent_position, i, action):
 
+        current_cell_value = self.grid[self.agent_position[0]][self.agent_position[1]]
+        if current_cell_value == self.block_position_value:  # block
+            return self.block_reward
+        if current_cell_value == self.target_position_value: # target
+            return self.target_reward
+
+        return self.reward_dict[i][tuple(prev_agent_position)][action]
 
     def get_reward_path(self, prev_agent_position):
         current_cell_value = self.grid[self.agent_position[0]][self.agent_position[1]]
