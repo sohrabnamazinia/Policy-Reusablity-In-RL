@@ -1,13 +1,12 @@
 import os
-import openai
 from langchain.chains import ConversationChain
-from langchain.llms import OpenAI
+from langchain.chat_models import ChatOpenAI
 
 class LLM():
     def __init__(self, token="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") -> None:
         self.token = token
         os.environ["OPENAI_API_KEY"] = self.token
-        self.llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0.0)
+        self.llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.0)
         self.chain = ConversationChain(llm=self.llm)
 
     def ask(self, input):

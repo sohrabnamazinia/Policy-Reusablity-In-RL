@@ -58,6 +58,7 @@ learning_rate = 0.1
 discount_factor = 0.99
 heuristic_k = 1
 agent_type = "QLearning"
+# A2C
 deep_algorithm = "PPO"
 timesteps = n_episodes
 

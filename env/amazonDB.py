@@ -3,7 +3,7 @@ import torch
 import random
 import os
 import csv
-from string_vector import embed_text_to_vector, compute_cosine_similarity
+from env.string_vector import embed_text_to_vector, compute_cosine_similarity
 
 class amazonDB:
 

@@ -1,14 +1,13 @@
 import gym
 from gym import spaces
 import numpy as np
-import copy
-from amazonDB import amazonDB
-from string_vector import embed_text_to_vector, compute_cosine_similarity
-from LLM import LLM
+from env.amazonDB import amazonDB
+from env.string_vector import embed_text_to_vector, compute_cosine_similarity
+from env.LLM import LLM
 
 
 class Query_Refine(gym.Env):
-    def __init__(self, embedding_size, query, reference_review, reference_features, reward_system="closeness", gaol_reward = 10):
+    def __init__(self, embedding_size, query, reference_review, reference_features, reward_system="closeness", goal_reward = 10):
         super(Query_Refine, self).__init__()
         self.amazonDB = amazonDB()
         self.llm = LLM()
@@ -17,15 +16,16 @@ class Query_Refine(gym.Env):
         self.actions = ["add word", "remove word"]
         self.action_size = len(self.actions)
         self.action_space = spaces.Discrete(self.action_size)
-        self.state_space = spaces.Box(low=-np.inf, high=np.inf, shape=(embedding_size,), dtype=np.float32)
+        self.embed_size = embedding_size
+        self.state_space = spaces.Box(low=-np.inf, high=np.inf, shape=(self.embed_size,), dtype=np.float32)
         self.embed_vector_ratio = 10
-        self.goal_reward = gaol_reward
+        self.goal_reward = goal_reward
         self.reference_features_names = reference_features
         self.reference_features = {feature: 0 for feature in reference_features}
         self.reference_review = reference_review
         self.cosine_similarity_threshold = 0.7
         self.feature_avg_threshold = 0.5
-        self.reference_review_vector = embed_text_to_vector(text=self.reference_review)
+        self.reference_review_vector = embed_text_to_vector(text=self.reference_review, vector_size=self.embed_size)
         self.initial_query = query
         self.query = query
         self.initial_query_vector = self.update_query_vector()
@@ -48,8 +48,12 @@ class Query_Refine(gym.Env):
         return self.query_vector, reward, done, {}
 
     def update_query_vector(self):
-        self.query_vector = embed_text_to_vector(text=self.query, vector_size=len(self.reference_review) * self.embed_vector_ratio)
+        self.query_vector = embed_text_to_vector(text=self.query, vector_size=self.embed_size)
         return self.query_vector
+    
+    #TODO
+    def get_state_index(self):
+        pass
     
     def is_end_state(self):
         if self.reward_system == "closeness":
