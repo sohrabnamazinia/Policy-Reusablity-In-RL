@@ -1,10 +1,11 @@
 from env.init_query_refine import init_query_refine_1
 import numpy as np
 from agents.q_agent import QLearningAgent, SarsaAgent
+import math
 
 def train_q_qr(env, n_episodes, max_steps_per_episode, agent_type, output_path, learning_rate=None, discount_factor=None):
 
-    n_states = np.product(env.query_vector.shape)
+    n_states = int(math.pow(2, env.query_vector.shape[0]))
     n_actions = env.action_space.n
 
     # Initialize the Q-Learning agent
@@ -45,6 +46,8 @@ def train_q_qr(env, n_episodes, max_steps_per_episode, agent_type, output_path, 
 
         # update lerning rate and explortion rate
         q_agent.exploration_rate = max(q_agent.exploration_rate * q_agent.exploration_rate_decay, q_agent.min_exploration_rate)
+
+    np.save(output_path, q_agent.q_table)
 
     return
     

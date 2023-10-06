@@ -40,7 +40,7 @@ class Query_Refine(gym.Env):
     def step(self, action):
         done = None        
         updated_query = self.llm.reformulate_query(self.query, self.actions[action], self.reference_review)
-        prev_query = self.query.copy()
+        prev_query = self.query[:]
         self.query = updated_query
         self.update_query_vector()
         reward = self.compute_reward()
@@ -49,11 +49,15 @@ class Query_Refine(gym.Env):
 
     def update_query_vector(self):
         self.query_vector = embed_text_to_vector(text=self.query, vector_size=self.embed_size)
+        min_value = np.min(self.query_vector)
+        max_value = np.max(self.query_vector)
+        self.query_vector = (self.query_vector - min_value) / (max_value - min_value)
         return self.query_vector
     
-    #TODO
     def get_state_index(self):
-        pass
+        temp_vector = np.where(self.query_vector >= 0.5, 1, 0)
+        state_index = np.sum(temp_vector * (2 ** np.arange(len(temp_vector))))
+        return state_index
     
     def is_end_state(self):
         if self.reward_system == "closeness":
@@ -80,7 +84,7 @@ class Query_Refine(gym.Env):
 
     def compute_reward_closeness(self):
         review = self.amazonDB.pick_one_similar_random_review(self.query_vector)
-        return compute_cosine_similarity(review, embed_text_to_vector(self.reference_review))
+        return compute_cosine_similarity(embed_text_to_vector(review, self.embed_size), embed_text_to_vector(self.reference_review, self.embed_size))
 
     def compute_reward_feature(self):
         review = self.amazonDB.pick_one_similar_random_review(self.query_vector)

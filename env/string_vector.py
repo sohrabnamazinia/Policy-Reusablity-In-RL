@@ -5,7 +5,12 @@ import torch
 import numpy as np
 from transformers import AutoTokenizer, AutoModel
 
-def embed_text_to_vector(text, model_name="bert-base-uncased", vector_size=100):
+def embed_text_to_vector(text, vector_size, model_name="bert-base-uncased"):
+    # cut text if its length is > the max possible length for the specified model
+    text_max_length = 512
+    if len(text) > text_max_length:
+        text = text[:text_max_length]
+
     # Load the pre-trained tokenizer and model
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModel.from_pretrained(model_name)

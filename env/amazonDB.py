@@ -7,7 +7,7 @@ from env.string_vector import embed_text_to_vector, compute_cosine_similarity
 
 class amazonDB:
 
-    def __init__(self, database="amazon_reviews", user="postgres", passwd="2534", host="localhost", port="5432", csv_file_name="reviews.csv", review_conut=1000):
+    def __init__(self, database="amazon_reviews", user="postgres", passwd="2534", host="localhost", port="5432", csv_file_name="reviews.csv", review_conut=10):
         self.csv_file_name = csv_file_name
         self.review_count = review_conut
         self.reviews = []
@@ -40,7 +40,7 @@ class amazonDB:
     def get_top_five_related_reviews(self, query_vector):
         similarities = []
         for review in self.reviews:
-            review_vector = embed_text_to_vector(review)
+            review_vector = embed_text_to_vector(review, vector_size=len(query_vector))
             similarity = compute_cosine_similarity(query_vector, review_vector)
             similarities.append((review, similarity))
 
