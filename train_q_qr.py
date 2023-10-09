@@ -23,16 +23,17 @@ def train_q_qr(env, n_episodes, max_steps_per_episode, agent_type, output_path, 
     
     cumulative_reward = 0
     for episode in range(n_episodes):
+        print("Episode number " + str(episode))
         env.reset().flatten()
         state_index = env.get_state_index()
 
         for step in range(max_steps_per_episode):
+            print("State: " + str(state_index))
             action = q_agent.get_action(state_index)
-
+            print("Action: " + str(action))
             grid, reward, done, info = env.step(action)
             cumulative_reward += reward
             next_state_index = env.get_state_index()
-            
             if agent_type == "Sarsa":
                 next_action = q_agent.get_action(next_state_index)
                 q_agent.update_q_table(state_index, action, reward, next_state_index, next_action)
@@ -42,21 +43,23 @@ def train_q_qr(env, n_episodes, max_steps_per_episode, agent_type, output_path, 
             state_index = next_state_index
 
             if done:
+                state_index = env.final_state_index
+                print("State (Final):" + str(state_index))
+                print("Agent reached the target in episode number " + str(episode))
                 break
 
         # update lerning rate and explortion rate
         q_agent.exploration_rate = max(q_agent.exploration_rate * q_agent.exploration_rate_decay, q_agent.min_exploration_rate)
 
     np.save(output_path, q_agent.q_table)
-
     return
     
 
 # test a sample
-reward_system = "closeness"
+reward_system = "feature"
 env = init_query_refine_1(reward_system)
-n_episodes = 1000
-max_steps_per_episode = 100
+n_episodes = 10
+max_steps_per_episode = 10
 agent_type = "QLearning"
-output_path = "Train_QR_" + agent_type + "_" + str(n_episodes) + ".npy"
+output_path = "Train_QR_" + agent_type + "_" + reward_system + "_" + str(n_episodes) + ".npy"
 train_q_qr(env, n_episodes=n_episodes, max_steps_per_episode=100, output_path=output_path, agent_type=agent_type)

@@ -24,8 +24,13 @@ class amazonDB:
             self.reviews = self.get_reviews()
             with open(self.csv_file_name, "w", newline="") as file:
                 csv_writer = csv.writer(file)
-                for i in range(self.review_count):
-                    csv_writer.writerow([self.reviews[i]])
+                count = 0
+                for i in range(len(self.reviews)):
+                    if count >= self.review_count:
+                        break
+                    if ("camera" in self.reviews[i][0].lower()):
+                        csv_writer.writerow([self.reviews[i][0]])
+                        count += 1
     
     def get_reviews(self):
         self.cursor.execute("SELECT reviewtext FROM reviews")
@@ -37,7 +42,7 @@ class amazonDB:
         self.connection.close()
         return reviews
     
-    def get_top_five_related_reviews(self, query_vector):
+    def get_top_k_related_reviews(self, query_vector, k):
         similarities = []
         for review in self.reviews:
             review_vector = embed_text_to_vector(review, vector_size=len(query_vector))
@@ -46,12 +51,12 @@ class amazonDB:
 
         # Sort reviews by similarity in descending order and return the top 5
         sorted_reviews = sorted(similarities, key=lambda x: x[1], reverse=True)
-        top_five_reviews = sorted_reviews[:5]
+        top_five_reviews = sorted_reviews[:k]
 
         return top_five_reviews
     
-    def pick_one_similar_random_review(self, query_vector):
-        random_review, _ = random.choice(self.get_top_five_related_reviews(query_vector))
+    def pick_one_similar_random_review(self, query_vector, k):
+        random_review, _ = random.choice(self.get_top_k_related_reviews(query_vector, k))
         return random_review
     
 
