@@ -4,6 +4,7 @@ import numpy as np
 from env.amazonDB import amazonDB
 from env.string_vector import embed_text_to_vector, compute_cosine_similarity
 from env.LLM import LLM
+import math
 
 
 class Query_Refine(gym.Env):
@@ -14,9 +15,10 @@ class Query_Refine(gym.Env):
         
         # number of actions
         self.actions = ["\"adding only one word\"", "\"changing only one word\""]
-        self.action_size = len(self.actions)
-        self.action_space = spaces.Discrete(self.action_size)
         self.embed_size = embedding_size
+        self.action_count = len(self.actions)
+        self.state_count = int(math.pow(2, self.embed_size))
+        self.action_space = spaces.Discrete(self.action_count)
         self.state_space = spaces.Box(low=-np.inf, high=np.inf, shape=(self.embed_size,), dtype=np.float32)
         self.embed_vector_ratio = 10
         self.goal_reward = goal_reward
@@ -60,6 +62,16 @@ class Query_Refine(gym.Env):
         vector = (vector - min_value) / (max_value - min_value)
         return vector
     
+    def index_to_state(self, number):
+        binary_str = bin(number)[2:]  # [2:] to remove the '0b' prefix
+        # Calculate the number of zero padding needed
+        padding_length = self.embed_size - len(binary_str)
+        # Pad the binary string with leading zeros
+        binary_vector = '0' * padding_length + binary_str
+        # Convert the binary string to a NumPy array of integers
+        binary_array = np.array(list(binary_vector), dtype=int)
+        return binary_array
+    
     def get_final_state_index(self):
         temp_vector = np.where(self.reference_review_vector >= 0.5, 1, 0)
         state_index = np.sum(temp_vector * (2 ** np.arange(len(temp_vector))))
@@ -67,6 +79,11 @@ class Query_Refine(gym.Env):
     
     def get_state_index(self):
         temp_vector = np.where(self.query_vector >= 0.5, 1, 0)
+        state_index = np.sum(temp_vector * (2 ** np.arange(len(temp_vector))))
+        return state_index
+    
+    def state_to_index(self, vector):
+        temp_vector = np.where(vector >= 0.5, 1, 0)
         state_index = np.sum(temp_vector * (2 ** np.arange(len(temp_vector))))
         return state_index
     
