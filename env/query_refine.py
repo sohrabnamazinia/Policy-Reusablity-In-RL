@@ -5,6 +5,7 @@ from env.amazonDB import amazonDB
 from env.string_vector import embed_text_to_vector, compute_cosine_similarity
 from env.LLM import LLM
 import math
+import copy
 
 
 class Query_Refine(gym.Env):
@@ -36,9 +37,11 @@ class Query_Refine(gym.Env):
         self.reward_system = reward_system
         self.final_state_index = self.get_final_state_index()
 
-    def reset(self):
-        self.query_vector = self.initial_query_vector
-        self.query = self.initial_query
+    def reset(self, new_query=None):
+        if new_query != None:
+            self.initial_query = new_query
+        self.query = copy.copy(self.initial_query)
+        self.initial_query_vector = self.update_query_vector()
         return self.query_vector
 
     def step(self, action):
