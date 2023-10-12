@@ -6,7 +6,7 @@ import time
 
 # inference method
 # the q_table.npy file must be in the same directory as this file
-def inference_q_qr(env, q_table_path):
+def inference_q_qr(env, q_table_path, edge_dict):
 
     # Load the Q-table
     q_table = np.load(q_table_path)
@@ -28,8 +28,8 @@ def inference_q_qr(env, q_table_path):
         # turn on stopwatch
         start_time = time.time()
 
-        # print the current location of the agent
-        print("Agent State: " + str(env.agent_position))
+        # print the current state index of the agent
+        print("Agent State: " + str(env.get_state_index()))
 
         # greedy action selection (inference)
         action = np.argmax(q_table[state_index, :])
@@ -39,16 +39,19 @@ def inference_q_qr(env, q_table_path):
         print("Action: ", action)
 
         # step
-        grid, reward, done, _ = env.step(action)
+        state_index = env.get_state_index()
+        next_state_index, reward = edge_dict[(state_index, action)]
         total_reward += reward
-        next_state_index = env.state_to_index(env.agent_position)
 
         # upadate state index
         state_index = next_state_index
+        done = state_index == env.final_state_index
 
         # print step index
         print("Step: ", step + 1)
-        print(grid)
+
+        elapsed_time = time.time() - start_time
+        total_time += elapsed_time
 
         # check if the agent reached the target or the maximum number of steps is reached
         if done:
@@ -58,18 +61,9 @@ def inference_q_qr(env, q_table_path):
                 print("Agent failed to reach the target!")
             break
 
-        # turn of stopwatch
-        elapsed_time = time.time() - start_time
-        total_time += elapsed_time
-
         #wandb.log({"Total Inference Time": total_time}, step=step)
     
     #run.finish()
     return total_time, total_reward, path
 
-# set inputs
-# reward_system = "combined"
-# grid_world = init_gridworld_1(reward_system)
-# q_table_path = "q_table_combined.npy"
-# total_time, total_reward = inference_q(grid_world, q_table_path)
-# print("Total reward: " + str(total_reward))
+

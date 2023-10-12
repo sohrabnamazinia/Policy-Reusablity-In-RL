@@ -15,8 +15,8 @@ def get_best_path(env, dag, paths):
         for i in range(len(path) - 1):
             state_index_1 = path[i]
             state_index_2 = path[i + 1]
-            action = dag.obtain_action(state_index_1, state_index_2)
-            grid, r, done, _ = env.step(action)
+            action, r = dag.obtain_action(state_index_1, state_index_2)
+            #grid, r, done, _ = env.step(action)
             reward += r
         if reward >= max_reward:
             max_reward = reward
@@ -47,27 +47,29 @@ def run_pruning(env, dag_1, dag_2, learning_rate, discount_factor):
     return best_path, max_reward, total_time, pruning_percentage
 
 
+# # set inputs
+# reward_system_1 = "closeness"
+# reward_system_2 = "feature"
+# env_1 = init_query_refine_1(reward_system_1)
+# env_2 = init_query_refine_1(reward_system_2)
+# n_episodes = 3
+# max_steps_per_episode = 10
+# agent_type = "QLearning"
+# learning_rate = 0.1
+# discount_factor = 0.99
+# output_path_1 = f"q_table_QR_{reward_system_1}_{agent_type}.npy"
+# output_path_2 = f"q_table_QR_{reward_system_2}_{agent_type}.npy"
 
-reward_system_1 = "closeness"
-reward_system_2 = "feature"
-env_1 = init_query_refine_1(reward_system_1)
-env_2 = init_query_refine_1(reward_system_2)
-output_path_1 = "q_table_" + reward_system_1 + ".npy"
-output_path_2 = "q_table_" + reward_system_2 + ".npy"
-n_episodes = 3
-max_steps_per_episode = 10
-agent_type = "QLearning"
-learning_rate = 0.1
-discount_factor = 0.99
-
-# train the agent and run the algorithm
-total_time_1, dag_1 = train_q_qr(env_1, n_episodes, max_steps_per_episode, agent_type, output_path_1, learning_rate, discount_factor)
-total_time_2, dag_2 = train_q_qr(env_2, n_episodes, max_steps_per_episode, agent_type, output_path_2, learning_rate, discount_factor)
-print("Total training time - " + reward_system_1 + ": " + str(total_time_1))
-print("Total training time - " + reward_system_2 + ": " + str(total_time_2))
-print("Dag of Training " + reward_system_1 + ": ")
-dag_1.print(mode=0)
-print("Dag of Training " + reward_system_2 + ": ")
-dag_2.print(mode=0)
-best_path, max_reward, total_time, pruning_percentage = run_pruning(env_1, dag_1, dag_2, learning_rate, discount_factor)
-print("Total time of the pruning algorithm: " + str(total_time))
+# # train the agent and run the algorithm
+# total_time_1, dag_1 = train_q_qr(env_1, n_episodes, max_steps_per_episode, agent_type, output_path_1, learning_rate, discount_factor)
+# total_time_2, dag_2 = train_q_qr(env_2, n_episodes, max_steps_per_episode, agent_type, output_path_2, learning_rate, discount_factor)
+# print("Total training time - " + reward_system_1 + ": " + str(total_time_1))
+# print("Total training time - " + reward_system_2 + ": " + str(total_time_2))
+# print("Dag of Training " + reward_system_1 + ": ")
+# dag_1.print()
+# print("Dag of Training " + reward_system_2 + ": ")
+# dag_2.print()
+# best_path, max_reward, total_time, pruning_percentage = run_pruning(env_1, dag_1, dag_2, learning_rate, discount_factor)
+# print("Total time of the pruning algorithm: " + str(total_time))
+# print("Best path: " + str(best_path))
+# print("Max reward: " + str(max_reward))

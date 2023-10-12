@@ -7,12 +7,13 @@ from utilities import plot_recalls_qr
 
 
 #inputs
-env_test_count = 4
-diff_start_query_test = 4
+env_test_count = 2
+# 1 to 4
+diff_start_query_test = 1
 first_env_size = 7
 env_test_step = 1
-n_episodes = 10
-max_steps_per_episode = 10
+n_episodes = 1
+max_steps_per_episode = 8
 learning_rate = 0.1
 discount_factor = 0.99
 agent_type = "QLearning"
@@ -63,17 +64,17 @@ for i in range(env_test_count):
         feature_env.reset(new_query=start_query)
         combined_env.reset(new_query=start_query)
         print("Start Query: " + start_query)
-        time_closeness, dag_path = train_q_qr(grid_world=closeness_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_1_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
-        time_feature, dag_gold = train_q_qr(grid_world=feature_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_2_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
-        time_combined, dag_combined = train_q_qr(grid_world=combined_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_3_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
-        inference_time_combined, reward_ground_truth, _ = inference_q_qr(grid_world=combined_env, q_table_path=q_table_3_output_path)
+        time_closeness, dag_path = train_q_qr(env=closeness_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_1_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
+        time_feature, dag_gold = train_q_qr(env=feature_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_2_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
+        time_combined, dag_combined = train_q_qr(env=combined_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_3_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
+        inference_time_combined, reward_ground_truth, _ = inference_q_qr(env=combined_env, q_table_path=q_table_3_output_path, edge_dict=dag_combined.edge_dict)
         best_path, max_reward, total_time, pruning_percentage = run_pruning(env=combined_env, dag_1=dag_path, dag_2=dag_gold, discount_factor=discount_factor, learning_rate=learning_rate)
         # reset agent position to try all paths and get rewards
         if max_reward >= reward_ground_truth:
             recall_exact_pruning += 1
 
     recall_exact_pruning = round(((recall_exact_pruning / diff_start_query_test) * 100), 2)
-    df.at[i, env_size_index] = str((combined_env.grid_width, combined_env.grid_length))
+    df.at[i, env_size_index] = combined_env.state_count
     df.at[i, recall_exact_pruning_index] = recall_exact_pruning
     recalls_exact_pruning.append(recall_exact_pruning)
     df.to_csv(csv_file_name, index=False, header=header)

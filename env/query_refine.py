@@ -52,6 +52,8 @@ class Query_Refine(gym.Env):
         self.update_query_vector()
         reward = self.compute_reward()
         done = self.is_end_state()
+        if done:
+            self.query_vector = self.reference_review_vector
         return self.query_vector, reward, done, {}
 
     def update_query_vector(self):

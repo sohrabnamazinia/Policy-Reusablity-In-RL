@@ -34,7 +34,12 @@ class DAG:
         if self.edge_dict == None:
             print("Error: Edge dict has not been loaded for this DAG yet!")
             return
-        return self.edge_dict[(state_1_index, state_2_index)][0]
+        for i in range(self.env.action_count):
+            if ((state_1_index, i) in self.edge_dict.keys()) and self.edge_dict[(state_1_index, i)][0] == state_2_index:
+                return i, self.edge_dict[(state_1_index, i)][1]
+
+        print(f"Error: Action not found from state {state_1_index} to {state_2_index}")
+        return None
 
     # This has been implemented for the gridworld environment with two actions: right and down
     # def obtain_action(self, state_1_index, state_2_index):
@@ -87,10 +92,20 @@ class DAG:
         new_env.reset()
         dag = DAG(new_env, self.N)
         dag.graph = graph
-        new_edge_dict = self.edge_dict.copy()  
-        new_edge_dict.update(other.edge_dict)   
-        dag.edge_dict = new_edge_dict
+        dag.union_edge_dicts(self.edge_dict, other.edge_dict)
         return dag
+    
+    def union_edge_dicts(self, edge_dict_1, edge_dict_2):
+        union_dict = {}
+        for key, value in edge_dict_1.items():            
+            union_dict[key] = value
+        for key, value in edge_dict_2.items():
+            if key in union_dict:
+                union_dict[key] = (union_dict[key][0], union_dict[key][1] + value[1])
+            else:
+                union_dict[key] = value  
+        self.edge_dict = union_dict
+        return union_dict
     
     def min_max_iter(self):
         return self.max_iter(), self.min_iter()        
@@ -108,7 +123,7 @@ class DAG:
             for node in self.graph.predecessors(next_node):
                 if node not in visited and node not in queue:
                     adding_candidates.append(node)
-                action = self.obtain_action(node, next_node)
+                action, _ = self.obtain_action(node, next_node)
                 if next_node == self.end_node:
                     max_iterations[node][action] = self.N - (self.graph.in_degree(next_node) - 1)
                 else:
@@ -154,7 +169,7 @@ class DAG:
             for node in self.graph.predecessors(next_node):
                 if node not in visited and node not in queue:
                     queue.append(node)
-                action = self.obtain_action(node, next_node)
+                action, _ = self.obtain_action(node, next_node)
                 if self.graph.out_degree(node) == 1 and self.graph.in_degree(node) > 1:
                     min_iterations[node][action] = itr[node]
                 elif self.graph.in_degree(next_node) == 1 and self.graph.out_degree(next_node) > 1:
@@ -178,11 +193,9 @@ class DAG:
                 if node not in visited and node not in queue:
                     adding_candidates.append(node)
 
-                action = self.obtain_action(node, next_node)
+                action, reward = self.obtain_action(node, next_node)
                 min_iter, max_iter = min_iterations[node][action], max_iterations[node][action]
 
-                # NOTE: update lower and uppder bounds
-                reward = self.calculate_reward(node, next_node)
                 # Assuming max_iters is a dictionary with nodes as keys and lists as values
                 next_max = max(max_iterations[next_node][i] for i in range(self.action_size))
                 next_min = min(min_iterations[next_node][i] for i in range(self.action_size))
@@ -198,7 +211,8 @@ class DAG:
         return lower_Qs, upper_Qs
     
     def calculate_reward(self, node, next_node):
-        return self.edge_dict[node, next_node][1]
+        action, reward = self.obtain_action(node, next_node)
+        return reward
     
     def compute_pruning_percentage(self, edge_count_before, edge_count_after):
         reduced_edge_count = edge_count_before - edge_count_after
@@ -219,14 +233,14 @@ class DAG:
                 queue.append(next_nodes[0])
             else:
                 for next_node in next_nodes:
-                    action = self.obtain_action(node, next_node)
+                    action, _ = self.obtain_action(node, next_node)
                     lower_bound = lower_bounds[node][action]
                     upper_bound = upper_bounds[node][action]
                     for next_node_2 in next_nodes:
                         if (next_node == next_node_2) or ((node, next_node) in remove) or ((node, next_node_2) in remove):
                             continue
                         else:
-                            action_2 = self.obtain_action(node, next_node_2)
+                            action_2, _ = self.obtain_action(node, next_node_2)
                             upper_bound_2 = upper_bounds[node][action_2]
                             lower_bound_2 = lower_bounds[node][action_2]
 
