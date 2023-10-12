@@ -75,4 +75,11 @@ def plot_speedup(csv_file_name, x, y_1, y_2, y_3):
     plt.xlabel("Enironment size (width, length)")
     plt.ylabel("Speedup")
     plt.show()
+
+def plot_speedup_qr(csv_file_name, x, y_1, y_2, y_3):
+    data = pd.read_csv(csv_file_name)
+    plt.plot(data[x], data[y_3], label="Speedup", marker='o', linestyle='-')
+    plt.xlabel("State Space size")
+    plt.ylabel("Speedup")
+    plt.show()
      
