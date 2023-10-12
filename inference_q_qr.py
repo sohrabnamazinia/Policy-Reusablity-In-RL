@@ -19,6 +19,8 @@ def inference_q_qr(env, q_table_path, edge_dict):
     env.reset().flatten()
     state_index = env.get_state_index()
 
+    if state_index == env.final_state_index:
+        return 0, env.goal_reward, []
 
     # Maximum number of steps for inference
     max_steps_inference = 10

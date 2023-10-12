@@ -44,6 +44,9 @@ def run_pruning(env, dag_1, dag_2, learning_rate, discount_factor):
     print("Pruning Percentage: %" + str(pruning_percentage))
     total_time = time.time() - start_time
     best_path, max_reward = get_best_path(env=env, dag=union_dag, paths=paths)
+    # if we are already in the goal state
+    if best_path == None:
+        return None, env.goal_reward, total_time, pruning_percentage
     return best_path, max_reward, total_time, pruning_percentage
 
 

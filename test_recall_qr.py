@@ -7,13 +7,13 @@ from utilities import plot_recalls_qr
 
 
 #inputs
-env_test_count = 2
+env_test_count = 5
 # 1 to 4
-diff_start_query_test = 1
+diff_start_query_test = 4
 first_env_size = 7
 env_test_step = 1
-n_episodes = 1
-max_steps_per_episode = 8
+n_episodes = 2
+max_steps_per_episode = 4
 learning_rate = 0.1
 discount_factor = 0.99
 agent_type = "QLearning"
@@ -21,7 +21,7 @@ _, new_queries = init_query_refine_2("closeness", first_env_size)
 
 #output
 recalls_exact_pruning = []
-csv_file_name = "Recall_" + agent_type + "_" + str(n_episodes) + ".csv"
+csv_file_name = "Recall_QR_" + agent_type + ".csv"
 q_table_1_output_path = "q_table_closeness.npy"
 q_table_2_output_path = "q_table_feature.npy"
 q_table_3_output_path = "q_table_combined.npy"
@@ -74,7 +74,7 @@ for i in range(env_test_count):
             recall_exact_pruning += 1
 
     recall_exact_pruning = round(((recall_exact_pruning / diff_start_query_test) * 100), 2)
-    df.at[i, env_size_index] = combined_env.state_count
+    df.at[i, env_size_index] = int(combined_env.state_count)
     df.at[i, recall_exact_pruning_index] = recall_exact_pruning
     recalls_exact_pruning.append(recall_exact_pruning)
     df.to_csv(csv_file_name, index=False, header=header)

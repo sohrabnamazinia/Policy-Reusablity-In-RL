@@ -34,12 +34,18 @@ class DAG:
         if self.edge_dict == None:
             print("Error: Edge dict has not been loaded for this DAG yet!")
             return
+        result = 0, 0
+        is_there_action = False
         for i in range(self.env.action_count):
             if ((state_1_index, i) in self.edge_dict.keys()) and self.edge_dict[(state_1_index, i)][0] == state_2_index:
-                return i, self.edge_dict[(state_1_index, i)][1]
+                is_there_action = True
+                result = i, result[1] + self.edge_dict[(state_1_index, i)][1]
+        if not is_there_action:
+            print(f"Error: Action not found from state {state_1_index} to {state_2_index}")
+            return None
+        else:
+            return result
 
-        print(f"Error: Action not found from state {state_1_index} to {state_2_index}")
-        return None
 
     # This has been implemented for the gridworld environment with two actions: right and down
     # def obtain_action(self, state_1_index, state_2_index):
@@ -216,6 +222,8 @@ class DAG:
     
     def compute_pruning_percentage(self, edge_count_before, edge_count_after):
         reduced_edge_count = edge_count_before - edge_count_after
+        if edge_count_before == 0:
+            return 100
         return round(((100 * reduced_edge_count) / edge_count_before), 2)
     
     def prune(self, lower_bounds, upper_bounds):
