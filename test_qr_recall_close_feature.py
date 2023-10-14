@@ -1,9 +1,8 @@
 from env.init_query_refine import init_query_refine_2
 from train_q_qr import train_q_qr
 from inference_q_qr import inference_q_qr
-from pruning_qr import run_pruning
 import pandas as pd
-from utilities import plot_recalls_qr
+from utilities import plot_recalls_qr_closeness_feature
 
 
 #inputs
@@ -12,7 +11,7 @@ env_test_count = 5
 diff_start_query_test = 4
 first_env_size = 7
 env_test_step = 1
-n_episodes = 2
+n_episodes = 3
 max_steps_per_episode = 4
 learning_rate = 0.1
 discount_factor = 0.99
@@ -22,7 +21,7 @@ _, new_queries = init_query_refine_2("closeness", first_env_size)
 #output
 recalls_closeness = []
 recalls_feature = []
-csv_file_name = "Recall_QR_close_feature_" + agent_type + ".csv"
+csv_file_name = "Test_recall_QR_close_feature_" + agent_type + ".csv"
 q_table_1_output_path = "q_table_closeness.npy"
 q_table_2_output_path = "q_table_feature.npy"
 q_table_3_output_path = "q_table_combined.npy"
@@ -87,7 +86,7 @@ for i in range(env_test_count):
     df.to_csv(csv_file_name, index=False, header=header)
 
 
-plot_recalls_qr(csv_file_name, header[0], header[1])
+plot_recalls_qr_closeness_feature(csv_file_name, header[0], header[1], header[2])
 print("State space sizes: " + str(env_sizes))
 print("Recalls for Closeness: " + str(recalls_closeness))
 print("Recalls for Feature: " + str(recalls_feature))

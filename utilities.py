@@ -58,6 +58,16 @@ def plot_recalls_qr(csv_file_name, x, y_1):
     plt.legend()
     plt.show()
 
+def plot_recalls_qr_closeness_feature(csv_file_name, x, y_1, y_2):
+    data = pd.read_csv(csv_file_name)
+    plt.plot(data[x], data[y_1], label="Recall - Closeness", marker='o', linestyle='-')
+    plt.plot(data[x], data[y_2], label="Recall - Feature", marker='s', linestyle='--')
+    #plt.title("Recall percentage")
+    plt.xlabel("State Space size")
+    plt.ylabel("Recall Percentage")
+    plt.legend()
+    plt.show()
+
 def plot_cumulative_reward_env_size(csv_file_name, x, y_1, y_2, y_3):
     data = pd.read_csv(csv_file_name)
     plt.plot(data[x], data[y_1], label="Training Combined Policy", marker='o', linestyle='-')
