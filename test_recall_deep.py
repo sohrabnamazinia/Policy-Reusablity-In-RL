@@ -43,8 +43,8 @@ def compute_deep_max_reward(gridworld, paths):
 
 
 #inputs
-env_test_count = 4
-diff_agent_pos_per_test = 8
+env_test_count = 5
+diff_agent_pos_per_test = 10
 first_env_size = 4
 env_test_step = 2
 deep_algorithm = "DQN"
