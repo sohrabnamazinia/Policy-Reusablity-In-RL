@@ -82,4 +82,11 @@ def plot_speedup_qr(csv_file_name, x, y_1, y_2, y_3):
     plt.xlabel("State Space size")
     plt.ylabel("Speedup")
     plt.show()
+
+def plot_recall_deep(csv_file_name, x, y_1):
+    data = pd.read_csv(csv_file_name)
+    plt.plot(data[x], data[y_1], label="Recall (Deep Agent)", marker='o', linestyle='-')
+    plt.xlabel("Environment Size")
+    plt.ylabel("Recall for Deep Agent (%)")
+    plt.show()
      

@@ -6,11 +6,11 @@ from pruning_qr import run_pruning
 from utilities import plot_speedup_qr
 
 #inputs
-env_test_count = 5
-first_env_size = 7
+env_test_count = 1
+first_env_size = 11
 env_test_step = 1
-n_episodes = 2
-max_steps_per_episode = 4
+n_episodes = 4
+max_steps_per_episode = 8
 learning_rate = 0.1
 discount_factor = 0.99
 agent_type = "QLearning"
@@ -54,10 +54,10 @@ for i in range(env_test_count):
     closeness_env = closeness_environments[i]
     feature_env = feature_environments[i]
     combined_env = combined_environments[i]
-    time_closeness, dag_closeness, _ = train_q_qr(env=closeness_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_1_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
-    time_feature, dag_feature, _ = train_q_qr(env=feature_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_2_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
-    time_train_combined, dag_combined, _ = train_q_qr(env=combined_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_3_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
-    inference_time_combined, reward_ground_truth, _ = inference_q_qr(env=combined_env, q_table_path=q_table_3_output_path, edge_dict=dag_combined.edge_dict)
+    time_closeness, dag_closeness = train_q_qr(env=closeness_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_1_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
+    time_feature, dag_feature = train_q_qr(env=feature_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_2_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
+    time_train_combined, dag_combined = train_q_qr(env=combined_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_3_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
+    inference_time_combined, _, _ = inference_q_qr(env=combined_env, q_table_path=q_table_3_output_path, edge_dict=dag_combined.edge_dict)
     time_from_scratch = time_train_combined + inference_time_combined
     best_path, max_reward, time_ExNonZeroDiscount, pruning_percentage = run_pruning(env=combined_env, dag_1=dag_closeness, dag_2=dag_feature, discount_factor=discount_factor, learning_rate=learning_rate)
 
