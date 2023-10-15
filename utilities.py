@@ -99,4 +99,11 @@ def plot_recall_deep(csv_file_name, x, y_1):
     plt.xlabel("Environment Size")
     plt.ylabel("Recall for Deep Agent (%)")
     plt.show()
+
+def plot_recall_qr_heuristic(csv_file_name, x, y_1, k):
+    data = pd.read_csv(csv_file_name)
+    plt.plot(data[x], data[y_1], label="Recall - Query Refinement (Greedy-K)", marker='o', linestyle='-')
+    plt.xlabel("State Space size")
+    plt.ylabel(f"Recall for Greedy K={k}")
+    plt.show()
      

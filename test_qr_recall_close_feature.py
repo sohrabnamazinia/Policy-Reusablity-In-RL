@@ -68,7 +68,9 @@ for i in range(env_test_count):
         time_feature, dag_feature = train_q_qr(env=feature_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_2_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
         time_combined, dag_combined = train_q_qr(env=combined_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_3_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
         inference_time_combined, reward_closeness, _ = inference_q_qr(env=combined_env, q_table_path=q_table_1_output_path, edge_dict=dag_closeness.edge_dict)
+        combined_env.reset(new_query=start_query)
         inference_time_combined, reward_feature, _ = inference_q_qr(env=combined_env, q_table_path=q_table_2_output_path, edge_dict=dag_feature.edge_dict)
+        combined_env.reset(new_query=start_query)
         inference_time_combined, reward_ground_truth, _ = inference_q_qr(env=combined_env, q_table_path=q_table_3_output_path, edge_dict=dag_combined.edge_dict)
         # reset agent position to try all paths and get rewards
         if reward_closeness >= reward_ground_truth:
