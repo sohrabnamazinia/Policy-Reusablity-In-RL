@@ -33,14 +33,3 @@ def generate_random_policies(width, length, n, l, u):
     return reward_dict
 
 
-
-# Example usage:
-# width = 3
-# length = 4
-# n = 2
-# l = 0
-# u = 2
-
-# reward_dict = generate_random_policies(width, length, n, l, u)
-# print(reward_dict)
-

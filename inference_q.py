@@ -4,8 +4,10 @@ from env.init_gridworld import init_gridworld_1
 import wandb
 import time
 
+
 # inference method
 # the q_table.npy file must be in the same directory as this file
+
 def inference_q(grid_world, q_table_path):
 
     # Load the Q-table
@@ -28,15 +30,9 @@ def inference_q(grid_world, q_table_path):
         # turn on stopwatch
         start_time = time.time()
 
-        # print the current location of the agent
-        print("Agent location: " + str(grid_world.agent_position))
-
         # greedy action selection (inference)
         action = np.argmax(q_table[state_index, :])
         path.append(action)
-
-        # print action
-        print("Action: ", action)
 
         # step
         grid, reward, done, _ = grid_world.step(action)
@@ -45,10 +41,6 @@ def inference_q(grid_world, q_table_path):
 
         # upadate state index
         state_index = next_state_index
-
-        # print step index
-        print("Step: ", step + 1)
-        print(grid)
 
         # check if the agent reached the target or the maximum number of steps is reached
         if done:
@@ -66,10 +58,3 @@ def inference_q(grid_world, q_table_path):
     
     #run.finish()
     return total_time, total_reward, path
-
-# set inputs
-# reward_system = "combined"
-# grid_world = init_gridworld_1(reward_system)
-# q_table_path = "q_table_combined.npy"
-# total_time, total_reward = inference_q(grid_world, q_table_path)
-# print("Total reward: " + str(total_reward))

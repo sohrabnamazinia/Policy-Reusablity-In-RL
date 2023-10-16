@@ -30,7 +30,6 @@ class WandbCallback(BaseCallback):
 class Agent:
     def __init__(self, env, algorithm='A2C'):
         self.algorithm = algorithm
-        #self.callback = WandbCallback()
         
         if self.algorithm == 'DQN':
             self.model = DQN("MlpPolicy", env, verbose=1)
@@ -43,8 +42,7 @@ class Agent:
 
     def learn(self, timesteps):
         self.model.learn(total_timesteps=timesteps)
-        #self.model.learn(total_timesteps=timesteps, callback=self.callback)
-        #wandb.log({"Total Training Time": self.callback.total_time})
+
     
     def save(self, path):
         self.model.save(path)

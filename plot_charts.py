@@ -12,10 +12,3 @@ def combine_paths(path_1, path_2):
             combined_paths.append(combined_path_2)
     return combined_paths
 
-# # Example usage:
-# path_1 = [[0, 0], [0, 1], [1, 1], [2, 1], [1, 1], [0, 1], [0, 2], [0, 3]]
-# path_2 = [[0, 0], [1, 0], [2, 0], [2, 1], [2, 2], [2, 3], [1, 3], [0, 3]]
-
-# combined_paths = combine_paths(path_1, path_2)
-# for p in combined_paths:
-#     print((p))

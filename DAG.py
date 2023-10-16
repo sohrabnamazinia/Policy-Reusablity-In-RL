@@ -4,6 +4,7 @@ from env.gridworld import GridWorld
 import math
 import copy
 
+
 class DAG:
     # n = node size
     # action size = number of possible actions
@@ -26,6 +27,7 @@ class DAG:
         self.graph.add_edge(a, b)
 
     # This has been implemented for the gridworld environment with two actions: right and down
+
     def obtain_action(self, state_1_index, state_2_index):
 
         state_1 = GridWorld.index_to_state(state_1_index, self.env_length)
@@ -50,9 +52,10 @@ class DAG:
     #     return 0
     
     # ENV width & length are only used for gridworld policy 
-    # to have a better understanding of the position of states 
+    # to have a better understanding of the position of states
+
     def print(self, mode=0):
-        print(self.graph)
+        # print(self.graph)
         if mode == 0:
             return
         elif mode == 1:
@@ -69,19 +72,39 @@ class DAG:
                 neighbor_states = [GridWorld.index_to_state(neighbor, self.env_length) for neighbor in self.graph.neighbors(i)]
                 print("\t" + str(neighbor_states))
 
-    def union_of_graphs(self, graph_list):
+    # @staticmethod
+    # def union_of_graphs(gridworld, graph_list):
+    #
+    #     union_graph = nx.DiGraph()
+    #
+    #     for graph in graph_list:
+    #         union_graph.add_nodes_from(graph.nodes)
+    #         union_graph.add_edges_from(graph.edges)
+    #
+    #     new_grid_world = copy.copy(gridworld)
+    #     new_grid_world.reward_system = "combined"
+    #     new_grid_world.reset()
+    #     dag = DAG(new_grid_world, self.N)
+    #     dag.graph = union_graph
+    #     return dag
+
+    @staticmethod
+    def union_of_graphs(gridworld, dags, N):
+
         union_graph = nx.DiGraph()
 
-        for graph in graph_list:
-            union_graph.add_nodes_from(graph.nodes)
-            union_graph.add_edges_from(graph.edges)
+        for dag in dags:
+            union_graph.add_nodes_from(dag.graph.nodes)
+            union_graph.add_edges_from(dag.graph.edges)
 
-        new_grid_world = copy.copy(self.gridworld)
+        new_grid_world = copy.copy(gridworld)
         new_grid_world.reward_system = "combined"
         new_grid_world.reset()
-        dag = DAG(new_grid_world, self.N)
+        dag = DAG(new_grid_world, N)  # Make sure you have self.N defined in the class or pass it as a parameter.
         dag.graph = union_graph
+
         return dag
+
 
     def union(self, other):
         graph = nx.DiGraph()
@@ -94,10 +117,12 @@ class DAG:
         dag = DAG(new_grid_world, self.N)
         dag.graph = graph
         return dag
-    
+
+
     def min_max_iter(self):
-        return self.max_iter(), self.min_iter()        
-    
+        return self.max_iter(), self.min_iter()
+
+
     def max_iter(self):
         visited = set()
         queue = deque([self.end_node])
@@ -129,7 +154,8 @@ class DAG:
                             adding_candidates[i], adding_candidates[j] = adding_candidates[j], adding_candidates[i]
                 queue.extend(adding_candidates)
         return max_iterations
-    
+
+
     def calculate_itr_nodes(self):
         itr = [0] * self.graph.number_of_nodes()
 
@@ -144,6 +170,7 @@ class DAG:
             else:
                 itr[i] = max(self.graph.in_degree(i), self.graph.out_degree(i))
         return itr
+
 
     def min_iter(self):
         visited = set()
@@ -165,7 +192,8 @@ class DAG:
                 else:
                     min_iterations[node][action] = 1
         return min_iterations
-    
+
+
     def backtrack(self, min_iterations, max_iterations, learning_rate, discount_factor):
         visited = set()
         queue = deque([self.end_node])
@@ -199,16 +227,19 @@ class DAG:
                             adding_candidates[i], adding_candidates[j] = adding_candidates[j], adding_candidates[i]
                 queue.extend(adding_candidates)
         return lower_Qs, upper_Qs
-    
+
+
     def calculate_reward(self, state, next_state):
         self.gridworld.agent_position = next_state
         reward = self.gridworld._get_reward(state)
         return reward
-    
+
+
     def compute_pruning_percentage(self, edge_count_before, edge_count_after):
         reduced_edge_count = edge_count_before - edge_count_after
         return round(((100 * reduced_edge_count) / edge_count_before), 2)
-    
+
+
     def prune(self, lower_bounds, upper_bounds):
         queue = deque()
         queue.append(self.start_node)
@@ -236,7 +267,7 @@ class DAG:
                             lower_bound_2 = lower_bounds[node][action_2]
 
                             if upper_bound_2 <= lower_bound:
-                                print("Edge removed: " + str((node, next_node_2)))
+                                # print("Edge removed: " + str((node, next_node_2)))
                                 remove.append((node, next_node_2))
                             else:
                                 if next_node_2 not in queue and next_node_2 not in visited:
@@ -248,7 +279,8 @@ class DAG:
         edge_count_after = self.graph.number_of_edges()
         pruning_percentage = self.compute_pruning_percentage(edge_count_before=edge_count_before, edge_count_after=edge_count_after)
         return self.graph, pruning_percentage
-    
+
+
     def find_paths(self):
         paths = []
         #x_start, y_start = self.gridworld.index_to_state(self.start_node, self.gridworld.grid_length)

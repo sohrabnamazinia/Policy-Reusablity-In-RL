@@ -53,7 +53,7 @@ for i in range(experiments_count):
     data_frame.at[i, discount_factor_index] = df
     data_frame.at[i, pruning_percentage_index] = pruning_percentage
     data_frame.to_csv(csv_file_name, index=False, header=header)
-    #pruned_graph.find_paths()
+
 
 plot_discount_factors(discount_factors, pruning_percentages)
 print("Experiment results:\n")

@@ -29,7 +29,7 @@ class GridWorld(gym.Env):
         self.gold_position_value = gold_position_value
         self.gold_k = gold_k
         self.num_synthetic_policies = n
-        self.reward_dict = generate_random_policies(self.grid_width, self.grid_length, self.num_synthetic_policies, 0, 2)
+        self.reward_dict = generate_random_policies(self.grid_width, self.grid_length, self.num_synthetic_policies, 0, 1)
 
         # action space in case we want to avoid cycles
         self.action_space = spaces.Discrete(2)
@@ -90,6 +90,7 @@ class GridWorld(gym.Env):
         elif (state_2[0] == state_1[0] and state_2[1] == state_1[1] + 1):
             return 0
         else:
+            return None
             print("Action could not be obtained")
     
     def check_boundry_constraint(self):
@@ -100,22 +101,12 @@ class GridWorld(gym.Env):
     def step(self, action):
         prev_agent_position = [self.agent_position[0], self.agent_position[1]]
 
-        # if action == 0:   # up
-        #     self.agent_position[0] -= 1
-        # elif action == 1: # right
-        #     self.agent_position[1] += 1
-        # elif action == 2: # down
-        #     self.agent_position[0] += 1
-        # elif action == 3: # left
-        #     self.agent_position[1] -= 1
-
         #NOTE: actions in case we want to avoid cycle
         if action == 0: # right
             self.agent_position[1] += 1
         elif action == 1: # down
             self.agent_position[0] += 1
         
-        #self.agent_position = np.clip(self.agent_position, (0, 0), (self.grid_width - 1, self.grid_length - 1))
         # check boundary constraint of the grid world
         if not self.check_boundry_constraint():
             self.agent_position = prev_agent_position
@@ -163,6 +154,9 @@ class GridWorld(gym.Env):
 
     def get_reward_synthetic(self, prev_agent_position, i, action):
 
+        if action == None:
+            return self.block_reward
+
         current_cell_value = self.grid[self.agent_position[0]][self.agent_position[1]]
         if current_cell_value == self.block_position_value:  # block
             return self.block_reward
@@ -180,6 +174,8 @@ class GridWorld(gym.Env):
         d1 = np.sum(np.abs(np.array(prev_agent_position) - np.array(self.target_position)))
         d2 = np.sum(np.abs(np.array(self.agent_position) - np.array(self.target_position)))
         r = d1 - d2
+
+
         return r    
         
     def get_reward_gold(self):
@@ -202,4 +198,5 @@ class GridWorld(gym.Env):
                 reward += 1
         if current_cell_value == self.gold_position_value:  # gold
             self.grid[self.agent_position[0]][self.agent_position[1]] = 0
-        return reward
+
+        return reward / len(self.gold_positions)

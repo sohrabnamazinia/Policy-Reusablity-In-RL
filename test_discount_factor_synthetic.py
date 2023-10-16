@@ -58,12 +58,12 @@ for i in range(experiments_count):
         lstDAG.append(dag)
 
     gridworld_combined = init_gridworld_5(policy_combined, env_width_size, env_length_size)
-    best_path, max_reward, total_time, pruning_percentage = run_pruning(gridworld_1, lstDAG, learning_rate, df) #why gridworld_1 here not combined?
+    best_path, max_reward, total_time, pruning_percentage = run_pruning(gridworld_combined, lstDAG, learning_rate, df)
     pruning_percentages.append(pruning_percentage)
     data_frame.at[i, discount_factor_index] = df
     data_frame.at[i, pruning_percentage_index] = pruning_percentage
     data_frame.to_csv(csv_file_name, index=False, header=header)
-    #pruned_graph.find_paths()
+
 
 plot_discount_factors(discount_factors, pruning_percentages)
 print("Experiment results:\n")

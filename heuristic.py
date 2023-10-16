@@ -4,14 +4,6 @@ import time
 
 def step_heuristic(grid_world, current_state, action):
     next_state = [current_state[0], current_state[1]]
-    # if action == 0:   # up
-    #         next_state[0] -= 1
-    # elif action == 1: # right
-    #         next_state[1] += 1
-    # elif action == 2: # down
-    #         next_state[0] += 1
-    # elif action == 3: # left
-    #         next_state[1] -= 1
 
     if action == 0:   # right
             next_state[1] += 1
@@ -70,8 +62,6 @@ def heuristic(q_table_1, q_table_2, env, k, max_allowed_path_size):
             
             for action in top_k_actions:
                 # NOTE: escaping actions that cause cycle
-                # if action in [0, 3]:
-                #      continue
                 next_state = step_heuristic(env, current_state, action)
                 if (next_state == current_state):
                      continue
@@ -93,19 +83,3 @@ def run_heuristic(q_table_1_path, q_table_2_path, k, max_allowed_path_size, rewa
     if reward_system != None:
         gridworld = init_gridworld_1(reward_system)
     return heuristic(q_table_1, q_table_2, gridworld, k, max_allowed_path_size)
-
-
-# # set up inputs
-# reward_system = "combined"
-# q_table_1_path = "q_table_path.npy"
-# q_table_2_path = "q_table_gold.npy"
-# k = 2
-# max_allowed_path_size = 8
-
-# max_cumulative_reward, best_path, paths, shortest_paths, total_time = run_heuristic(q_table_1_path, q_table_2_path, k, max_allowed_path_size, reward_system=reward_system)
-# print("Total_time: " + str(total_time))
-# print("All paths count:\n" + str(len(paths)))
-# #print(paths)
-# print("Shortest paths count:\n" + str(len(shortest_paths)))
-# print("Max cumulative reward: " + str(max_cumulative_reward))
-# #print(shortest_paths)

@@ -6,9 +6,9 @@ from pruning import run_pruning
 from utilities import plot_speedup
 
 #inputs
-env_test_count = 4
+env_test_count = 5
 first_env_size = 4
-env_test_step = 1
+env_test_step = 2
 n_episodes = 1000
 max_steps_per_episode = 100
 result_step_size = 10
@@ -20,7 +20,7 @@ agent_type = "QLearning"
 times_train_scratch = []
 times_ExNonZeroDiscount = []
 speedups = []
-csv_file_name = "Test_Speedup_" + agent_type + "_" + str(n_episodes) + ".csv"
+csv_file_name = "Test_Speedup_" + agent_type + ".csv"
 
 q_table_1_output_path = "q_table_1.npy"
 q_table_2_output_path = "q_table_2.npy"

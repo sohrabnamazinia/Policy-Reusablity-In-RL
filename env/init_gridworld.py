@@ -4,7 +4,6 @@ import random
 def init_gridworld_1(reward_system):
     # Define the environment details
     gold_positions = [[0, 2], [2, 2], [2, 5], [4, 1]]
-    #gold_positions = [[4, 2], [4, 1], [4, 0], [4, 3]]
     block_positions = []
     reward_system = reward_system
     agent_initial_position = [0, 0]
@@ -30,7 +29,6 @@ def init_gridworld_1(reward_system):
 def init_gridworld_2(reward_system):
     # Define the environment details
     gold_positions = []
-    #gold_positions = [[4, 2], [4, 1], [4, 0], [4, 3]]
     block_positions = []
     reward_system = reward_system
     agent_initial_position = [0, 0]
@@ -59,7 +57,7 @@ def init_gridworld_3(reward_system, grid_width, grid_length):
     gold_positions = []
     for i in range(1, min(grid_width, grid_length) - 1):
         gold_positions.append([i, i])
-    #gold_positions = [[4, 2], [4, 1], [4, 0], [4, 3]]
+
     block_positions = []
     reward_system = reward_system
     agent_initial_position = [0, 0]
@@ -87,7 +85,7 @@ def init_gridworld_4(reward_system, width_size, length_size):
     gold_positions = []
     for i in range(1, min(width_size, length_size) - 1):
         gold_positions.append([i, i])
-    #gold_positions = [[4, 2], [4, 1], [4, 0], [4, 3]]
+
     block_positions = []
     reward_system = reward_system
     agent_initial_position = [0, 0]
@@ -116,7 +114,7 @@ def init_gridworld_5(reward_system, width_size, length_size):
     for i in range(1, min(width_size, length_size)):
         if i != width_size or i != int(length_size / 2):
             gold_positions.append([i, i])
-    #gold_positions = [[4, 2], [4, 1], [4, 0], [4, 3]]
+
     block_positions = []
     reward_system = reward_system
     agent_initial_position = [0, 0]

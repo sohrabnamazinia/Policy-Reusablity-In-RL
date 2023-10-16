@@ -7,8 +7,7 @@ import time
 # inference method
 # the agent.pkl file must be in the same directory as this file
 def inference_deep(grid_world, algorithm, agent_path):
-    
-	#run = wandb.init(project="Inference_Deep")
+
 	total_time = 0
 	grid_world.reset()
 
@@ -64,11 +63,3 @@ def inference_deep(grid_world, algorithm, agent_path):
         
 	#run.finish()
 	return path, cumulative_reward, total_time
-
-# reward_system = "path"	
-# deep_algorithm = "PPO"	
-# agent_path = "deep_" + deep_algorithm + ".pkl"
-# grid_world = init_gridworld_1(reward_system)
-# path, cumulative_reward, total_time = inference_deep(grid_world, deep_algorithm, agent_path)
-# print("Path: " + str(path))
-# print("Cumulative reward = " + str(cumulative_reward))
