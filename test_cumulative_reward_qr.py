@@ -7,16 +7,16 @@ from utilities import plot_cumulative_reward_qr
 
 
 #inputs
-env_test_count = 2
+env_test_count = 5
 # 1 to 4
-diff_start_query_test = 2
+diff_start_query_test = 4
 first_env_size = 7
 env_test_step = 1
 n_episodes = 2
 max_steps_per_episode = 4
 learning_rate = 0.1
 discount_factor = 0.99
-agent_type = "QLearning"
+agent_type = "Sarsa"
 _, new_queries = init_query_refine_2("closeness", first_env_size)
 
 #output
@@ -74,8 +74,8 @@ for i in range(env_test_count):
         avg_reward_pruning += reward_exnonzero
         avg_reward_train_scratch += reward_ground_truth
 
-    avg_reward_pruning = round(((avg_reward_pruning / diff_start_query_test) * 100), 2)
-    avg_reward_train_scratch = round(((avg_reward_train_scratch / diff_start_query_test) * 100), 2)
+    avg_reward_pruning = round(((avg_reward_pruning / diff_start_query_test)), 2)
+    avg_reward_train_scratch = round(((avg_reward_train_scratch / diff_start_query_test)), 2)
     df.at[i, env_size_index] = int(combined_env.state_count)
     df.at[i, avg_cr_exnonzero_index] = avg_reward_pruning
     df.at[i, avg_cr_train_scratch_index] = avg_reward_train_scratch
@@ -87,5 +87,5 @@ for i in range(env_test_count):
 plot_cumulative_reward_qr(csv_file_name, header[0], header[1], header[2])
 print("State space sizes: " + str(env_sizes))
 print("Avg rewards for ExNonZeroDiscount: " + str(avg_rewards_exnonzero))
-print("Recalls for Train from scratch: " + str(avg_rewards_train_scratch))
+print("Avg rewards for Train from scratch: " + str(avg_rewards_train_scratch))
 

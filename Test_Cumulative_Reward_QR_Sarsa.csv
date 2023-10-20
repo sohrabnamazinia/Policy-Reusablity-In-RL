@@ -1,0 +1,6 @@
+State Space Size,Avg Reward - ExNonZeroDiscount,Avg Reward - Train From Scratch
+128.0,300.0,200.0
+256.0,350.0,200.0
+512.0,375.0,200.0
+1024.0,300.0,175.0
+2048.0,325.0,175.0

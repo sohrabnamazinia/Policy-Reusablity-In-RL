@@ -111,4 +111,5 @@ def plot_cumulative_reward_qr(csv_file_name, x, y_1, y_2):
     plt.plot(data[x], data[y_2], label="Training From Scratch", marker='s', linestyle='--')
     plt.xlabel("State space size")
     plt.ylabel("Average Cumulative Reward")
+    plt.legend()
     plt.show()
