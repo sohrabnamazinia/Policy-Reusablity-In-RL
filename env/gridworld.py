@@ -8,7 +8,7 @@ from env.Random_Policies_Generation import generate_random_policies
 class GridWorld(gym.Env):
     
     def __init__(self, grid_width, grid_length, reward_system, agent_position, target_position, cell_low_value, cell_high_value, 
-        start_position_value, target_position_value, block_position_value, agent_position_value, gold_position_value, block_reward, target_reward, gold_k=0, gold_positions=None, block_positions=None, n = 0):
+        start_position_value, target_position_value, block_position_value, agent_position_value, gold_position_value, block_reward, target_reward, gold_k=0, gold_positions=None, block_positions=None, n = 0, action_size=2):
         
         super(GridWorld, self).__init__()
 
@@ -32,8 +32,8 @@ class GridWorld(gym.Env):
         self.reward_dict = generate_random_policies(self.grid_width, self.grid_length, self.num_synthetic_policies, 0, 1)
 
         # action space in case we want to avoid cycles
-        self.action_space = spaces.Discrete(2)
-        self.action_count = 2
+        self.action_space = spaces.Discrete(action_size)
+        self.action_count = action_size
         #self.action_space = spaces.Discrete(4)
         self.state_count = self.grid_length * self.grid_width
         self.observation_space = spaces.Box(low = cell_low_value,
@@ -89,6 +89,15 @@ class GridWorld(gym.Env):
         # right
         elif (state_2[0] == state_1[0] and state_2[1] == state_1[1] + 1):
             return 0
+        # down*2
+        if (state_2[0] == state_1[0] + 2 and state_2[1] == state_1[1]):
+            return 3
+        # right*2
+        elif (state_2[0] == state_1[0] and state_2[1] == state_1[1] + 2):
+            return 2
+        #diagonal
+        elif (state_2[0] == state_1[0] + 1 and state_2[1] == state_1[1] + 1):
+            return 4
         else:
             return None
             print("Action could not be obtained")
@@ -106,6 +115,16 @@ class GridWorld(gym.Env):
             self.agent_position[1] += 1
         elif action == 1: # down
             self.agent_position[0] += 1
+        elif action == 2: # right*2
+            self.agent_position[1] += 2
+        elif action == 3: #down*2
+            self.agent_position[0] += 2
+        elif action == 4: #diagonal
+            self.agent_position[0] += 1
+            self.agent_position[1] += 1
+        else:
+            print(f"Action {action} not defined!")
+
         
         # check boundary constraint of the grid world
         if not self.check_boundry_constraint():
@@ -199,4 +218,4 @@ class GridWorld(gym.Env):
         if current_cell_value == self.gold_position_value:  # gold
             self.grid[self.agent_position[0]][self.agent_position[1]] = 0
 
-        return reward / len(self.gold_positions)
+        return reward

@@ -113,3 +113,12 @@ def plot_cumulative_reward_qr(csv_file_name, x, y_1, y_2):
     plt.ylabel("Average Cumulative Reward")
     plt.legend()
     plt.show()
+
+def plot_speedup_action_size(csv_file_name, x, y_1, y_2, y_3, y_4, y_5):
+    data = pd.read_csv(csv_file_name)
+    plt.plot(data[x], data[y_4], label="ExNonZeroDiscount", marker='o', linestyle='-')
+    plt.plot(data[x], data[y_5], label="Greedy-K", marker='s', linestyle='--')
+    plt.xlabel("Action size")
+    plt.ylabel("Speedup (Gridworld)")
+    plt.legend()
+    plt.show()
