@@ -9,6 +9,13 @@ def step_heuristic(grid_world, current_state, action):
             next_state[1] += 1
     elif action == 1: # down
             next_state[0] += 1
+    elif action == 2: # right*2
+            next_state[1] += 2
+    elif action == 3: # down*2
+            next_state[0] += 2
+    elif action == 4: # diagonal
+            next_state[0] += 1
+            next_state[1] += 1
 
     next_state = np.clip(next_state, (0, 0), (grid_world.grid_width - 1, grid_world.grid_length - 1))
     return next_state.tolist()

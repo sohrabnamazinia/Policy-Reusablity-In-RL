@@ -36,11 +36,18 @@ class DAG:
         # down
         if (state_2[0] == state_1[0] + 1 and state_2[1] == state_1[1]):
             return 1
-        
         # right
         elif (state_2[0] == state_1[0] and state_2[1] == state_1[1] + 1):
             return 0
-        
+        # down*2
+        if (state_2[0] == state_1[0] + 2 and state_2[1] == state_1[1]):
+            return 3
+        # right*2
+        elif (state_2[0] == state_1[0] and state_2[1] == state_1[1] + 2):
+            return 2
+        #diagonal
+        elif (state_2[0] == state_1[0] + 1 and state_2[1] == state_1[1] + 1):
+            return 4
         else:
             print("Action could not be obtained")
 

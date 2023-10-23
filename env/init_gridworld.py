@@ -137,7 +137,7 @@ def init_gridworld_5(reward_system, width_size, length_size):
     
     return grid_world
 
-def init_gridworld_6(reward_system, action_size):
+def init_gridworld_6(reward_system, action_size, side_length):
     # Define the environment details
     gold_positions = []
     block_positions = []
@@ -156,7 +156,7 @@ def init_gridworld_6(reward_system, action_size):
     action_size = action_size
 
     # Instantiate GridWorld
-    grid_world = GridWorld(grid_width=4, grid_length=4, gold_positions=gold_positions, block_positions=block_positions
+    grid_world = GridWorld(grid_width=side_length, grid_length=side_length, gold_positions=gold_positions, block_positions=block_positions
                         , reward_system=reward_system, agent_position=agent_initial_position, target_position=target_position
                         , cell_high_value=cell_high_value, cell_low_value=cell_low_value,
                         start_position_value=start_position_value, target_position_value=target_position_value, block_position_value=block_position_value, gold_position_value=gold_position_value, agent_position_value=agent_position_value, block_reward=block_reward, target_reward=target_reward, action_size=action_size)
