@@ -58,19 +58,3 @@ class amazonDB:
     def pick_one_similar_random_review(self, query_vector, k):
         random_review, _ = random.choice(self.get_top_k_related_reviews(query_vector, k))
         return random_review
-    
-
-    
-    # def compute_cosine_similarity(self, text1, text2, model_name="bert-base-uncased"):
-    #     tokenizer = AutoTokenizer.from_pretrained(model_name)
-    #     model = AutoModel.from_pretrained(model_name)
-    #     inputs = tokenizer([text1, text2], padding=True, truncation=True, return_tensors="pt")
-
-    #     with torch.no_grad():
-    #         output = model(**inputs)
-    #         embeddings = output.last_hidden_state
-        
-    #     print(embeddings)
-
-    #     similarity = cosine_similarity(embeddings[0], embeddings[1])[0][0]
-    #     return similarity
