@@ -6,7 +6,7 @@
 - [Getting Started](#getting-started)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
-- [Examples](#examples)
+- [Example](#example)
 
 
 ## Introduction
@@ -45,8 +45,11 @@ The other files in the env folder serve different functionalities. For example, 
 
 ## Getting Started
 To run this project, you need to have Python 3.x installed (Preferrebly Python3.9 or higher versions). Also, you need to have some libraries installed using "pip install" command. 
+
 The files containing the "test" word in the beginning are the experiments of the project. You can run any of them to see their corresponding results. After you run a test file, some information might be printed about the execution process in the terminal. When the test is done, a csv file including the test results is created in the root directory of the project. Also, a window pops up which plots the resulting graphs of the experiment if applicable. 
+
 Also, since the Query Refinement use case uses amazon reviews, we have stored a subset of reviews of the whole amazon dataset reviews in a csv file, and we read from that csv file in the code. However, if one wants to get the whole dataset and work on that, must have PostgreSQL installed, load "amazon reviews" dataset in their PostreSQL server, and also delete the "review.csv" file. Because if this file exists, the code will not read from the database, but if it doesn't, our code will get the reviews from the amazon database. You can also specify more details about that (number of desired reviews, etc) in the code.
+
 Finally, as another optional step, if you want to have some of the generated figures stored on an online environment, you can create an account on WandB website, and use "wandb login" command in your terminal to login to your account. Then, you can uncomment those lines of the code that are related to WandB so that the figures get stored on your WandB account. 
 
 ### Prerequisites
@@ -77,7 +80,7 @@ Finally, as another optional step, if you want to have some of the generated fig
     git clone https://github.com/your-username/your-repo.git
 </code>
 </pre>
-2. Install the following libraries using pip command:
+2. Install the following libraries using pip:
 <pre>
 <code>
     pip install matplotlib
@@ -93,9 +96,9 @@ Finally, as another optional step, if you want to have some of the generated fig
     pip install networkx
 </code>
 </pre>
-3. **Optional**: Setup the database if you want to work on more reviews as explained in [Getting Started]    (#getting-started)
+3. **(Optional)** Setup the database if you want to work on more reviews as explained in [Getting Started]    (#getting-started)
 
-4. **Optional**: if you want to have some figures/plots stored on an online envrionment, you can create a WandB account, login to your account using terminal and uncomment any wandb command in the code that you want to execute and store their corresponding figures. Here is the command you need to run in your terminal after you created an account on WandB website:
+4. **(Optional)**: if you want to have some figures/plots stored on an online envrionment, you can create a [WandB account](https://wandb.ai/site), login to your account using terminal and uncomment any wandb command in the code that you want to execute and store their corresponding figures. Here is the command you need to run in your terminal after you created an account on WandB website:
 <pre>
 <code>
     wandb login
@@ -103,4 +106,20 @@ Finally, as another optional step, if you want to have some of the generated fig
 </pre>
 
 5. Run any test file that you want to see its results. A test file's name starts with "test_". Before you run a test file, you can search "#input" in the file, and then you will see the already default parameters set to some values. You can change these input parameters. These are the setting parameters of the tests (For example number of different test cases, etc). 
+
+### Example
+
+After the setup process is all done, we can run a sample test file like "test_recall_deep.py". 
+
+First we can modify the input parameters if we want (not necessary):
+![Test_Recall_Deep_Input](./sample_images/Test_Recall_Deep_Input.png)
+
+After running the file, here is the generated output Figure and CSV file:
+
+![Test_Recall_Deep_CSV](./sample_images/Test_Recall_Deep_CSV.png)
+![Test_Recall_Deep_Figure](./sample_images/Test_Recall_Deep_Figure.png)
+
+
+
+
 
