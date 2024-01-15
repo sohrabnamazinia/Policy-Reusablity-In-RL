@@ -26,7 +26,7 @@ class Query_Refine(gym.Env):
         self.reference_features_names = reference_features
         self.reference_features = {feature: 0 for feature in reference_features}
         self.reference_review = reference_review
-        self.cosine_similarity_threshold = 0.6
+        self.cosine_similarity_threshold = 0.2
         self.feature_avg_threshold = 0.5
         self.top_k_reviews = top_k_reviews
         self.reference_review_vector = self.normalize_vector(embed_text_to_vector(text=self.reference_review, vector_size=self.embed_size))
