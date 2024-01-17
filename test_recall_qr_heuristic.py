@@ -15,7 +15,7 @@ env_test_step = 1
 n_episodes = 2
 k = 2
 max_steps_per_episode = 4
-agent_type = "QLearning"
+agent_type = "Sarsa"
 _, new_queries = init_query_refine_2("closeness", first_env_size)
 
 #output

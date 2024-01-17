@@ -15,7 +15,7 @@ n_episodes = 3
 max_steps_per_episode = 4
 learning_rate = 0.1
 discount_factor = 0.99
-agent_type = "QLearning"
+agent_type = "Sarsa"
 _, new_queries = init_query_refine_2("closeness", first_env_size)
 
 #output

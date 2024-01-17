@@ -6,10 +6,11 @@ from env.string_vector import embed_text_to_vector, compute_cosine_similarity
 from env.LLM import LLM
 import math
 import copy
+from Random_Policy_Generation_QR import generate_random_policies
 
 
 class Query_Refine(gym.Env):
-    def __init__(self, embedding_size, query, reference_review, reference_features, reward_system="closeness", goal_reward = 100, top_k_reviews=1):
+    def __init__(self, embedding_size, query, reference_review, reference_features, reward_system="closeness", goal_reward = 100, top_k_reviews=1, n=0):
         super(Query_Refine, self).__init__()
         self.amazonDB = amazonDB()
         self.llm = LLM()
@@ -26,7 +27,7 @@ class Query_Refine(gym.Env):
         self.reference_features_names = reference_features
         self.reference_features = {feature: 0 for feature in reference_features}
         self.reference_review = reference_review
-        self.cosine_similarity_threshold = 0.2
+        self.cosine_similarity_threshold = 0.6
         self.feature_avg_threshold = 0.5
         self.top_k_reviews = top_k_reviews
         self.reference_review_vector = self.normalize_vector(embed_text_to_vector(text=self.reference_review, vector_size=self.embed_size))
@@ -35,6 +36,8 @@ class Query_Refine(gym.Env):
         self.initial_query_vector = self.update_query_vector()
         self.query_vector = self.update_query_vector()
         self.reward_system = reward_system
+        self.num_synthetic_policies = n
+        self.reward_dict = generate_random_policies(self.state_count, self.num_synthetic_policies, 0, 1)
         self.final_state_index = self.get_final_state_index()
 
     def reset(self, new_query=None):
@@ -48,9 +51,10 @@ class Query_Refine(gym.Env):
         done = None        
         updated_query = self.llm.reformulate_query(self.query, self.actions[action], self.reference_review)
         prev_query = self.query[:]
+        prev_state_index = self.get_state_index()
         self.query = updated_query
         self.update_query_vector()
-        reward = self.compute_reward()
+        reward = self.compute_reward(prev_state_index, action)
         done = self.is_end_state()
         if done:
             self.query_vector = self.reference_review_vector
@@ -111,13 +115,34 @@ class Query_Refine(gym.Env):
         #         return True
         #     return False
     
-    def compute_reward(self):
+    def get_reward_synthetic(self, state_index, i, action):
+
+        if state_index == self.final_state_index: # target
+            return self.goal_reward
+
+        return self.reward_dict[i][tuple(state_index)][action]
+    
+    def compute_reward(self, prev_state_index=None, action=None):
         if self.reward_system == "closeness":
             return self.compute_reward_closeness()
         elif self.reward_system == "feature":
             return self.compute_reward_feature()
         elif self.reward_system == "combined":
             return self.compute_reward_combined()
+        
+        # synthetic rewards 
+        if prev_state_index == None or action == None:
+            print("Error: Prev state index or action is None")
+            return 0
+        
+        total = 0
+        for i in range(self.num_synthetic_policies):
+            if self.reward_system == f"R{i}":
+                return self.get_reward_synthetic(prev_state_index, i, action)
+            elif self.reward_system == "combined_synthetic":
+                total += self.get_reward_synthetic(prev_state_index, i, action)
+        return total
+
 
     def compute_reward_closeness(self):
         if self.is_end_state():
