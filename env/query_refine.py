@@ -6,7 +6,7 @@ from env.string_vector import embed_text_to_vector, compute_cosine_similarity
 from env.LLM import LLM
 import math
 import copy
-from Random_Policy_Generation_QR import generate_random_policies
+from env.Random_Policy_Generation_QR import generate_random_policies
 
 
 class Query_Refine(gym.Env):

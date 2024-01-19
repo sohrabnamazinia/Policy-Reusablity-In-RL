@@ -74,18 +74,20 @@ class DAG:
                 neighbor_states = [self.env.index_to_state(neighbor) for neighbor in self.graph.neighbors(i)]
                 print("\t" + str(neighbor_states))
 
-    def union_of_graphs(self, graph_list):
+    @staticmethod
+    def union_of_graphs(env, dags, N):
         union_graph = nx.DiGraph()
 
-        for graph in graph_list:
-            union_graph.add_nodes_from(graph.nodes)
-            union_graph.add_edges_from(graph.edges)
+        for dag in dags:
+            union_graph.add_nodes_from(dag.graph.nodes)
+            union_graph.add_edges_from(dag.graph.edges)
 
-        new_env = copy.copy(self.env)
+        new_env = copy.copy(env)
         new_env.reward_system = "combined"
         new_env.reset()
-        dag = DAG(new_env, self.N)
+        dag = DAG(new_env, N)
         dag.graph = union_graph
+        dag.edge_dict = DAG.union_all_edge_dicts(dags)
         return dag
 
     def union(self, other):
@@ -111,6 +113,18 @@ class DAG:
             else:
                 union_dict[key] = value  
         self.edge_dict = union_dict
+        return union_dict
+    
+    @staticmethod
+    def union_all_edge_dicts(dags):
+        union_dict = {}
+        for dag_1 in dags:
+            for key, value in dag_1.edge_dict.items():
+                if key in union_dict:
+                    union_dict[key] = (union_dict[key][0], union_dict[key][1] + value[1])
+                else:
+                    union_dict[key] = value  
+        #dag.edge_dict = union_dict
         return union_dict
     
     def min_max_iter(self):

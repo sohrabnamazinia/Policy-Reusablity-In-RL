@@ -70,12 +70,12 @@ def train_q_qr(env, n_episodes, max_steps_per_episode, agent_type, output_path, 
     np.save(output_path, q_agent.q_table)
     return total_train_time, dag
 
-env_closeness = init_query_refine_1("closeness")
-env_feature = init_query_refine_1("feature")
-n_episodes = 3
-max_steps_per_episode = 8
-agent_type = "QLearning"
-output_path_closeness = "q_table_qr_closeness.npy"
-output_path_feature = "q_table_qr_feature.npy"
-train_q_qr(env_closeness, n_episodes, max_steps_per_episode, agent_type, output_path_closeness)
-train_q_qr(env_feature, n_episodes, max_steps_per_episode, agent_type, output_path_feature)
+# env_closeness = init_query_refine_1("closeness")
+# env_feature = init_query_refine_1("feature")
+# n_episodes = 3
+# max_steps_per_episode = 8
+# agent_type = "QLearning"
+# output_path_closeness = "q_table_qr_closeness.npy"
+# output_path_feature = "q_table_qr_feature.npy"
+# train_q_qr(env_closeness, n_episodes, max_steps_per_episode, agent_type, output_path_closeness)
+# train_q_qr(env_feature, n_episodes, max_steps_per_episode, agent_type, output_path_feature)

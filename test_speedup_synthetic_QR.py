@@ -1,28 +1,27 @@
-from env.init_gridworld import init_gridworld_3
+from env.init_query_refine import init_query_refine_2
 import pandas as pd
-from train_q_policy import train_q_policy
-from inference_q import inference_q
-from pruning_synthetic import run_pruning
+from train_q_qr import train_q_qr
+from inference_q_qr import inference_q_qr
+from pruning_synthetic_QR import run_pruning_qr
 from utilities import plot_speedup
 
 #inputs
-n_episodes = 1000
-max_steps_per_episode = 100
-result_step_size = 10
+n_episodes = 4
+max_steps_per_episode = 4
 learning_rate = 0.1
 discount_factor = 0.99
-agent_type = "Sarsa"
-env_width_size = 8
-env_length_size = 8
-num_synthetic_policies = 12
+agent_type = "QLearning"
+embedding_size = 8
+# num_synthetic_policies = 12
+num_synthetic_policies = 4
 
-synthetic_reward = [i for i in range(4, num_synthetic_policies+1, 2)]
+synthetic_rewards_Counts = [i for i in range(4, num_synthetic_policies+1, 2)]
 
 #output
 times_train_scratch = []
 times_ExNonZeroDiscount = []
 speedups = []
-csv_file_name = "Test_Speedup_" + agent_type + "_synthetic_correct_2nd.csv"
+csv_file_name = "Test_Speedup_" + agent_type + "_synthetic_QR.csv"
 
 q_tables = {}
 
@@ -42,22 +41,22 @@ def create_policy_environments(num_synthetic_policies):
 policy_environments = create_policy_environments(num_synthetic_policies)
 combined_environments = []
 
-def create_grid_world(num_synthetic_policies):
-    grid_worlds = {}
+def create_env(num_synthetic_policies):
+    envs = {}
     for i in range(num_synthetic_policies):
-        variable_name = f"grid_world_{i}"  # Construct the variable name
-        grid_worlds[variable_name] = None
-    return grid_worlds
+        variable_name = f"env_{i}"  # Construct the variable name
+        envs[variable_name] = None
+    return envs
 
-grid_worlds = create_grid_world(num_synthetic_policies)
+envs = create_env(num_synthetic_policies)
 
 
 
 for i in range(num_synthetic_policies):
-    grid_worlds[f"grid_world_{i}"] = init_gridworld_3(f"R{i}", env_width_size, env_length_size)
-    policy_environments[f"policy_R{i}_environments"].append(grid_worlds[f"grid_world_{i}"])
-grid_world_combined = init_gridworld_3("combined_synthetic", env_width_size, env_length_size)
-combined_environments.append(grid_world_combined)
+    envs[f"env_{i}"] = init_query_refine_2(f"R{i}", embedding_size)
+    policy_environments[f"policy_R{i}_environments"].append(envs[f"env_{i}"])
+env_combined = init_query_refine_2("combined_synthetic", embedding_size)
+combined_environments.append(env_combined)
 
 for key in policy_environments.keys():
     print(key, len(policy_environments[key]))
@@ -72,21 +71,21 @@ speedup_index = 3
 synthetic_env = {}
 lstDAG = []
 
-for i, n in enumerate(synthetic_reward):
+for i, n in enumerate(synthetic_rewards_Counts):
     for j in range(n):
         synthetic_env[f"R{j}_env"] = policy_environments[f"policy_R{j}_environments"][0]
-        time, dag, _ = train_q_policy(grid_world=synthetic_env[f"R{j}_env"], n_episodes=n_episodes,
+        time, dag = train_q_qr(env=synthetic_env[f"R{j}_env"][0], n_episodes=n_episodes,
                                                 max_steps_per_episode=max_steps_per_episode, agent_type=agent_type,
-                                                output_path=q_tables[f"q_table_{j}_output_path"], result_step_size=result_step_size,
+                                                output_path=q_tables[f"q_table_{j}_output_path"],
                                                 learning_rate=learning_rate, discount_factor=discount_factor)
         lstDAG.append(dag)
 
     combined_env = combined_environments[0]
 
-    time_train_combined, dag_combined, _ = train_q_policy(grid_world=combined_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_combined_output_path, result_step_size=result_step_size, learning_rate=learning_rate, discount_factor=discount_factor)
-    inference_time_combined, reward_ground_truth, _ = inference_q(grid_world=combined_env, q_table_path=q_table_combined_output_path)
+    time_train_combined, dag_combined = train_q_qr(env=combined_env[0], n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_combined_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
+    inference_time_combined, reward_ground_truth, _ = inference_q_qr(env=combined_env[0], q_table_path=q_table_combined_output_path, edge_dict=dag_combined.edge_dict)
     time_from_scratch = time_train_combined + inference_time_combined
-    best_path, max_reward, time_ExNonZeroDiscount, pruning_percentage = run_pruning(gridworld=combined_env, dags=lstDAG, discount_factor=discount_factor, learning_rate=learning_rate, number_of_episodes=n_episodes)
+    best_path, max_reward, time_ExNonZeroDiscount, pruning_percentage = run_pruning_qr(env=combined_env[0], dags=lstDAG, discount_factor=discount_factor, learning_rate=learning_rate, number_of_episodes=n_episodes)
 
     speedup = time_from_scratch / time_ExNonZeroDiscount
     df.at[i, reward_index] = n
@@ -99,7 +98,7 @@ for i, n in enumerate(synthetic_reward):
     df.to_csv(csv_file_name, index=False, header=header)
 
 plot_speedup(csv_file_name, header[0], header[1], header[2], header[3])
-print("Number of Synthetic Rewards: " + str(synthetic_reward))
+print("Number of Synthetic Rewards: " + str(synthetic_rewards_Counts))
 print("Total time for ExNonZeroDiscount: " + str(times_ExNonZeroDiscount))
-print("Total time for train from scratch algorithm: " + str(times_train_scratch))
+print("Total time for train-from-scratch algorithm: " + str(times_train_scratch))
 print("Speedups: " + str(speedups))
