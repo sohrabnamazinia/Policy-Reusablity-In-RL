@@ -2,15 +2,16 @@ from env.init_query_refine import init_query_refine_2
 import pandas as pd
 from train_q_qr import train_q_qr
 from inference_q_qr import inference_q_qr
-from pruning_synthetic_QR import run_pruning_qr
+from heuristic_synthetic_QR import run_heuristic
 from utilities import plot_speedup
 
 #inputs
 n_episodes = 4
 max_steps_per_episode = 4
+heuristic_k = 2
 learning_rate = 0.1
 discount_factor = 0.99
-agent_type = "Sarsa"
+agent_type = "QLearning"
 embedding_size = 8
 # num_synthetic_policies = 12
 num_synthetic_policies = 12
@@ -19,9 +20,9 @@ synthetic_rewards_Counts = [i for i in range(4, num_synthetic_policies+1, 2)]
 
 #output
 times_train_scratch = []
-times_ExNonZeroDiscount = []
+times_heuristic = []
 speedups = []
-csv_file_name = "Test_Speedup_" + agent_type + "_synthetic_QR.csv"
+csv_file_name = "Test_Speedup_" + agent_type + "_heuristic_synthetic_QR.csv"
 
 q_tables = {}
 
@@ -62,9 +63,9 @@ for key in policy_environments.keys():
     print(key, len(policy_environments[key]))
 # setup panda
 df = pd.DataFrame()
-header = ["Number of Synthetic Rewards", "Time - ExNonZeroDiscount", "Time - train scratch", "Speedup"]
+header = ["Number of Synthetic Rewards", "Time - Greedy-K", "Time - train scratch", "Speedup"]
 reward_index = 0
-time_ExNonZeroDiscount_index = 1
+time_heuristic_index = 1
 time_train_scratch_index = 2
 speedup_index = 3
 
@@ -80,25 +81,27 @@ for i, n in enumerate(synthetic_rewards_Counts):
                                                 learning_rate=learning_rate, discount_factor=discount_factor)
         lstDAG.append(dag)
 
-    combined_env = combined_environments[0]
+    combined_env = combined_environments[0][0]
 
-    time_train_combined, dag_combined = train_q_qr(env=combined_env[0], n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_combined_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
-    inference_time_combined, reward_ground_truth, _ = inference_q_qr(env=combined_env[0], q_table_path=q_table_combined_output_path, edge_dict=dag_combined.edge_dict)
+    time_train_combined, dag_combined = train_q_qr(env=combined_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_combined_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
+    inference_time_combined, reward_ground_truth, _ = inference_q_qr(env=combined_env, q_table_path=q_table_combined_output_path, edge_dict=dag_combined.edge_dict)
     time_from_scratch = time_train_combined + inference_time_combined
-    best_path, max_reward, time_ExNonZeroDiscount, pruning_percentage = run_pruning_qr(env=combined_env[0], dags=lstDAG, discount_factor=discount_factor, learning_rate=learning_rate, number_of_episodes=n_episodes)
+    heuristic_max_allowed_path_size = combined_env.state_count
+    combined_env.reset()
+    max_cumulative_reward, best_path, paths, shortest_paths, time_heuristic = run_heuristic(dags=lstDAG, k=heuristic_k, n=n, max_allowed_path_size=heuristic_max_allowed_path_size, env=combined_env)
 
-    speedup = time_from_scratch / time_ExNonZeroDiscount
+    speedup = time_from_scratch / time_heuristic
     df.at[i, reward_index] = n
-    df.at[i, time_ExNonZeroDiscount_index] = time_ExNonZeroDiscount
+    df.at[i, time_heuristic_index] = time_heuristic
     df.at[i, time_train_scratch_index] = time_from_scratch
     df.at[i, speedup_index] = speedup
     times_train_scratch.append(time_from_scratch)
-    times_ExNonZeroDiscount.append(time_ExNonZeroDiscount)
+    times_heuristic.append(time_heuristic)
     speedups.append(speedup)
     df.to_csv(csv_file_name, index=False, header=header)
 
 plot_speedup(csv_file_name, header[0], header[1], header[2], header[3])
 print("Number of Synthetic Rewards: " + str(synthetic_rewards_Counts))
-print("Total time for ExNonZeroDiscount: " + str(times_ExNonZeroDiscount))
+print("Total time for Heuristic: " + str(times_heuristic))
 print("Total time for train-from-scratch algorithm: " + str(times_train_scratch))
 print("Speedups: " + str(speedups))

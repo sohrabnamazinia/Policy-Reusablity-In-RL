@@ -92,23 +92,23 @@ def run_heuristic(q_table_1_path, q_table_2_path, k, max_allowed_path_size, dag_
     return heuristic(q_table_1, q_table_2, env, k, max_allowed_path_size, dag_closeness, dag_feature)
 
 
-# set up inputs
-reward_system = "combined"
-output_path_closeness = "q_table_qr_closeness.npy"
-output_path_feature = "q_table_qr_feature.npy"
-agent_type = "QLearning"
-k = 2
-n_episodes = 1
-env_closeness = init_query_refine_1("closeness")
-env_feature = init_query_refine_1("feature")
-max_steps_per_episode = 8
-_, dag_closeness = train_q_qr(env_closeness, n_episodes, max_steps_per_episode, agent_type, output_path_closeness)
-_, dag_feature = train_q_qr(env_feature, n_episodes, max_steps_per_episode, agent_type, output_path_feature)
+# # set up inputs
+# reward_system = "combined"
+# output_path_closeness = "q_table_qr_closeness.npy"
+# output_path_feature = "q_table_qr_feature.npy"
+# agent_type = "QLearning"
+# k = 2
+# n_episodes = 1
+# env_closeness = init_query_refine_1("closeness")
+# env_feature = init_query_refine_1("feature")
+# max_steps_per_episode = 8
+# _, dag_closeness = train_q_qr(env_closeness, n_episodes, max_steps_per_episode, agent_type, output_path_closeness)
+# _, dag_feature = train_q_qr(env_feature, n_episodes, max_steps_per_episode, agent_type, output_path_feature)
 
-max_cumulative_reward, best_path, paths, shortest_paths, total_time = run_heuristic(output_path_closeness, output_path_feature, k, max_steps_per_episode, reward_system=reward_system, dag_closeness=dag_closeness, dag_feature=dag_feature)
-print("Total_time: " + str(total_time))
-print("All paths count:\n" + str(len(paths)))
-#print(paths)
-print("Shortest paths count:\n" + str(len(shortest_paths)))
-print("Max cumulative reward: " + str(max_cumulative_reward))
-#print(shortest_paths)
+# max_cumulative_reward, best_path, paths, shortest_paths, total_time = run_heuristic(output_path_closeness, output_path_feature, k, max_steps_per_episode, reward_system=reward_system, dag_closeness=dag_closeness, dag_feature=dag_feature)
+# print("Total_time: " + str(total_time))
+# print("All paths count:\n" + str(len(paths)))
+# #print(paths)
+# print("Shortest paths count:\n" + str(len(shortest_paths)))
+# print("Max cumulative reward: " + str(max_cumulative_reward))
+# #print(shortest_paths)
