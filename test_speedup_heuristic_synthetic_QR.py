@@ -6,13 +6,13 @@ from heuristic_synthetic_QR import run_heuristic
 from utilities import plot_speedup
 
 #inputs
-n_episodes = 4
+n_episodes = 2
 max_steps_per_episode = 4
 heuristic_k = 2
 learning_rate = 0.1
 discount_factor = 0.99
-agent_type = "QLearning"
-embedding_size = 8
+agent_type = "Sarsa"
+embedding_size = 7
 # num_synthetic_policies = 12
 num_synthetic_policies = 12
 

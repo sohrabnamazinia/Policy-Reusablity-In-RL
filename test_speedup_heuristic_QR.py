@@ -10,8 +10,8 @@ from heuristic_qr import run_heuristic
 env_test_count = 5
 first_env_size = 7
 env_test_step = 1
-n_episodes = 4
-max_steps_per_episode = 8
+n_episodes = 1
+max_steps_per_episode = 4
 learning_rate = 0.1
 discount_factor = 0.99
 heuristic_k = 2

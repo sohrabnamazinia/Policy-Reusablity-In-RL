@@ -42,7 +42,10 @@ def inference_q_qr(env, q_table_path, edge_dict):
 
         # step
         state_index = env.get_state_index()
-        next_state_index, reward = edge_dict[(state_index, action)]
+        try:
+            next_state_index, reward = edge_dict[(state_index, action)]
+        except Exception as e:
+            break
         total_reward += reward
 
         # upadate state index

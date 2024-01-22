@@ -6,12 +6,12 @@ from pruning_synthetic_QR import run_pruning_qr
 from utilities import plot_speedup
 
 #inputs
-n_episodes = 4
+n_episodes = 10
 max_steps_per_episode = 4
 learning_rate = 0.1
 discount_factor = 0.99
 agent_type = "Sarsa"
-embedding_size = 8
+embedding_size = 7
 # num_synthetic_policies = 12
 num_synthetic_policies = 12
 
