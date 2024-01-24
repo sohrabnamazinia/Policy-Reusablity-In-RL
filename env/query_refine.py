@@ -21,7 +21,7 @@ class Query_Refine(gym.Env):
         self.action_count = len(self.actions)
         self.state_count = int(math.pow(2, self.embed_size))
         self.action_space = spaces.Discrete(self.action_count)
-        self.state_space = spaces.Box(low=-np.inf, high=np.inf, shape=(self.embed_size,), dtype=np.float32)
+        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(self.embed_size,), dtype=np.float32)
         self.embed_vector_ratio = 10
         self.goal_reward = goal_reward
         self.reference_features_names = reference_features
@@ -71,10 +71,11 @@ class Query_Refine(gym.Env):
         vector = (vector - min_value) / (max_value - min_value)
         return vector
     
-    def index_to_state(self, number):
+    @staticmethod
+    def index_to_state(number, vector_size):
         binary_str = bin(number)[2:]  # [2:] to remove the '0b' prefix
         # Calculate the number of zero padding needed
-        padding_length = self.embed_size - len(binary_str)
+        padding_length = vector_size - len(binary_str)
         # Pad the binary string with leading zeros
         binary_vector = '0' * padding_length + binary_str
         # Convert the binary string to a NumPy array of integers
@@ -142,6 +143,19 @@ class Query_Refine(gym.Env):
             elif self.reward_system == "combined_synthetic":
                 total += self.get_reward_synthetic(prev_state_index, i, action)
         return total
+
+    @staticmethod
+    def obtain_action(state_index_1, state_index_2, vector_size):
+        state_1 = Query_Refine.index_to_state(state_index_1, vector_size)
+        state_2 = Query_Refine.index_to_state(state_index_2, vector_size)
+        diff_count = 0
+        for i in range(vector_size):
+            if state_1[i] != state_2[i]:
+                diff_count += 1
+        if diff_count > 1:
+            return 1
+        else:
+            return 0
 
 
     def compute_reward_closeness(self):

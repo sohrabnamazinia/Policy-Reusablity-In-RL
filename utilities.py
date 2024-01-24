@@ -105,10 +105,11 @@ def plot_recall_qr_heuristic(csv_file_name, x, y_1, k):
     plt.ylabel(f"Recall for Greedy K={k}")
     plt.show()
 
-def plot_cumulative_reward_qr(csv_file_name, x, y_1, y_2):
+def plot_cumulative_reward_qr(csv_file_name, x, y_1, y_2, y_3):
     data = pd.read_csv(csv_file_name)
     plt.plot(data[x], data[y_1], label="ExNonZeroDiscount", marker='o', linestyle='-')
     plt.plot(data[x], data[y_2], label="Training From Scratch", marker='s', linestyle='--')
+    plt.plot(data[x], data[y_3], label="Training Greedy-K", marker='^', linestyle=':')
     plt.xlabel("State space size")
     plt.ylabel("Average Cumulative Reward")
     plt.legend()
