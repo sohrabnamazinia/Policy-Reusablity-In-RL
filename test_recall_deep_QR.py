@@ -42,7 +42,7 @@ def compute_deep_max_reward(env, paths):
 
 
 #inputs
-env_test_count = 2
+env_test_count = 5
 diff_start_query_test = 4
 first_env_size = 7
 env_test_step = 1
@@ -97,8 +97,8 @@ for i in range(env_test_count):
         train_deep_qr(closeness_env, deep_algorithm, timesteps=timesteps, output_path=deep_agent_closeness_policy_output_path)
         train_deep_qr(feature_env, deep_algorithm, timesteps=timesteps, output_path=deep_agent_feature_policy_output_path)
         train_deep_qr(combined_env, deep_algorithm, timesteps=timesteps, output_path=deep_agent_combined_policy_output_path)
-        path_1, cumulative_reward_deep_path, _ = inference_deep(closeness_env, deep_algorithm, deep_agent_closeness_policy_output_path)
-        path_2, cumulative_reward_deep_gold, _ = inference_deep(feature_env, deep_algorithm, deep_agent_feature_policy_output_path)
+        path_1, _, _ = inference_deep(closeness_env, deep_algorithm, deep_agent_closeness_policy_output_path)
+        path_2, _, _ = inference_deep(feature_env, deep_algorithm, deep_agent_feature_policy_output_path)
         path_3, reward_ground_truth, _ = inference_deep(combined_env, deep_algorithm, deep_agent_combined_policy_output_path)
         deep_all_paths = combine_paths(path_1, path_2)
         deep_best_path, deep_max_reward = compute_deep_max_reward(combined_env, deep_all_paths)
