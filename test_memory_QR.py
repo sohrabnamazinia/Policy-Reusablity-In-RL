@@ -1,4 +1,4 @@
-from env.query_refine import init_query_refine_2
+from env.init_query_refine import init_query_refine_2
 from train_q_qr import train_q_qr
 from inference_q_qr import inference_q_qr
 from pruning_synthetic_QR import run_pruning_qr
@@ -12,10 +12,9 @@ def memory_usage():
     return process.memory_info().rss / (1024 ** 2)  # Convert to megabytes
 
 
-#inputs
+#input
 n_episodes = 4
 max_steps_per_episode = 4
-result_step_size = 1
 learning_rate = 0.1
 discount_factor = 0.99
 agent_type = "QLearning"
@@ -86,10 +85,9 @@ for i, n in enumerate(synthetic_reward):
     memory_train = 0
     for j in range(n):
         synthetic_env[f"R{j}_env"] = policy_environments[f"policy_R{j}_environments"][0]
-        time, dag, _ = train_q_qr(grid_world=synthetic_env[f"R{j}_env"], n_episodes=n_episodes,
+        time, dag = train_q_qr(env=synthetic_env[f"R{j}_env"][0], n_episodes=n_episodes,
                                       max_steps_per_episode=max_steps_per_episode, agent_type=agent_type,
                                       output_path=q_tables[f"q_table_{j}_output_path"],
-                                      result_step_size=result_step_size,
                                       learning_rate=learning_rate, discount_factor=discount_factor)
         lstDAG.append(dag)
         current_train, peak_train = tracemalloc.get_traced_memory()
@@ -99,11 +97,11 @@ for i, n in enumerate(synthetic_reward):
     combined_env = combined_environments[0]
 
     tracemalloc.start()
-    time_combined, dag_combined, _ = train_q_qr(env=combined_env, n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_combined_output_path, result_step_size=result_step_size, learning_rate=learning_rate, discount_factor=discount_factor)
+    time_combined, dag_combined = train_q_qr(env=combined_env[0], n_episodes=n_episodes, max_steps_per_episode=max_steps_per_episode, agent_type=agent_type, output_path=q_table_combined_output_path, learning_rate=learning_rate, discount_factor=discount_factor)
     current_scratch_train, peak_scratch_train = tracemalloc.get_traced_memory()
     memory_train += peak_scratch_train
 
-    inference_time_combined, reward_ground_truth, _ = inference_q_qr(env=combined_env, q_table_path=q_table_combined_output_path)
+    inference_time_combined, reward_ground_truth, _ = inference_q_qr(env=combined_env[0], q_table_path=q_table_combined_output_path, edge_dict=dag_combined)
 
     current_scratch_infer, peak_scratch_infer = tracemalloc.get_traced_memory()
     memory_train += peak_scratch_infer
@@ -112,7 +110,7 @@ for i, n in enumerate(synthetic_reward):
 
     tracemalloc.start()
 
-    best_path, max_reward, total_time, pruning_percentage = run_pruning_qr(env=combined_env, dags=lstDAG, discount_factor=discount_factor, learning_rate=learning_rate, number_of_episodes=n_episodes)
+    best_path, max_reward, total_time, pruning_percentage = run_pruning_qr(env=combined_env[0], dags=lstDAG, discount_factor=discount_factor, learning_rate=learning_rate, number_of_episodes=n_episodes)
 
     current_prune, peak_prune = tracemalloc.get_traced_memory()
 
