@@ -9,11 +9,11 @@ from utilities import plot_speedup_qr
 env_test_count = 5
 first_env_size = 7
 env_test_step = 1
-n_episodes = 10
+n_episodes = 30
 max_steps_per_episode = 8
 learning_rate = 0.1
 discount_factor = 0.99
-agent_type = "QLearning"
+agent_type = "Sarsa"
 
 #output
 times_train_scratch = []
