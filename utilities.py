@@ -123,3 +123,22 @@ def plot_speedup_action_size(csv_file_name, x, y_1, y_2, y_3, y_4, y_5):
     plt.ylabel("Speedup (Gridworld)")
     plt.legend()
     plt.show()
+
+# def plot_times(csv_file_name, x, y_1, y_2, y_3):
+#     data = pd.read_csv(csv_file_name)
+#     plt.plot(data[x], data[y_1], label="ExNonZeroDiscount", marker='o', linestyle='-')
+#     plt.plot(data[x], data[y_2], label="Training From Scratch", marker='s', linestyle='--')
+#     plt.plot(data[x], data[y_3], label="Training Greedy-K", marker='^', linestyle=':')
+#     plt.xlabel("Number of synthetic rewards")
+#     plt.ylabel("Time taken for the algorithms")
+#     plt.legend()
+#     plt.show()
+
+def plot_times(csv_file_name, x, y_1, y_2):
+    data = pd.read_csv(csv_file_name)
+    plt.plot(data[x], data[y_1], label="ExNonZeroDiscount", marker='o', linestyle='-')
+    plt.plot(data[x], data[y_2], label="Training From Scratch", marker='s', linestyle='--')
+    plt.xlabel("Number of synthetic rewards")
+    plt.ylabel("Time taken for the algorithms")
+    plt.legend()
+    plt.show()

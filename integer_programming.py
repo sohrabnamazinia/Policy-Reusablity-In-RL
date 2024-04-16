@@ -144,6 +144,11 @@ def solve_integer_programming(objective_function, constraints, variables):
         #print(f"{var_name}_l =", value(var_lower))
         print(f"{var_name}_u =", value(var_upper))
 
+def solve(G, N):
+    itr = compute_itr(G, N)
+    objective_function, constraints, variables = build_constraints(G, itr, N)
+    solve_integer_programming(objective_function, constraints, variables)
+
 def main():
     N = 4
     G = create_dag()

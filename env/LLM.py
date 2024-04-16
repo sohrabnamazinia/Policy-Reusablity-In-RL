@@ -3,7 +3,7 @@ from langchain.chains import ConversationChain
 from langchain.chat_models import ChatOpenAI
 
 class LLM():
-    def __init__(self, token="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") -> None:
+    def __init__(self, token="sk-proj-Wz0JDX5MGaXIvp58DMxXT3BlbkFJZMf7hQvKaJOVN3xtSzWw") -> None:
         self.token = token
         os.environ["OPENAI_API_KEY"] = self.token
         self.llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.0)
