@@ -1,6 +1,6 @@
 from env.init_gridworld import init_gridworld_1
 from train_q_policy import train_q_policy
-from pruning import run_pruning_IP
+from pruning import run_pruning_IP, run_pruning
 
 # set inputs
 reward_system_1 = "path"
@@ -24,7 +24,9 @@ print("Dag of Training " + reward_system_1 + ": ")
 dag_1.print()
 print("Dag of Training " + reward_system_2 + ": ")
 dag_2.print()
-best_path, max_reward, total_time, pruning_percentage = run_pruning_IP(env_1, dag_1, dag_2, learning_rate, discount_factor, n_episodes)
+best_path, max_reward, total_time, pruning_percentage = run_pruning_IP(env_1, dag_1, dag_2, learning_rate, discount_factor, N=n_episodes)
+#best_path, max_reward, total_time, pruning_percentage = run_pruning(env_1, dag_1, dag_2, learning_rate, discount_factor)
+print("Pruning Percentage: ", pruning_percentage)
 print("Total time of the pruning algorithm: " + str(total_time))
 print("Best path: " + str(best_path))
 print("Max reward: " + str(max_reward))

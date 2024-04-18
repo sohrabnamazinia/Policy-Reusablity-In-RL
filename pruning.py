@@ -28,7 +28,8 @@ def run_pruning(gridworld, dag_1, dag_2, learning_rate, discount_factor):
     #print("Union DAG:")
     union_dag.print()
     max_iterations, min_iterations = union_dag.min_max_iter()
-
+    print("Min iterations: \n", min_iterations)
+    print("Max iterations: \n", max_iterations)
     lower_bounds, upper_bounds = union_dag.backtrack(min_iterations, max_iterations, learning_rate, discount_factor)
 
     edge_count_before_prune = union_dag.graph.number_of_edges()
@@ -45,8 +46,9 @@ def run_pruning_IP(gridworld, dag_1, dag_2, learning_rate, discount_factor, N):
     union_dag = dag_1.union(dag_2)
     #print("Union DAG:")
     union_dag.print()
-    max_iterations, min_iterations = solve_IP(union_dag.graph, N)
-
+    max_iterations, min_iterations = solve_IP(union_dag, N, union_dag.start_node, union_dag.end_node)
+    print("Min iterations: \n", min_iterations)
+    print("Max iterations: \n", max_iterations)
     lower_bounds, upper_bounds = union_dag.backtrack(min_iterations, max_iterations, learning_rate, discount_factor)
 
     #edge_count_before_prune = union_dag.graph.number_of_edges()
