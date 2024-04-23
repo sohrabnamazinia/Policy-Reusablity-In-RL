@@ -31,6 +31,7 @@ def f(G, node):
     if a == 1 and b > 1:
         return True, (node, list(G.successors(node))[0])
     elif a > 1 and b == 1:
+        list(G.successors(node))[0]
         return True, (list(G.predecessors(node))[0], node)
     else:
         return False, None
@@ -95,19 +96,14 @@ def build_constraints(G, itr, N, end, M, E):
             constraints.append(variables[edge][1] - (total - (p - 1)) + M * (1 - total_exceeds_N) + M * (1 - indegree_equal_zero) >= 0)
 
             # total > N and If indegree(next_node) == 1:
-            # ti_u= total – (p – 1)
-            constraints.append(variables[edge][1] - (total - (p - 1)) - M * (1 - total_exceeds_N) - M * (1 - indegree_equal_one) <= 0)
-            constraints.append(variables[edge][1] - (total - (p - 1)) + M * (1 - total_exceeds_N) + M * (1 - indegree_equal_one) >= 0)
-
-            # total > N and If indegree(next_node) == 0:
             # ti_u= N
-            constraints.append(variables[edge][1] - (N) - M * (1 - total_exceeds_N) - M * (1 - indegree_equal_zero) <= 0)
-            constraints.append(variables[edge][1] - (N) + M * (1 - total_exceeds_N) + M * (1 - indegree_equal_zero) >= 0)
+            constraints.append(variables[edge][1] - (N) - M * (1 - total_exceeds_N) - M * (1 - indegree_equal_one) <= 0)
+            constraints.append(variables[edge][1] - (N) + M * (1 - total_exceeds_N) + M * (1 - indegree_equal_one) >= 0)
 
             # total > N and If indegree(next_node) > 1:
             # ti_u= N – (p – 1)
-            constraints.append(variables[edge][1] - (total - (p - 1)) - M * (1 - total_exceeds_N) - M * (1 - indegree_greater_one) <= 0)
-            constraints.append(variables[edge][1] - (total - (p - 1)) + M * (1 - total_exceeds_N) + M * (1 - indegree_greater_one) >= 0)
+            constraints.append(variables[edge][1] - (N - (p - 1)) - M * (1 - total_exceeds_N) - M * (1 - indegree_greater_one) <= 0)
+            constraints.append(variables[edge][1] - (N - (p - 1)) + M * (1 - total_exceeds_N) + M * (1 - indegree_greater_one) >= 0)
 
         # if s_prime == "END":
         #     constraints.append(variables[edge][1] == N - (p - 1))
@@ -174,8 +170,6 @@ def solve_integer_programming(dag, objective_function, constraints, variables, g
             min_iters.append(value(var_lower))
             max_iters.append(value(var_upper))
         return (min_iters, max_iters)
-
-    
 
 def solve_IP(dag, N, start, end, M=100000, E=0.00001, get_dag=True):
     if get_dag:
