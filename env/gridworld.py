@@ -41,7 +41,8 @@ class GridWorld(gym.Env):
 
         # Initialize the grid
         self.grid = np.zeros((self.grid_width, self.grid_length))
-        self.visited = np.zeros((self.grid_width, self.grid_length))
+        self.visited_count_states = np.zeros((self.grid_width, self.grid_length))
+        self.visited_count_transitions = np.zeros((self.grid_width, self.grid_length, self.action_count))
         self.grid = np.zeros((self.grid_width, self.grid_length))
         self.grid[self.start_position[0]][self.start_position[1]] = start_position_value # e.g., 5
         self.grid[self.target_position[0]][self.target_position[1]] = target_position_value # e.g., 10
@@ -60,6 +61,8 @@ class GridWorld(gym.Env):
         self.grid[self.start_position[0]][self.start_position[1]] = self.agent_position_value
 
     def reset(self, new_start_position=None):
+       #self.visited_count_states = np.zeros((self.grid_width, self.grid_length))
+        #self.visited_count_transitions = np.zeros((self.grid_width, self.grid_length, self.action_count))
         self.grid[self.agent_position[0]][self.agent_position[1]] = 0
         if new_start_position != None:
             self.start_position = new_start_position
@@ -109,7 +112,7 @@ class GridWorld(gym.Env):
 
     def step(self, action):
         prev_agent_position = [self.agent_position[0], self.agent_position[1]]
-
+        self.visited_count_transitions[prev_agent_position[0], prev_agent_position[1], action] += 1
         #NOTE: actions in case we want to avoid cycle
         if action == 0: # right
             self.agent_position[1] += 1

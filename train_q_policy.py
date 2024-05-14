@@ -50,7 +50,7 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
         state_index = grid_world.state_to_index(grid_world.agent_position)
 
         for step in range(max_steps_per_episode):
-            grid_world.visited[grid_world.agent_position[0]][grid_world.agent_position[1]] += 1
+            grid_world.visited_count_states[grid_world.agent_position[0]][grid_world.agent_position[1]] += 1
             action = q_agent.get_action(state_index)
 
             grid, reward, done, info = grid_world.step(action)
@@ -93,4 +93,4 @@ def train_q_policy(grid_world, n_episodes, max_steps_per_episode, agent_type, ou
     np.save(output_path, q_agent.q_table)
     #run.finish()
 
-    return total_time, dag, cumulative_reward
+    return total_time, dag, cumulative_reward, grid_world.visited_count_transitions
