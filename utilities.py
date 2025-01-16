@@ -37,11 +37,11 @@ def plot_cummulative_reward(csv_file_name, x, y):
     plt.ylabel("Cumulative Reward")
     plt.show()
 
-def plot_recalls(csv_file_name, x, y_1, y_2, y_3):
+def plot_recalls(csv_file_name, x, y_1, y_2=None, y_3=None):
     data = pd.read_csv(csv_file_name)
     plt.plot(data[x], data[y_1], label="ExNonZeroDiscount", marker='o', linestyle='-')
-    plt.plot(data[x], data[y_2], label="Greedy K", marker='s', linestyle='--')
-    plt.plot(data[x], data[y_3], label="Deep Agent", marker='^', linestyle=':')
+    if y_2 != None: plt.plot(data[x], data[y_2], label="Greedy K", marker='s', linestyle='--')
+    if y_3 != None: plt.plot(data[x], data[y_3], label="Deep Agent", marker='^', linestyle=':')
     plt.xlabel("Enironment size (width, length)")
     plt.ylabel("Recall Percentage")
     plt.legend()
