@@ -52,7 +52,7 @@ def init_gridworld_2(reward_system):
     return grid_world
 
 
-def init_gridworld_3(reward_system, grid_width, grid_length):
+def init_gridworld_3(reward_system, grid_width, grid_length, parameterized = False):
     # Define the environment details
     gold_positions = []
     for i in range(1, min(grid_width, grid_length) - 1):
@@ -76,7 +76,7 @@ def init_gridworld_3(reward_system, grid_width, grid_length):
     grid_world = GridWorld(grid_width=grid_width, grid_length=grid_length, gold_positions=gold_positions, block_positions=block_positions
                         , reward_system=reward_system, agent_position=agent_initial_position, target_position=target_position
                         , cell_high_value=cell_high_value, cell_low_value=cell_low_value,
-                        start_position_value=start_position_value, target_position_value=target_position_value, block_position_value=block_position_value, gold_position_value=gold_position_value, agent_position_value=agent_position_value, block_reward=block_reward, target_reward=target_reward)
+                        start_position_value=start_position_value, target_position_value=target_position_value, block_position_value=block_position_value, gold_position_value=gold_position_value, agent_position_value=agent_position_value, block_reward=block_reward, target_reward=target_reward, parameterized=parameterized)
     
     return grid_world
 

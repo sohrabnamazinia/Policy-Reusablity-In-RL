@@ -8,7 +8,7 @@ from env.Random_Policies_Generation import generate_random_policies
 class GridWorld(gym.Env):
     
     def __init__(self, grid_width, grid_length, reward_system, agent_position, target_position, cell_low_value, cell_high_value, 
-        start_position_value, target_position_value, block_position_value, agent_position_value, gold_position_value, block_reward, target_reward, gold_k=0, gold_positions=None, block_positions=None, n = 0, action_size=2):
+        start_position_value, target_position_value, block_position_value, agent_position_value, gold_position_value, block_reward, target_reward, gold_k=0, gold_positions=None, block_positions=None, n = 0, action_size=2, parameterized = False):
         
         super(GridWorld, self).__init__()
 
@@ -28,6 +28,7 @@ class GridWorld(gym.Env):
         self.block_position_value = block_position_value
         self.gold_position_value = gold_position_value
         self.gold_k = gold_k
+        self.parameterized = parameterized
         self.num_synthetic_policies = n
         self.reward_dict = generate_random_policies(self.grid_width, self.grid_length, self.num_synthetic_policies, 0, 1)
 
@@ -155,8 +156,10 @@ class GridWorld(gym.Env):
             return self.get_reward_path(prev_agent_position)
         
         elif self.reward_system == "combined":
-            return self.get_reward_gold() + self.get_reward_path(prev_agent_position)
-
+            if not self.parameterized:
+                return self.get_reward_gold() + self.get_reward_path(prev_agent_position)
+            else:
+                return 2 * self.get_reward_gold() + 3 * self.get_reward_path(prev_agent_position)
         # get synthetic policies reward
 
         action = self.obtain_action(prev_agent_position, self.agent_position)

@@ -26,7 +26,7 @@ def combine_paths(path_1, path_2):
     return combined_paths
 
 #inputs
-env_test_count = 2
+env_test_count = 3
 diff_agent_pos_per_test = 1
 first_env_size = 4
 env_test_step = 1
@@ -37,6 +37,7 @@ learning_rate = 0.1
 discount_factor = 0.99
 agent_type = "QLearning"
 # A2C
+parameterized = True
 timesteps = n_episodes
 
 #output
@@ -58,7 +59,7 @@ combined_environments = []
 for (env_width, env_length) in env_sizes:
     grid_world_1 = init_gridworld_3("path", env_width, env_length)
     grid_world_2 = init_gridworld_3("gold", env_width, env_length)
-    grid_world_3 = init_gridworld_3("combined", env_width, env_length)
+    grid_world_3 = init_gridworld_3("combined", env_width, env_length, parameterized=parameterized)
     path_environments.append(grid_world_1)
     gold_environments.append(grid_world_2)
     combined_environments.append(grid_world_3)
