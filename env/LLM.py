@@ -6,7 +6,7 @@ class LLM():
     def __init__(self, token="X") -> None:
         self.token = token
         os.environ["OPENAI_API_KEY"] = self.token
-        self.llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.0)
+        self.llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.0, openai_api_key="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")
         self.chain = ConversationChain(llm=self.llm)
 
     def ask(self, input):

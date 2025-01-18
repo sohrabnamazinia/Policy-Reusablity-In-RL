@@ -10,7 +10,7 @@ from env.Random_Policy_Generation_QR import generate_random_policies
 
 
 class Query_Refine(gym.Env):
-    def __init__(self, embedding_size, query, reference_review, reference_features, reward_system="closeness", goal_reward = 100, top_k_reviews=1, n=0):
+    def __init__(self, embedding_size, query, reference_review, reference_features, reward_system="closeness", goal_reward = 100, top_k_reviews=1, n=0, parameterized=False, alpha_beta=(1, 1)):
         super(Query_Refine, self).__init__()
         self.amazonDB = amazonDB()
         self.llm = LLM()
@@ -33,6 +33,8 @@ class Query_Refine(gym.Env):
         self.reference_review_vector = self.normalize_vector(embed_text_to_vector(text=self.reference_review, vector_size=self.embed_size))
         self.initial_query = query
         self.query = query
+        self.parameteerized = parameterized
+        self.alpha_beta = alpha_beta
         self.initial_query_vector = self.update_query_vector()
         self.query_vector = self.update_query_vector()
         self.reward_system = reward_system
@@ -162,7 +164,12 @@ class Query_Refine(gym.Env):
         if self.is_end_state():
             return self.goal_reward
         review = self.amazonDB.pick_one_similar_random_review(self.query_vector, self.top_k_reviews)
-        return compute_cosine_similarity(embed_text_to_vector(review, self.embed_size), embed_text_to_vector(self.reference_review, self.embed_size))
+        reward = compute_cosine_similarity(embed_text_to_vector(review, self.embed_size), embed_text_to_vector(self.reference_review, self.embed_size))
+        return reward
+        # if not self.parameteerized:
+        #     return reward
+        # else:
+        #     return reward * self.alpha_beta[0]
 
     def compute_reward_feature(self):
         if self.is_end_state():
@@ -173,6 +180,13 @@ class Query_Refine(gym.Env):
         for key in self.reference_features.keys():
             self.reference_features[key] = int(max(self.reference_features[key], features_dict[key]))
         return reward
+        # if not self.parameteerized:
+        #     return reward
+        # else:
+        #     return reward * self.alpha_beta[1]
 
     def compute_reward_combined(self):
-        return self.compute_reward_closeness() + self.compute_reward_feature()
+        if not self.parameteerized:
+            return self.compute_reward_closeness() + self.compute_reward_feature()
+        else:
+            return self.alpha_beta[0] * self.compute_reward_closeness() + self.alpha_beta[1] * self.compute_reward_feature()

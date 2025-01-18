@@ -38,6 +38,7 @@ discount_factor = 0.99
 agent_type = "QLearning"
 # A2C
 parameterized = True
+alpha, beta = (2, 2)
 timesteps = n_episodes
 
 #output
@@ -59,7 +60,7 @@ combined_environments = []
 for (env_width, env_length) in env_sizes:
     grid_world_1 = init_gridworld_3("path", env_width, env_length)
     grid_world_2 = init_gridworld_3("gold", env_width, env_length)
-    grid_world_3 = init_gridworld_3("combined", env_width, env_length, parameterized=parameterized)
+    grid_world_3 = init_gridworld_3("combined", env_width, env_length, parameterized=parameterized, alpha_beta=(alpha, beta))
     path_environments.append(grid_world_1)
     gold_environments.append(grid_world_2)
     combined_environments.append(grid_world_3)

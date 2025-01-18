@@ -1,4 +1,4 @@
-import psycopg2
+#import psycopg2
 import torch
 import random
 import os

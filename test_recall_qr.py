@@ -7,7 +7,7 @@ from utilities import plot_recalls_qr
 
 
 #inputs
-env_test_count = 5
+env_test_count = 2
 # 1 to 4
 diff_start_query_test = 4
 first_env_size = 7
@@ -16,7 +16,7 @@ n_episodes = 2
 max_steps_per_episode = 4
 learning_rate = 0.1
 discount_factor = 0.99
-agent_type = "Sarsa"
+agent_type = "QLearning"
 _, new_queries = init_query_refine_2("closeness", first_env_size)
 
 #output
@@ -25,6 +25,8 @@ csv_file_name = "Recall_QR_" + agent_type + ".csv"
 q_table_1_output_path = "q_table_closeness.npy"
 q_table_2_output_path = "q_table_feature.npy"
 q_table_3_output_path = "q_table_combined.npy"
+parameterized = True
+alpha, beta = (2, 3)
 
 env_sizes = []
 for i in range(env_test_count):
@@ -35,9 +37,9 @@ closeness_environments = []
 feature_environments = []
 combined_environments = []
 for env_size in env_sizes:
-    env_1, _ = init_query_refine_2("closeness", env_size)
-    env_2, _ = init_query_refine_2("feature", env_size)
-    env_3, _ = init_query_refine_2("combined", env_size)
+    env_1, _ = init_query_refine_2("closeness", env_size, parameterized=parameterized, alpha_beta=(alpha, beta))
+    env_2, _ = init_query_refine_2("feature", env_size, parameterized=parameterized, alpha_beta=(alpha, beta))
+    env_3, _ = init_query_refine_2("combined", env_size, parameterized=parameterized, alpha_beta=(alpha, beta))
     closeness_environments.append(env_1)
     feature_environments.append(env_2)
     combined_environments.append(env_3)

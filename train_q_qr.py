@@ -49,6 +49,11 @@ def train_q_qr(env, n_episodes, max_steps_per_episode, agent_type, output_path, 
                 q_agent.update_q_table(state_index, action, reward, next_state_index)
 
             if (state_index != next_state_index):
+                if env.parameteerized:
+                    if env.reward_system == "closeness":
+                        reward *= env.alpha_beta[0]
+                    elif env.reward_system == "feature":
+                        reward *= env.alpha_beta[1]
                 edge_dict[(state_index, action)] = (next_state_index, reward)
                 dag.add_edge(state_index, next_state_index)
             state_index = next_state_index

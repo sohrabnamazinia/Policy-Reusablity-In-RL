@@ -9,14 +9,14 @@ def init_query_refine_1(reward_system):
     env = Query_Refine(embedding_size, query, reference_review, reference_features, reward_system=reward_system)
     return env
 
-def init_query_refine_2(reward_system, env_size):
+def init_query_refine_2(reward_system, env_size, parameterized = False, alpha_beta = (1, 1)):
     embedding_size = env_size
     query = "camera"
     reference_review = "I recently purchased this digital camera, and its battery life is perfect"
     reference_features = ["quality", "HD", "battery", "price"]
     new_queries = ["camera", "digital", "battery", "digital camera"]
 
-    env = Query_Refine(embedding_size, query, reference_review, reference_features, reward_system=reward_system)
+    env = Query_Refine(embedding_size, query, reference_review, reference_features, reward_system=reward_system, parameterized=parameterized, alpha_beta=alpha_beta)
     return env, new_queries
 
 
